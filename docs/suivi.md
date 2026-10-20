@@ -19,3 +19,12 @@ Archi :
 DO :
 -	Mettre wsl sur vscode via les double flèche ><
 -	Faire un clone du projet dans ubuntu et pas en C :
+-   Mettre en place un .venv 
+    -   python3 -m venv .venv
+    -   curl -LsSf https://astral.sh/uv/install.sh | sh
+    -   déplace dans le backend
+        - uv init 
+            - si pas installer : sudo snap install astral-uv
+    -   mettre fichier du venv dans le gitignore
+-   Installer django 
+-   

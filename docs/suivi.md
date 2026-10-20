@@ -19,3 +19,11 @@ Archi :
 DO :
 -	Mettre wsl sur vscode via les double flèche ><
 -	Faire un clone du projet dans ubuntu et pas en C :
+
+
+curl -LsSf https://astral.sh/uv/install.sh | sh   # installer uv (Linux/WSL)
+cd backend
+uv init --python 3.13      # crée pyproject.toml et .python-version
+uv add django               # crée .venv et installe Django
+uv run django-admin startproject config .
+uv run python manage.py runserver

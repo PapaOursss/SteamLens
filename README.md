@@ -27,7 +27,13 @@ cd SteamLens
 
 ```bash
 cd backend
-uv sync                              # crée .venv et installe les dépendances (Python compris)
+uv sync          # crée .venv et installe les dépendances (Python compris)
+uv run backend   # lance le point d'entrée du backend
+```
+
+Une fois Django en place, le serveur se lancera avec :
+
+```bash
 uv run python manage.py migrate      # prépare la base de données
 uv run python manage.py runserver    # http://127.0.0.1:8000
 ```

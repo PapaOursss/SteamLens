@@ -217,12 +217,16 @@ fixtures) ; il reste à enregistrer en base, ce qui attend les modèles de T-02.
 
 ### T-09 · Steam Web API : joueurs connectés en direct et historique maison
 - **Type**: task
-- **Status**: todo
+- **Status**: in progress — branch feat/T-09-player-count, since 2026-10-23
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Nathan · **Due**: —
+- **Effort**: M · **Owner**: @NathanBarrachin · **Due**: —
 - **Origin**: steamcommunity.com/dev · `ISteamUserStats/GetNumberOfCurrentPlayers`
 
 Pas d'historique officiel : on le fabrique nous-mêmes en photographiant les joueurs.
+`GetNumberOfCurrentPlayers` marche **sans clé** : client fait dans
+`backend/ingestion/sources/steam_web_api/` (branche partie de T-08). La commande attend
+`PlayerCountSnapshot` (T-02).
+- [x] Client `PlayerCountClient.snapshot(appids)` (un appel toutes les 0,5 s, 404 = jeu ignoré)
 - [ ] `manage.py snapshot_players` sur le top 500 (SteamSpy) → `PlayerCountSnapshot`
 - [ ] Le lancer toutes les heures (cron du poste ou T-45) dès que possible : plus on commence
   tôt, plus les courbes seront belles à la soutenance

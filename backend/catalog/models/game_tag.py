@@ -9,9 +9,7 @@ class GameTag(models.Model):
     votes = models.PositiveIntegerField(default=0)
 
     class Meta:
-        constraints = (
-            models.UniqueConstraint(fields=["game", "tag"], name="unique_game_tag"),
-        )
+        constraints = (models.UniqueConstraint(fields=["game", "tag"], name="unique_game_tag"),)
         ordering = ("-votes",)
 
     def __str__(self) -> str:

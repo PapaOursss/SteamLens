@@ -230,15 +230,19 @@ Pas d'historique officiel : on le fabrique nous-mêmes en photographiant les jou
 
 ### T-10 · Steam Store : fiche détaillée et prix dans chaque pays
 - **Type**: task
-- **Status**: todo
+- **Status**: in progress — branch feat/T-10-steam-store, since 2026-10-23
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Nathan · **Due**: —
+- **Effort**: M · **Owner**: @NathanBarrachin · **Due**: —
 - **Origin**: `store.steampowered.com/api/appdetails?appids=&cc=` (sans clé, non documentée)
 
-- [ ] Fiche : description courte, captures, catégories, configuration, développeurs
-- [ ] Prix : même jeu interrogé avec `cc=fr,us,gb,br,ar,tr,ru,in,cn,jp,…` (~40 pays),
+Client et lecture faits dans `backend/ingestion/sources/steam_store/` (branche partie de
+T-08) ; les prix se demandent par paquets de 50 jeux, un pays par appel (44 pays). Il reste à
+enregistrer en base, ce qui attend `Game` et `PricePoint` (T-02) et les taux en euros (T-16).
+- [x] Fiche : description courte, captures, catégories, configuration, développeurs
+- [x] Prix : même jeu interrogé avec `cc=fr,us,gb,br,ar,tr,ru,in,cn,jp,…` (~40 pays),
   `filters=price_overview` pour alléger
-- [ ] Respecter ~200 req / 5 min : file d'attente, top 1 000 jeux seulement
+- [x] Respecter ~200 req / 5 min (un appel toutes les 1,5 s)
+- [ ] `manage.py import_steam_store` sur le top 1 000 (SteamSpy) vers `PricePoint` (après T-02)
 
 ### T-11 · IGDB : genres, thèmes, modes de jeu et PopScore
 - **Type**: task

@@ -11,6 +11,15 @@ sudo apt update && sudo apt install -y podman podman-compose
 podman --version     # vérifie que c'est installé
 ```
 
+macOS (avec [Homebrew](https://brew.sh)) :
+
+```bash
+brew install podman podman-compose
+podman machine init     # crée la machine virtuelle qui fait tourner les conteneurs
+podman machine start    # à relancer après chaque redémarrage du Mac
+podman --version        # vérifie que c'est installé
+```
+
 ## Lancer le projet
 
 Depuis la racine du repo :

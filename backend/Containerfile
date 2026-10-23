@@ -1,0 +1,9 @@
+# Image de développement du backend Django (lancée par compose.yml à la racine).
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+WORKDIR /app
+COPY pyproject.toml uv.lock README.md ./
+COPY src ./src
+RUN uv sync --frozen
+COPY . .
+EXPOSE 8000
+CMD ["sh", "-c", "uv run python manage.py migrate && uv run python manage.py runserver 0.0.0.0:8000"]

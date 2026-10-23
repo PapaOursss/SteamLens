@@ -1,0 +1,28 @@
+# Pile de développement SteamLens : `podman compose up --build` depuis la racine.
+# Le code est monté dans les conteneurs : une modification se voit sans reconstruire.
+name: steamlens
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Containerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app:z
+      - /app/.venv
+    environment:
+      DJANGO_DEBUG: "1"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Containerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app:z
+      - /app/node_modules
+    depends_on:
+      - backend

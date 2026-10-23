@@ -19,3 +19,36 @@ Archi :
 DO :
 -	Mettre wsl sur vscode via les double flèche ><
 -	Faire un clone du projet dans ubuntu et pas en C :
+-   Mettre en place un .venv 
+    -   python3 -m venv .venv
+    -   curl -LsSf https://astral.sh/uv/install.sh | sh
+    -   déplace dans le backend
+        - uv init 
+            - si pas installer : sudo snap install astral-uv
+    -   mettre fichier du venv dans le gitignore
+-   Installer django 
+-
+
+Commandes :
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh   # installer uv (Linux/WSL)
+cd backend
+uv init --python 3.13      # crée pyproject.toml et .python-version
+uv add django               # crée .venv et installe Django
+uv run django-admin startproject config .
+uv run python manage.py runserver
+```
+
+TODO : 
+- installer django dans le back avec uv
+- use wsl avec distro sur vscode
+- installer nuxt dans le front avec uv
+- 
+
+
+cmd : 
+- /usage = suivie de consomation limite de 5h et limite de token hebdo
+- /model = changer de modèle 
+- /effort = modifie les perf du model
+- /clear = dès qu'on a fini un tache en cours faut y faire pour limiter le cout d'utilisation.

@@ -1,0 +1,18 @@
+# Rules checked by kiln's `charter` command (`charter --detail`): after each edit (hook of
+# kiln's Claude Code plugin), and in CI or before each commit once added there. Repo adopted by
+# `kiln adopt`: only the rules that hold anywhere. Bans hold everywhere. Others (logging,
+# personal data, ratchets…) are added by hand, after the charter.toml `kiln new` writes.
+
+size = "ember"
+exclude = ["/migrations/", "/node_modules/", "/vendor/"]
+unverified_rules = "scripts/ci/unverified-rules.txt"
+
+[bans.forbidden-tools]
+id = "UV-PODMAN"
+
+# References to an audit report ("audit H36", "(CART-06)") rot with it. Add to `prefixes` the
+# prefixes of the project's audit findings as they come.
+[bans.audit-references]
+id = "AUDIT-REFERENCES"
+prefixes = "AUDIT"
+exclude = '(^docs/|^charter\.toml$|/migrations/|-lock\.yaml$|\.lock$)'

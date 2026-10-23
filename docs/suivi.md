@@ -28,3 +28,16 @@ DO :
     -   mettre fichier du venv dans le gitignore
 -   Installer django 
 -   
+
+TODO : 
+- installer django dans le back avec uv
+- use wsl avec distro sur vscode
+- installer nuxt dans le front avec uv
+- 
+
+
+cmd : 
+- /usage = suivie de consomation limite de 5h et limite de token hebdo
+- /model = changer de modèle 
+- /effort = modifie les perf du model
+- /clear = dès qu'on a fini un tache en cours faut y faire pour limiter le cout d'utilisation.

@@ -7,7 +7,9 @@ authors = [
     { name = "Samuel", email = "s.coudert74@gmail.com" }
 ]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "django>=6.1.2",
+]
 
 [project.scripts]
 backend = "backend:main"

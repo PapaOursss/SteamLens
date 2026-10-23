@@ -144,5 +144,11 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '0.1.0',
 }
 
+# Cache disque des réponses des API externes (backend/data/ est ignoré par git).
+HOURS_PER_DAY = 24
+SECONDS_PER_HOUR = 3600
+HTTP_CACHE_DIR = BASE_DIR / 'data' / 'cache'
+HTTP_CACHE_TTL_SECONDS = env.int('HTTP_CACHE_TTL_SECONDS', default=HOURS_PER_DAY * SECONDS_PER_HOUR)
+
 # Le front Nuxt tourne sur le port 3000 en développement.
 CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:3000']

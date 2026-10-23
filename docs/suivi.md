@@ -27,7 +27,18 @@ DO :
             - si pas installer : sudo snap install astral-uv
     -   mettre fichier du venv dans le gitignore
 -   Installer django 
--   
+-
+
+Commandes :
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh   # installer uv (Linux/WSL)
+cd backend
+uv init --python 3.13      # crée pyproject.toml et .python-version
+uv add django               # crée .venv et installe Django
+uv run django-admin startproject config .
+uv run python manage.py runserver
+```
 
 TODO : 
 - installer django dans le back avec uv

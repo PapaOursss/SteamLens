@@ -202,15 +202,18 @@ supportées, Metacritic, propriétaires estimés.
 
 ### T-08 · SteamSpy : propriétaires, joueurs, tags pondérés
 - **Type**: task
-- **Status**: todo
+- **Status**: in progress — branch feat/T-08-steamspy, since 2026-10-23
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Nathan · **Due**: —
+- **Effort**: M · **Owner**: @NathanBarrachin · **Due**: —
 - **Origin**: steamspy.com/api.php (sans clé)
 
-- [ ] `request=all&page=N` (1 000 jeux par page, 1 appel/min) pour la base
-- [ ] `request=appdetails&appid=` pour les tags avec leur nombre de votes
-- [ ] `request=top100in2weeks` et `top100forever` pour les classements
-- [ ] Les fourchettes « 1 000 000 .. 2 000 000 » stockées en min / max / milieu
+Client et lecture des réponses faits dans `backend/ingestion/sources/steamspy/` (testés sur
+fixtures) ; il reste à enregistrer en base, ce qui attend les modèles de T-02.
+- [x] `request=all&page=N` (1 000 jeux par page, 1 appel/min) pour la base
+- [x] `request=appdetails&appid=` pour les tags avec leur nombre de votes
+- [x] `request=top100in2weeks` et `top100forever` pour les classements
+- [x] Les fourchettes « 1 000 000 .. 2 000 000 » lues en min / max / milieu
+- [ ] `manage.py import_steamspy` vers `Game`, `Tag` et `ImportRun` (après T-02)
 
 ### T-09 · Steam Web API : joueurs connectés en direct et historique maison
 - **Type**: task

@@ -44,6 +44,13 @@ Steam, où, à quel prix et depuis quand — à partir d'au moins dix sources de
   release (`/kiln:backlog plan`); numbers are planned, not promised, until the candidate is cut.
 - **Closing a ticket**: remove it from its section and add a line at the top of the "✅ Done"
   log: `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
+
+- **2026-10-23** · T-45 · Rafraîchissement automatique des données — `manage.py run_scheduler` (APScheduler), conteneur `worker`, admin des `ImportRun` ; planning dans `ingestion/scheduling/schedule.py` (feat/socle-backend) · opened 2026-10-23
+- **2026-10-23** · T-12 · API du backend : un endpoint par visualisation — `/api/games/` filtré et paginé, fiche, `/players/`, `/prices/`, `/api/stats/…`, `/api/map/<indicateur>/`, `/api/docs/` (feat/socle-backend) · opened 2026-10-23
+- **2026-10-23** · T-04 · Client HTTP partagé : cache, débit limité, reprises — `ingestion.http.ApiClient` (httpx) : cache disque haché, écart minimal par source, reprises 429 / 5xx avec Retry-After (feat/socle-backend) · opened 2026-10-23
+- **2026-10-23** · T-03 · Clés d'API en variables d'environnement — django-environ, `backend/.env.example`, `get_api_keys()` saute la source sans clé, `env_file` dans `compose.yml` (feat/socle-backend) · opened 2026-10-23
+- **2026-10-23** · T-02 · Modèle de données commun à toutes les sources — modèles (une classe par fichier), migrations, admin, schéma dans `docs/donnees.md` (feat/socle-backend) · opened 2026-10-23
+- **2026-10-23** · T-01 · Backend Django prêt à servir une API REST — DRF, CORS, django-filter, cinq apps, `/api/health/`, requirements.txt régénéré (feat/socle-backend) · opened 2026-10-23
 - **Details in archived audits**: when a ticket quotes lines of `docs/_archive/`, the original
   finding is there in full; it is old, check it against the current code.
 - **Locations quoted are hints, not addresses.**
@@ -97,67 +104,6 @@ backend importe, met en cache et sert des agrégats. Aucune donnée personnelle 
 ---
 
 ## 🔴 Critical
-
-### T-01 · Backend Django prêt à servir une API REST
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Antoine · **Due**: —
-- **Origin**: plan initial du projet
-
-Socle sur lequel tout le reste se branche.
-- [ ] `uv add djangorestframework django-cors-headers django-filter`
-- [ ] Créer les apps `catalog`, `pricing`, `players`, `geography`, `ingestion`
-- [ ] CORS ouvert sur `http://localhost:3000` en dev
-- [ ] Route `/api/health/` qui répond `{"status": "ok"}`
-- [ ] Régénérer `requirements.txt` (`uv export …`, voir `GEMINI.md`)
-
-### T-02 · Modèle de données commun à toutes les sources
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Antoine · **Due**: —
-- **Origin**: plan initial du projet
-
-La clé de voûte : **l'appid Steam** relie toutes les sources. Une classe par fichier.
-- [ ] `Game` (appid, nom, date de sortie, gratuit ?, image, ids externes IGDB / RAWG / ITAD)
-- [ ] `Genre`, `Tag` (avec poids des votes), `Theme`, `GameMode`, `Platform`
-- [ ] `Company` (développeur / éditeur, pays d'origine)
-- [ ] `Country` (ISO-2, ISO-3, nom français, continent, langue principale)
-- [ ] `PricePoint` (jeu, pays, devise, prix, prix en euros, remise, date, source)
-- [ ] `PlayerCountSnapshot` (jeu, date-heure, joueurs connectés, source)
-- [ ] `ReviewSummary` (jeu, langue, positifs, négatifs, date)
-- [ ] `ImportRun` (source, début, fin, nombre de lignes, erreurs) pour suivre les imports
-- [ ] Schéma dessiné dans `docs/donnees.md`
-
-### T-03 · Clés d'API en variables d'environnement
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: Antoine · **Due**: —
-- **Origin**: règle « jamais de secret dans le code » (`GEMINI.md`)
-
-- [ ] `uv add django-environ`, lecture de `backend/.env` (ignoré par git)
-- [ ] `backend/.env.example` commité avec toutes les variables vides : `STEAM_API_KEY`,
-  `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET`, `RAWG_API_KEY`, `ITAD_API_KEY`,
-  `KAGGLE_USERNAME`, `KAGGLE_KEY`
-- [ ] Une source dont la clé manque est sautée avec un message clair, sans planter
-- [ ] `compose.yml` : `env_file: backend/.env`
-
-### T-04 · Client HTTP partagé : cache, débit limité, reprises
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Antoine · **Due**: —
-- **Origin**: limites des API gratuites
-
-Toutes les API gratuites limitent le débit ; se faire bannir pendant la démo serait bête.
-- [ ] `uv add httpx requests-cache tenacity` (ou `hishel` pour le cache httpx)
-- [ ] Une classe `ApiClient` dans `ingestion/` : cache disque, pause entre deux appels,
-  reprise exponentielle sur 429 / 5xx
-- [ ] Limites à régler par source : Steam Store ~200 req / 5 min, SteamSpy 1 req/s
-  (`request=all` : 1 req/min), IGDB 4 req/s, Twitch 800 points/min, RAWG 20 000 req/mois
-- [ ] Les réponses brutes de test sont enregistrées en fixtures (voir T-49)
 
 ### T-05 · Front Nuxt : Tailwind, ECharts, mise en page et navigation
 - **Type**: task
@@ -250,20 +196,6 @@ IGDB a une classification plus fine que Steam.
 - [ ] Genres, thèmes (horreur, SF…), `game_modes`, `player_perspectives`, studios et pays
 - [ ] `popularity_primitives` (PopScore : visites, envies, joueurs) pour un second avis
   sur la popularité
-
-### T-12 · API du backend : un endpoint par visualisation
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Antoine · **Due**: —
-- **Origin**: règle d'or des données (Vue d'ensemble)
-
-Le backend renvoie des données déjà agrégées, prêtes à tracer.
-- [ ] `/api/games/?search=&genre=&tag=&order=` paginé
-- [ ] `/api/games/<appid>/` et `/api/games/<appid>/players/`, `/prices/`
-- [ ] `/api/stats/genres/`, `/api/stats/tags/`, `/api/stats/top-played/`
-- [ ] `/api/map/<indicateur>/` qui renvoie `{iso3: valeur}` pour toutes les cartes
-- [ ] Documentation automatique (`drf-spectacular`, page `/api/docs/`)
 
 ### T-13 · Page d'accueil : tableau de bord en direct
 - **Type**: idea
@@ -550,14 +482,15 @@ Seule source officielle sur **qui** sont les joueurs.
 
 ### T-49 · Tests sans réseau : fixtures des réponses d'API
 - **Type**: task
-- **Status**: todo
+- **Status**: blocked — waiting for the import commands (T-06 to T-11)
 - **Opened**: 2026-10-23
 - **Effort**: M · **Owner**: Antoine · **Due**: —
 - **Origin**: fiabilité des imports
 
-- [ ] Une réponse réelle par source enregistrée dans `backend/tests/fixtures/`
+- [x] Une réponse réelle par source sans clé enregistrée dans `backend/tests/fixtures/`
+  (`load_fixture()`) ; les sources à clé suivront leurs clés (`urgent.md`)
 - [ ] Un test par commande d'import (parsing, idempotence) avec `respx` ou `responses`
-- [ ] Un test par endpoint de T-12
+- [x] Un test par endpoint de T-12
 
 ### T-50 · Page « Sources et méthode » pour la soutenance
 - **Type**: task
@@ -657,17 +590,6 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 - [ ] Genres préférés Amérique du Nord / Europe / Japon (barres groupées + mini-carte)
 - [ ] Comparaison avec ce que donne notre carte n°2 (T-23)
 
-### T-45 · Rafraîchissement automatique des données
-- **Type**: improvement
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Antoine · **Due**: —
-- **Origin**: T-09, T-21 (snapshots horaires)
-
-- [ ] Planificateur (APScheduler ou `django-q2`) dans un conteneur `worker` de `compose.yml`
-- [ ] Horaire : joueurs et Twitch ; quotidien : prix et avis ; mensuel : enquête matériel
-- [ ] Page d'admin qui liste les derniers `ImportRun` et leurs erreurs
-
 ### T-46 · Thème Steam et mode sombre
 - **Type**: improvement
 - **Status**: todo
@@ -706,3 +628,10 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 
 One line per closed ticket, most recent first:
 `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
+
+- **2026-10-23** · T-45 · Rafraîchissement automatique des données — `manage.py run_scheduler` (APScheduler), conteneur `worker`, admin des `ImportRun` ; planning dans `ingestion/scheduling/schedule.py` (feat/socle-backend) · opened 2026-10-23
+- **2026-10-23** · T-12 · API du backend : un endpoint par visualisation — `/api/games/` filtré et paginé, fiche, `/players/`, `/prices/`, `/api/stats/…`, `/api/map/<indicateur>/`, `/api/docs/` (feat/socle-backend) · opened 2026-10-23
+- **2026-10-23** · T-04 · Client HTTP partagé : cache, débit limité, reprises — `ingestion.http.ApiClient` (httpx) : cache disque haché, écart minimal par source, reprises 429 / 5xx avec Retry-After (feat/socle-backend) · opened 2026-10-23
+- **2026-10-23** · T-03 · Clés d'API en variables d'environnement — django-environ, `backend/.env.example`, `get_api_keys()` saute la source sans clé, `env_file` dans `compose.yml` (feat/socle-backend) · opened 2026-10-23
+- **2026-10-23** · T-02 · Modèle de données commun à toutes les sources — modèles (une classe par fichier), migrations, admin, schéma dans `docs/donnees.md` (feat/socle-backend) · opened 2026-10-23
+- **2026-10-23** · T-01 · Backend Django prêt à servir une API REST — DRF, CORS, django-filter, cinq apps, `/api/health/`, requirements.txt régénéré (feat/socle-backend) · opened 2026-10-23

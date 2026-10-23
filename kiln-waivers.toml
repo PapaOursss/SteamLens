@@ -1,0 +1,12 @@
+# This repo's waivers of kiln's rules ([WAIVERS]), checked by `charter`.
+# kiln never rewrites this file; `kiln waive` adds or renews an entry.
+# Duration at most: 7, 30, 90 then 182 days, next tier at each renewal.
+
+[[waiver]]
+rule = "UV-PODMAN"
+paths = ["backend/requirements.txt"]
+reason = "fichier généré par uv export pour les membres de l'équipe qui n'ont pas uv ; uv reste la source"
+by = "antoine-tena"
+since = 2026-10-23
+until = "never"
+renewals = 0

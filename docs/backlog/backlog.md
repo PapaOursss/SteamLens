@@ -102,7 +102,7 @@ backend importe, met en cache et sert des agrégats. Aucune donnée personnelle 
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Antoine · **Due**: —
 - **Origin**: plan initial du projet
 
 Socle sur lequel tout le reste se branche.
@@ -116,7 +116,7 @@ Socle sur lequel tout le reste se branche.
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Antoine · **Due**: —
 - **Origin**: plan initial du projet
 
 La clé de voûte : **l'appid Steam** relie toutes les sources. Une classe par fichier.
@@ -134,7 +134,7 @@ La clé de voûte : **l'appid Steam** relie toutes les sources. Une classe par f
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Antoine · **Due**: —
 - **Origin**: règle « jamais de secret dans le code » (`GEMINI.md`)
 
 - [ ] `uv add django-environ`, lecture de `backend/.env` (ignoré par git)
@@ -148,7 +148,7 @@ La clé de voûte : **l'appid Steam** relie toutes les sources. Une classe par f
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Antoine · **Due**: —
 - **Origin**: limites des API gratuites
 
 Toutes les API gratuites limitent le débit ; se faire bannir pendant la démo serait bête.
@@ -163,7 +163,7 @@ Toutes les API gratuites limitent le débit ; se faire bannir pendant la démo s
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Dorian · **Due**: —
 - **Origin**: plan initial du projet
 
 - [ ] Installer `@nuxtjs/tailwindcss`, `echarts`, `vue-echarts`
@@ -177,7 +177,7 @@ Toutes les API gratuites limitent le débit ; se faire bannir pendant la démo s
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Nathan · **Due**: —
 - **Origin**: `docs/suivi.md` · kaggle.com/datasets/trolukovich/steam-games-complete-dataset
 
 Première vraie donnée : ~40 000 jeux avec genres, tags, prix, dates, avis.
@@ -192,7 +192,7 @@ Première vraie donnée : ~40 000 jeux avec genres, tags, prix, dates, avis.
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Nathan · **Due**: —
 - **Origin**: kaggle.com/datasets/fronkongames/steam-games-dataset
 
 Plus récent et plus gros (~100 000 jeux) : pic de joueurs, temps de jeu moyen, langues
@@ -204,7 +204,7 @@ supportées, Metacritic, propriétaires estimés.
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Nathan · **Due**: —
 - **Origin**: steamspy.com/api.php (sans clé)
 
 - [ ] `request=all&page=N` (1 000 jeux par page, 1 appel/min) pour la base
@@ -216,7 +216,7 @@ supportées, Metacritic, propriétaires estimés.
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Nathan · **Due**: —
 - **Origin**: steamcommunity.com/dev · `ISteamUserStats/GetNumberOfCurrentPlayers`
 
 Pas d'historique officiel : on le fabrique nous-mêmes en photographiant les joueurs.
@@ -229,7 +229,7 @@ Pas d'historique officiel : on le fabrique nous-mêmes en photographiant les jou
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Nathan · **Due**: —
 - **Origin**: `store.steampowered.com/api/appdetails?appids=&cc=` (sans clé, non documentée)
 
 - [ ] Fiche : description courte, captures, catégories, configuration, développeurs
@@ -241,7 +241,7 @@ Pas d'historique officiel : on le fabrique nous-mêmes en photographiant les jou
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Nathan · **Due**: —
 - **Origin**: api-docs.igdb.com (jeton Twitch « client credentials »)
 
 IGDB a une classification plus fine que Steam.
@@ -255,7 +255,7 @@ IGDB a une classification plus fine que Steam.
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Antoine · **Due**: —
 - **Origin**: règle d'or des données (Vue d'ensemble)
 
 Le backend renvoie des données déjà agrégées, prêtes à tracer.
@@ -269,7 +269,7 @@ Le backend renvoie des données déjà agrégées, prêtes à tracer.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Léandre · **Due**: —
 - **Origin**: plan initial du projet
 
 - [ ] Tuiles chiffres clés : jeux suivis, joueurs connectés au total, genre roi, prix moyen
@@ -281,7 +281,7 @@ Le backend renvoie des données déjà agrégées, prêtes à tracer.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: L · **Owner**: — · **Due**: —
+- **Effort**: L · **Owner**: Léandre · **Due**: —
 - **Origin**: plan initial du projet
 
 - [ ] En-tête : jaquette, genres, studio, date, prix en France, note
@@ -295,7 +295,7 @@ Le backend renvoie des données déjà agrégées, prêtes à tracer.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
 - [ ] Treemap genre → tags, surface = propriétaires estimés, couleur = note moyenne
@@ -307,7 +307,7 @@ Le backend renvoie des données déjà agrégées, prêtes à tracer.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Dorian · **Due**: —
 - **Origin**: plan initial du projet
 
 Première carte, la plus simple : les données viennent de T-10.
@@ -321,7 +321,7 @@ Première carte, la plus simple : les données viennent de T-10.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Léandre · **Due**: —
 - **Origin**: plan initial du projet
 
 - [ ] Barre de recherche globale (raccourci `/`), suggestions avec jaquette dès 2 lettres
@@ -333,7 +333,7 @@ Première carte, la plus simple : les données viennent de T-10.
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Pavel · **Due**: —
 - **Origin**: docs.isthereanydeal.com (clé gratuite)
 
 La « vraie » évolution des prix demandée dans `docs/suivi.md`.
@@ -346,7 +346,7 @@ La « vraie » évolution des prix demandée dans `docs/suivi.md`.
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Léandre · **Due**: —
 - **Origin**: cheapshark.com/api (sans clé)
 
 - [ ] `deals?steamAppID=` : prix sur Steam, GOG, Humble, Fanatical…
@@ -357,7 +357,7 @@ La « vraie » évolution des prix demandée dans `docs/suivi.md`.
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Léandre · **Due**: —
 - **Origin**: rawg.io/apidocs (clé gratuite, 20 000 req/mois)
 
 - [ ] Note des joueurs RAWG, Metacritic, temps de jeu, captures supplémentaires
@@ -367,7 +367,7 @@ La « vraie » évolution des prix demandée dans `docs/suivi.md`.
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Léandre · **Due**: —
 - **Origin**: dev.twitch.tv/docs/api (même application que pour IGDB)
 
 - [ ] `helix/games/top` + somme des spectateurs de `helix/streams?game_id=` toutes les heures
@@ -378,7 +378,7 @@ La « vraie » évolution des prix demandée dans `docs/suivi.md`.
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Pavel · **Due**: —
 - **Origin**: `store.steampowered.com/appreviews/<appid>?json=1` (sans clé)
 
 - [ ] `query_summary` par langue (`language=french`, `english`, `schinese`…) → `ReviewSummary`
@@ -390,7 +390,7 @@ La « vraie » évolution des prix demandée dans `docs/suivi.md`.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Dorian · **Due**: —
 - **Origin**: demande de l'équipe (carte des styles de jeu par pays)
 
 Steam ne donne pas les joueurs par pays : on l'approche par **la langue des avis** (T-22) et
@@ -405,7 +405,7 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Sterenn · **Due**: —
 - **Origin**: Google Trends (`pytrends`, non officiel)
 
 - [ ] `interest_by_region` pour le top 50 des jeux et les grands genres (« jeu de survie »…)
@@ -417,7 +417,7 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Dorian · **Due**: —
 - **Origin**: api.worldbank.org (sans clé)
 
 « Combien d'heures de travail coûte un jeu à 60 € selon le pays ? »
@@ -430,7 +430,7 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Dorian · **Due**: —
 - **Origin**: query.wikidata.org (SPARQL, sans clé)
 
 - [ ] Requête SPARQL : jeux avec un Steam application ID (P1733) → développeur (P178) →
@@ -442,7 +442,7 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Pavel · **Due**: —
 - **Origin**: store.steampowered.com/hwsurvey (page publique, chiffres mensuels)
 
 Seule source officielle sur **qui** sont les joueurs.
@@ -454,7 +454,7 @@ Seule source officielle sur **qui** sont les joueurs.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Sterenn · **Due**: —
 - **Origin**: dataset Kaggle d'historique SteamCharts (à choisir) + T-09
 
 - [ ] Importer un historique mensuel de joueurs (pic et moyenne) depuis ~2012
@@ -465,7 +465,7 @@ Seule source officielle sur **qui** sont les joueurs.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
 - [ ] Nombre de sorties par genre et par année (ThemeRiver ECharts)
@@ -476,7 +476,7 @@ Seule source officielle sur **qui** sont les joueurs.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
 - [ ] x = prix, y = % d'avis positifs, taille = propriétaires, couleur = genre
@@ -487,7 +487,7 @@ Seule source officielle sur **qui** sont les joueurs.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
 - [ ] Graphe de forces : nœud = tag (taille = nb de jeux), lien = co-occurrence (épaisseur)
@@ -499,7 +499,7 @@ Seule source officielle sur **qui** sont les joueurs.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
 - [ ] Tranches : gratuit, < 5 €, 5-15 €, 15-30 €, > 30 € ; accueil : négatif, mitigé, positif,
@@ -510,7 +510,7 @@ Seule source officielle sur **qui** sont les joueurs.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
 - [ ] Heatmap jour de la semaine × mois du nombre de sorties (tout le monde sort le jeudi ?)
@@ -520,7 +520,7 @@ Seule source officielle sur **qui** sont les joueurs.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Samuel · **Due**: —
 - **Origin**: T-09 + T-21
 
 - [ ] Double courbe spectateurs Twitch / joueurs Steam pour un jeu
@@ -531,7 +531,7 @@ Seule source officielle sur **qui** sont les joueurs.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Pavel · **Due**: —
 - **Origin**: `ISteamUserStats/GetGlobalAchievementPercentagesForApp` (Steam Web API)
 
 - [ ] Pourcentage de joueurs pour chaque succès du top 300
@@ -542,7 +542,7 @@ Seule source officielle sur **qui** sont les joueurs.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Léandre · **Due**: —
 - **Origin**: plan initial du projet
 
 - [ ] Choisir 2 à 4 jeux : radars superposés (T-14), courbes de joueurs et de prix alignées
@@ -552,7 +552,7 @@ Seule source officielle sur **qui** sont les joueurs.
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Antoine · **Due**: —
 - **Origin**: fiabilité des imports
 
 - [ ] Une réponse réelle par source enregistrée dans `backend/tests/fixtures/`
@@ -563,7 +563,7 @@ Seule source officielle sur **qui** sont les joueurs.
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Samuel · **Due**: —
 - **Origin**: projet scolaire, à présenter
 
 - [ ] Chaque source : logo, ce qu'on en tire, fraîcheur (dernier `ImportRun`), licence
@@ -576,7 +576,7 @@ Seule source officielle sur **qui** sont les joueurs.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: L · **Owner**: — · **Due**: —
+- **Effort**: L · **Owner**: Pavel · **Due**: —
 - **Origin**: `ISteamUser/GetPlayerSummaries` (champ facultatif `loccountrycode`)
 
 La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
@@ -589,7 +589,7 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Samuel · **Due**: —
 - **Origin**: `protondb.com/api/v1/reports/summaries/<appid>.json` (non officiel)
 
 - [ ] Niveau (platinum, gold…) par jeu ; répartition par genre en barres empilées
@@ -599,7 +599,7 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Samuel · **Due**: —
 - **Origin**: temps de jeu moyen SteamSpy (T-08) et Kaggle (T-07)
 
 - [ ] Ridgeline (courbes de densité empilées) du temps de jeu médian par genre
@@ -609,7 +609,7 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Pavel · **Due**: —
 - **Origin**: texte des avis (T-22, T-47)
 
 - [ ] Mots les plus fréquents des avis 👍 et 👎 en deux nuages côte à côte (`echarts-wordcloud`)
@@ -619,7 +619,7 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Pavel · **Due**: —
 - **Origin**: tags pondérés SteamSpy (T-08)
 
 - [ ] Vecteur de tags pondérés par jeu, similarité cosinus, 10 voisins précalculés
@@ -630,7 +630,7 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Samuel · **Due**: —
 - **Origin**: idée fun pour la démo
 
 - [ ] Deux jaquettes : lequel a le plus de joueurs / coûte le plus cher / est le mieux noté ?
@@ -640,7 +640,7 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Samuel · **Due**: —
 - **Origin**: idée fun pour la démo
 
 - [ ] Page en cartes défilantes façon Spotify Wrapped : jeu de l'année, genre qui monte,
@@ -650,7 +650,7 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Samuel · **Due**: —
 - **Origin**: kaggle.com/datasets/gregorut/videogamesales
 
 Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
@@ -661,7 +661,7 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 - **Type**: improvement
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Antoine · **Due**: —
 - **Origin**: T-09, T-21 (snapshots horaires)
 
 - [ ] Planificateur (APScheduler ou `django-q2`) dans un conteneur `worker` de `compose.yml`
@@ -672,7 +672,7 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 - **Type**: improvement
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: — · **Due**: —
+- **Effort**: S · **Owner**: Dorian · **Due**: —
 - **Origin**: finition visuelle
 
 - [ ] Palette sombre bleu-gris façon client Steam, mode clair en option
@@ -682,7 +682,7 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 - **Type**: task
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: — · **Due**: —
+- **Effort**: M · **Owner**: Nathan · **Due**: —
 - **Origin**: kaggle.com/datasets/andrewmvd/steam-reviews
 
 - [ ] Gros fichier : lecture en flux avec polars, n'importer que les agrégats + un
@@ -693,7 +693,7 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 - **Type**: idea
 - **Status**: todo
 - **Opened**: 2026-10-23
-- **Effort**: XS · **Owner**: — · **Due**: —
+- **Effort**: XS · **Owner**: Dorian · **Due**: —
 - **Origin**: gamerpower.com/api/giveaways?platform=steam (sans clé)
 
 - [ ] Encart « gratuit en ce moment » sur l'accueil

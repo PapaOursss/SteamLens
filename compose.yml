@@ -12,6 +12,10 @@ services:
     volumes:
       - ./backend:/app:z
       - /app/.venv
+    # Clés d'API (voir backend/.env.example) ; facultatif : sans lui, les sources à clé sont sautées.
+    env_file:
+      - path: backend/.env
+        required: false
     environment:
       DJANGO_DEBUG: "1"
 

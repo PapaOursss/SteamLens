@@ -5,14 +5,35 @@ Référence : https://docs.djangoproject.com/en/6.1/ref/settings/
 
 from pathlib import Path
 
+import environ
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Développement seulement : la vraie clé viendra de l'environnement (T-03).
-SECRET_KEY = 'django-insecure--zzvdk+&4sp8p1ih-p(^74ng)ftmubfa6x(@r^cy$uuwc-o8(2'
+# Les secrets viennent de l'environnement ou de backend/.env (ignoré par git) ;
+# backend/.env.example liste toutes les variables.
+env = environ.Env()
+environ.Env.read_env(BASE_DIR / '.env')
 
-DEBUG = True
+DEVELOPMENT_SECRET_KEY = 'django-insecure-cle-de-developpement-seulement'
+SECRET_KEY = env.str('DJANGO_SECRET_KEY', default=DEVELOPMENT_SECRET_KEY)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+DEBUG = env.bool('DJANGO_DEBUG', default=True)
+
+ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['localhost', '127.0.0.1', '0.0.0.0'])
+
+# Clés des API externes : vide = la source est sautée à l'import.
+API_KEYS = {
+    name: env.str(name, default='')
+    for name in (
+        'STEAM_API_KEY',
+        'TWITCH_CLIENT_ID',
+        'TWITCH_CLIENT_SECRET',
+        'RAWG_API_KEY',
+        'ITAD_API_KEY',
+        'KAGGLE_USERNAME',
+        'KAGGLE_KEY',
+    )
+}
 
 
 INSTALLED_APPS = [

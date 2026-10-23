@@ -56,3 +56,8 @@ On est 7 sur le projet : les règles sont courtes exprès. Dans le doute, demand
 - Pas de code commenté laissé dans un commit, pas de `print` / `console.log` oubliés.
 - Jamais de secret (clé d'API Steam, mot de passe) dans le code : variables d'environnement.
 - Ne pas commiter `.venv/`, `node_modules/`, `.nuxt/`, `db.sqlite3`.
+
+## Skills
+
+Les skills de l'équipe sont dans `.agent/skills/` : `nouvelle-branche`, `commit`, `terminer`,
+`lancer`. Elles se mettent à jour avec `git pull` ; on ne les modifie que par une pull request.

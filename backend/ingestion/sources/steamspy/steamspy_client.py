@@ -1,24 +1,13 @@
-import json
-import urllib.parse
-import urllib.request
-from collections.abc import Callable, Iterator
+from collections.abc import Iterator
 from typing import Any
 
-from ingestion.sources.steamspy.request_pacer import RequestPacer
+from ingestion.sources.json_fetcher import JsonFetcher, fetch_json_over_http
+from ingestion.sources.request_pacer import RequestPacer
 from ingestion.sources.steamspy.steamspy_game import SteamSpyGame
 
 API_URL = "https://steamspy.com/api.php"
-REQUEST_TIMEOUT_SECONDS = 30
 DEFAULT_INTERVAL_SECONDS = 1.0
 ALL_PAGES_INTERVAL_SECONDS = 60.0
-
-JsonFetcher = Callable[[str, dict[str, str]], Any]
-
-
-def fetch_json_over_http(url: str, params: dict[str, str]) -> Any:
-    full_url = f"{url}?{urllib.parse.urlencode(params)}"
-    with urllib.request.urlopen(full_url, timeout=REQUEST_TIMEOUT_SECONDS) as response:
-        return json.load(response)
 
 
 class SteamSpyClient:

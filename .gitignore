@@ -1,7 +1,28 @@
+# Virtual environment
 .venv*
+venv/
+ENV/
+
+# Byte-compiled / optimized files
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 .mypy_cache/
 .pytest_cache/
+
+# Databases
 *.sqlite3
 db.sqlite3
+
+# Node / Nuxt
+node_modules/
+.output/
+.nuxt/
+dist/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

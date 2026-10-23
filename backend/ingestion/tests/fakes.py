@@ -10,7 +10,7 @@ def load_fixture(relative_path: str) -> Any:
 
 
 class FakeFetcher:
-    """Renvoie des réponses préparées et garde la trace des paramètres demandés."""
+    """Renvoie des réponses préparées (ou lève les exceptions données) et note les paramètres."""
 
     def __init__(self, responses: list[Any]) -> None:
         self._responses = list(responses)
@@ -18,7 +18,10 @@ class FakeFetcher:
 
     def __call__(self, url: str, params: dict[str, str]) -> Any:
         self.calls.append(params)
-        return self._responses.pop(0)
+        response = self._responses.pop(0)
+        if isinstance(response, Exception):
+            raise response
+        return response
 
 
 class FakeClock:

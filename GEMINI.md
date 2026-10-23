@@ -1,72 +1,56 @@
-# SteamLens - Règles du projet & Contexte agent
+# SteamLens — règles du projet
 
-Application web de visualisation de données Steam (évolution des prix, popularité des jeux).
+Application web de visualisation de données Steam (prix, popularité des jeux).
+On est 7 sur le projet : les règles sont courtes exprès. Dans le doute, demander à l'équipe.
 
-## Architecture globale
+## Carte du repo
 
-- **Backend** : Django (Python 3.12+), géré avec [`uv`](https://docs.astral.sh/uv/) dans le dossier `backend/`.
-- **Frontend** : Nuxt 3 + TypeScript + Tailwind CSS dans le dossier `frontend/`.
-- **Outillage** : `kiln` (optionnel) ou commandes natives (`uv`, `npm`).
+- `backend/` : Django, géré par `uv` (`config/` = réglages, une app Django par domaine).
+- `frontend/` : Nuxt + TypeScript. Le code est dans `frontend/app/` :
+  `pages/` (une page = une route), `components/` (morceaux d'écran), `composables/`
+  (logique réutilisable `useXxx`), `layouts/`, `middleware/`, `plugins/`, `types/`, `utils/`,
+  `assets/`.
+- `compose.yml` : lance toute la pile dans podman (voir `docs/podman.md`).
+- `docs/` : documentation et backlog.
 
----
+## Lancer le projet
 
-## Commandes utiles
+- Avec podman (le plus simple) : `podman compose up --build` → http://localhost:3000.
+- Sans conteneur : `cd backend && uv sync && uv run python manage.py runserver`,
+  puis `cd frontend && npm install && npm run dev`.
+- Python passe toujours par `uv` (`uv run`, `uv add`), jamais `pip`. Les conteneurs passent
+  par `podman`, jamais `docker`.
+- `backend/requirements.txt` est généré, ne pas l'éditer : après un `uv add`, le régénérer avec
+  `uv export --no-hashes --no-dev --no-emit-project -o requirements.txt`.
 
-### Backend (`backend/`)
-Toujours utiliser `uv` pour exécuter les outils Python :
-- Installer / synchroniser les dépendances :
+## Git
+
+- On ne commite **jamais** directement sur `main` ni `develop`.
+- Pas de worktree dans ce projet : une branche normale suffit.
   ```bash
-  cd backend && uv sync
+  git switch develop && git pull
+  git switch -c feat/graphique-prix
   ```
-- Exécuter les migrations :
-  ```bash
-  cd backend && uv run python manage.py migrate
-  ```
-- Lancer le serveur de développement :
-  ```bash
-  cd backend && uv run python manage.py runserver
-  ```
-- Ajouter un paquet :
-  ```bash
-  cd backend && uv add <paquet>
-  ```
-- Lancer les tests / linters :
-  ```bash
-  cd backend && uv run pytest  # ou manage.py test
-  ```
+- Nom de branche : `feat/`, `fix/`, `docs/`, `refactor/`, `test/` ou `chore/`, puis quelques
+  mots en minuscules séparés par des tirets (`fix/recherche-jeu`).
+- Commits petits : une idée par commit, 10 fichiers au plus.
+- Message : `type: ce que ça fait`, 50 caractères au plus, en français.
+  Types : `feat`, `fix`, `docs`, `refactor`, `test`, `style`, `chore`.
+  Exemple : `feat: courbe des prix sur la fiche jeu`.
+- Fini ? Pousser la branche et ouvrir une pull request vers `develop`.
+  Un autre membre relit avant la fusion.
 
-### Frontend (`frontend/`)
-- Installer les dépendances :
-  ```bash
-  cd frontend && npm install
-  ```
-- Lancer le serveur de développement :
-  ```bash
-  cd frontend && npm run dev
-  ```
-- Build de production / vérification de type :
-  ```bash
-  cd frontend && npm run build
-  ```
+## Code
 
-### Avec `kiln` (si disponible sur le poste)
-- `kiln install` : installe les dépendances et outils.
-- `kiln dev` : lance backend et frontend simultanément.
-- `kiln check` : tests, linters, typage.
-- `kiln doctor` : diagnostique l'environnement.
-
----
-
-## Règles et conventions de code
-
-1. **Gestion d'environnement Python** :
-   - Ne jamais invoquer `python` ou `pip` directement sans passer par `uv run`.
-   - Ne pas committer le dossier `backend/.venv/` ni `backend/db.sqlite3`.
-
-2. **Frontend** :
-   - Préférer le typage strict TypeScript dans les composants Nuxt / Vue (`<script setup lang="ts">`).
-   - Ne pas committer `frontend/node_modules/` ni `frontend/.nuxt/`.
-
-3. **Style et propreté** :
-   - Conserver les conventions de code et les docstrings existantes.
-   - Respecter les contraintes définies dans `charter.toml`.
+- **300 lignes au plus par fichier.** Trop gros ? Découper (un composant Vue devient un
+  dossier avec des sous-composants, un module Python devient un paquet).
+- **30 lignes au plus par fonction**, une seule responsabilité.
+- **Une classe par fichier** (Python) ; un composant par fichier (Vue).
+- Noms clairs, pas d'abréviations : `price_history`, pas `ph`.
+  - Python : `snake_case` pour fonctions et variables, `PascalCase` pour les classes.
+  - Vue : composants en `PascalCase` (`GameCard.vue`), composables en `useXxx`.
+  - Constantes en `UPPER_SNAKE_CASE`, pas de nombre magique dans le code.
+- TypeScript strict : `<script setup lang="ts">`, pas de `any`.
+- Pas de code commenté laissé dans un commit, pas de `print` / `console.log` oubliés.
+- Jamais de secret (clé d'API Steam, mot de passe) dans le code : variables d'environnement.
+- Ne pas commiter `.venv/`, `node_modules/`, `.nuxt/`, `db.sqlite3`.

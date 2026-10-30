@@ -455,9 +455,9 @@ Seule source officielle sur **qui** sont les joueurs.
 - **Effort**: S · **Owner**: Samuel · **Due**: —
 - **Origin**: T-09 + T-21
 
-- [ ] Double courbe spectateurs Twitch / joueurs Steam pour un jeu
-- [ ] Ratio spectateurs ÷ joueurs : jeux « regardés plus que joués » vs « joués en silence »
-- [ ] Classement des deux extrêmes
+- [x] Double courbe spectateurs Twitch / joueurs Steam pour un jeu
+- [x] Ratio spectateurs ÷ joueurs : jeux « regardés plus que joués » vs « joués en silence »
+- [x] Classement des deux extrêmes
 
 ### T-35 · Succès : les jeux que personne ne finit
 - **Type**: idea
@@ -499,9 +499,9 @@ Seule source officielle sur **qui** sont les joueurs.
 - **Effort**: S · **Owner**: Samuel · **Due**: —
 - **Origin**: projet scolaire, à présenter
 
-- [ ] Chaque source : logo, ce qu'on en tire, fraîcheur (dernier `ImportRun`), licence
-- [ ] Limites honnêtes (propriétaires estimés, pays approximés par la langue…)
-- [ ] Schéma du flux : sources → commandes d'import → base → API → graphiques
+- [x] Chaque source : logo, ce qu'on en tire, fraîcheur (dernier `ImportRun`), licence
+- [x] Limites honnêtes (propriétaires estimés, pays approximés par la langue…)
+- [x] Schéma du flux : sources → commandes d'import → base → API → graphiques
 
 ## ⚪ Background — long-running work, debt and ideas
 
@@ -525,8 +525,8 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Effort**: S · **Owner**: Samuel · **Due**: —
 - **Origin**: `protondb.com/api/v1/reports/summaries/<appid>.json` (non officiel)
 
-- [ ] Niveau (platinum, gold…) par jeu ; répartition par genre en barres empilées
-- [ ] Badge sur la fiche jeu
+- [x] Niveau (platinum, gold…) par jeu ; répartition par genre en barres empilées
+- [x] Badge sur la fiche jeu
 
 ### T-39 · Durée de vie des jeux par genre
 - **Type**: idea
@@ -535,8 +535,8 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Effort**: S · **Owner**: Samuel · **Due**: —
 - **Origin**: temps de jeu moyen SteamSpy (T-08) et Kaggle (T-07)
 
-- [ ] Ridgeline (courbes de densité empilées) du temps de jeu médian par genre
-- [ ] « Prix par heure de jeu » : classement des jeux les plus rentables
+- [x] Ridgeline (courbes de densité empilées) du temps de jeu médian par genre
+- [x] « Prix par heure de jeu » : classement des jeux les plus rentables
 
 ### T-40 · Nuage de mots des avis positifs et négatifs
 - **Type**: idea
@@ -566,8 +566,8 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Effort**: S · **Owner**: Samuel · **Due**: —
 - **Origin**: idée fun pour la démo
 
-- [ ] Deux jaquettes : lequel a le plus de joueurs / coûte le plus cher / est le mieux noté ?
-- [ ] Score et série en cours ; parfait pour lancer la soutenance avec la classe
+- [x] Deux jaquettes : lequel a le plus de joueurs / coûte le plus cher / est le mieux noté ?
+- [x] Score et série en cours ; parfait pour lancer la soutenance avec la classe
 
 ### T-43 · « Steam Wrapped » de l'année
 - **Type**: idea
@@ -576,7 +576,7 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Effort**: M · **Owner**: Samuel · **Due**: —
 - **Origin**: idée fun pour la démo
 
-- [ ] Page en cartes défilantes façon Spotify Wrapped : jeu de l'année, genre qui monte,
+- [x] Page en cartes défilantes façon Spotify Wrapped : jeu de l'année, genre qui monte,
   plus grosse promo, plus gros flop, pays le plus cher
 
 ### T-44 · Ventes par région (Kaggle vgsales)
@@ -587,8 +587,8 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Origin**: kaggle.com/datasets/gregorut/videogamesales
 
 Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
-- [ ] Genres préférés Amérique du Nord / Europe / Japon (barres groupées + mini-carte)
-- [ ] Comparaison avec ce que donne notre carte n°2 (T-23)
+- [x] Genres préférés Amérique du Nord / Europe / Japon (barres groupées + mini-carte)
+- [x] Comparaison avec ce que donne notre carte n°2 (T-23)
 
 ### T-46 · Thème Steam et mode sombre
 - **Type**: improvement

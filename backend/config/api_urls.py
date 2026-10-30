@@ -5,6 +5,7 @@ from rest_framework.routers import DefaultRouter
 from catalog.views import GameViewSet, genre_stats, tag_stats
 from config.health import health
 from geography.views import world_map
+from ingestion.views import sources_overview
 from players.views import top_played
 
 router = DefaultRouter(trailing_slash=True)
@@ -12,6 +13,7 @@ router.register("games", GameViewSet, basename="game")
 
 urlpatterns = [
     path("health/", health, name="health"),
+    path("sources/", sources_overview, name="sources-overview"),
     path("stats/genres/", genre_stats, name="stats-genres"),
     path("stats/tags/", tag_stats, name="stats-tags"),
     path("stats/top-played/", top_played, name="stats-top-played"),

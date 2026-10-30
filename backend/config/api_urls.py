@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 from catalog.views import GameViewSet, genre_stats, tag_stats
 from catalog.views.minigame import game_duel
+from catalog.views.playtime import playtime_stats
 from catalog.views.proton import proton_stats
 from config.health import health
 from geography.views import world_map
@@ -18,6 +19,7 @@ urlpatterns = [
     path("sources/", sources_overview, name="sources-overview"),
     path("minigame/duel/", game_duel, name="minigame-duel"),
     path("stats/proton/", proton_stats, name="stats-proton"),
+    path("stats/playtime/", playtime_stats, name="stats-playtime"),
     path("stats/genres/", genre_stats, name="stats-genres"),
     path("stats/tags/", tag_stats, name="stats-tags"),
     path("stats/top-played/", top_played, name="stats-top-played"),

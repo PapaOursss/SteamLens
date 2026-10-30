@@ -1,6 +1,7 @@
 from catalog.models.company import Company
 from catalog.models.game import Game
 from catalog.models.game_mode import GameMode
+from catalog.models.game_playtime import GamePlaytime
 from catalog.models.game_tag import GameTag
 from catalog.models.genre import Genre
 from catalog.models.platform import Platform
@@ -13,6 +14,7 @@ __all__ = [
     "Company",
     "Game",
     "GameMode",
+    "GamePlaytime",
     "GameTag",
     "Genre",
     "Platform",

@@ -3,6 +3,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import DefaultRouter
 
 from catalog.views import GameViewSet, genre_stats, tag_stats
+from catalog.views.minigame import game_duel
 from config.health import health
 from geography.views import world_map
 from ingestion.views import sources_overview
@@ -14,6 +15,7 @@ router.register("games", GameViewSet, basename="game")
 urlpatterns = [
     path("health/", health, name="health"),
     path("sources/", sources_overview, name="sources-overview"),
+    path("minigame/duel/", game_duel, name="minigame-duel"),
     path("stats/genres/", genre_stats, name="stats-genres"),
     path("stats/tags/", tag_stats, name="stats-tags"),
     path("stats/top-played/", top_played, name="stats-top-played"),

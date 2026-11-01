@@ -10,9 +10,8 @@ from django.core.management import call_command
 from django.test import override_settings
 
 from catalog.models import Game, GameTag, ReviewSummary
-from ingestion.management.commands import import_kaggle_steam_complete
 from ingestion.models import ImportRun
-from ingestion.sources.kaggle import KaggleDownloadError, dataset_file
+from ingestion.sources.kaggle import KaggleDownloadError, dataset_file, games_import
 from ingestion.sources.kaggle.cleaning import latest_date, parse_date, parse_money
 from pricing.euro_converter import EuroConverter
 from pricing.models import PricePoint
@@ -25,7 +24,7 @@ DATA_DATE = datetime.date(2017, 12, 21)
 @pytest.fixture(autouse=True)
 def fixed_rates(monkeypatch: pytest.MonkeyPatch) -> None:
     converter = EuroConverter({"USD": Decimal("1.25")})
-    monkeypatch.setattr(import_kaggle_steam_complete, "build_converter", lambda: converter)
+    monkeypatch.setattr(games_import, "build_converter", lambda: converter)
 
 
 @pytest.mark.django_db

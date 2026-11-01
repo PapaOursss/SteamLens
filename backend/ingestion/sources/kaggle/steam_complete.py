@@ -1,13 +1,13 @@
 """Kaggle « Steam Games Complete Dataset » (trolukovich, ~40 000 jeux relevés en 2019)."""
 
 import re
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 import polars as pl
 
 from ingestion.sources.kaggle.cleaning import parse_date, parse_money, split_list
+from ingestion.sources.kaggle.kaggle_game import KaggleGame
 from ingestion.sources.kaggle.usd_price import UsdPrice
 from ingestion.writing import GameRecord
 
@@ -19,13 +19,7 @@ REVIEWS = re.compile(r"(\d+)% of the ([\d,]+) user reviews")
 HUNDRED = 100
 
 
-@dataclass
-class SteamCompleteGame:
-    record: GameRecord
-    price: UsdPrice | None = None
-
-
-def read_steam_complete(path: Path, limit: int | None = None) -> list[SteamCompleteGame]:
+def read_steam_complete(path: Path, limit: int | None = None) -> list[KaggleGame]:
     """Lit le CSV : appid tiré de l'URL, lots et bundles écartés, un seul jeu par appid."""
     frame = pl.read_csv(path, infer_schema=False, n_rows=limit)
     if "types" in frame.columns:
@@ -40,7 +34,7 @@ def read_steam_complete(path: Path, limit: int | None = None) -> list[SteamCompl
     return [_game(row) for row in frame.iter_rows(named=True)]
 
 
-def _game(row: dict[str, Any]) -> SteamCompleteGame:
+def _game(row: dict[str, Any]) -> KaggleGame:
     appid = int(row["appid"])
     initial = parse_money(row.get("original_price"))
     discounted = parse_money(row.get("discount_price"))
@@ -64,7 +58,7 @@ def _game(row: dict[str, Any]) -> SteamCompleteGame:
         negative_reviews=negative,
     )
     price = UsdPrice(appid, final, initial) if final is not None else None
-    return SteamCompleteGame(record=record, price=price)
+    return KaggleGame(record=record, price=price)
 
 
 def _reviews(text: str | None) -> tuple[int | None, int | None]:

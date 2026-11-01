@@ -114,18 +114,6 @@ backend importe, met en cache et sert des agrégats. Aucune donnée personnelle 
 
 ## 🟠 Important
 
-### T-07 · Import Kaggle « Steam Games Dataset » (fronkongames)
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Nathan · **Due**: —
-- **Origin**: kaggle.com/datasets/fronkongames/steam-games-dataset
-
-Plus récent et plus gros (~100 000 jeux) : pic de joueurs, temps de jeu moyen, langues
-supportées, Metacritic, propriétaires estimés.
-- [ ] Fusion par appid avec T-06 : la donnée la plus récente gagne
-- [ ] Garder les « langues supportées » : elles servent aux cartes (T-23)
-
 ### T-11 · IGDB : genres, thèmes, modes de jeu et PopScore
 - **Type**: task
 - **Status**: todo
@@ -572,6 +560,7 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 One line per closed ticket, most recent first:
 `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
 
+- **2026-11-01** · T-07 · Import Kaggle « Steam Games Dataset » (fronkongames) — `manage.py import_kaggle_fronkongames` : en-tête cassé du CSV réparé, propriétaires, pic de joueurs, temps de jeu, Metacritic, langues supportées (pour T-23), captures, plateformes ; fusion par appid où la donnée la plus récente gagne (`data_date`), logique commune aux imports Kaggle dans `ingestion/sources/kaggle/games_import.py` ; à lancer une fois le jeton Kaggle dans `.env` (feat/T-07-kaggle-fronkongames) · opened 2026-10-23
 - **2026-11-01** · T-06 · Import Kaggle « Steam Games Complete Dataset » — `manage.py import_kaggle_steam_complete` (`--file` ou téléchargement par l'API Kaggle dans `backend/data/raw/`) : nettoyage polars, appid tiré de l'URL, dates ISO, prix USD convertis en euros, tags éclatés, avis ; idempotent, tracé dans `ImportRun` ; à lancer une fois le jeton Kaggle dans `.env` (feat/T-06-kaggle-steam-complete) · opened 2026-10-23
 - **2026-11-01** · T-10 · Steam Store : fiche détaillée et prix dans chaque pays — `manage.py import_steam_store` : prix du top 1 000 dans 44 pays par paquets de 50 (`PricePoint`, euros au taux BCE de Frankfurter via `pricing.EuroConverter`), 200 fiches par passage (description, captures, catégories, configuration, Metacritic), pays dans `geography.country_table`, planifié chaque jour (feat/T-10-steam-store) · opened 2026-10-23
 - **2026-11-01** · T-09 · Steam Web API : joueurs connectés en direct et historique maison — `manage.py snapshot_players` (top 500 par propriétaires, sans clé, toutes les heures) et `import_steamcharts_history` (passé comblé par SteamCharts depuis 2012, mensuel), dans `PlayerCountSnapshot` (feat/T-09-player-count) · opened 2026-10-23

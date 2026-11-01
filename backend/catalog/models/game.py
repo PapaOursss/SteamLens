@@ -18,6 +18,13 @@ class Game(models.Model):
     owners_mid = models.PositiveIntegerField(null=True, blank=True, db_index=True)
     peak_ccu = models.PositiveIntegerField(null=True, blank=True)
     supported_languages = models.JSONField(default=list, blank=True)
+    # Fiche du Steam Store (T-10).
+    short_description = models.TextField(blank=True)
+    screenshots = models.JSONField(default=list, blank=True)
+    categories = models.JSONField(default=list, blank=True)
+    minimum_requirements = models.TextField(blank=True)
+    metacritic_score = models.PositiveSmallIntegerField(null=True, blank=True)
+    store_fetched_at = models.DateTimeField(null=True, blank=True)
     # Date des données qui ont rempli la fiche : une source plus ancienne ne l'écrase pas.
     data_date = models.DateField(null=True, blank=True)
 

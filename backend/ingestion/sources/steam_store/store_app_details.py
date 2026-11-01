@@ -45,7 +45,9 @@ class StoreAppDetails:
             publishers=list(data.get("publishers") or []),
             genres=_descriptions(data.get("genres")),
             categories=_descriptions(data.get("categories")),
-            platforms=[name for name, supported in (data.get("platforms") or {}).items() if supported],
+            platforms=[
+                name for name, supported in (data.get("platforms") or {}).items() if supported
+            ],
             screenshot_urls=[shot["path_full"] for shot in data.get("screenshots") or []],
             minimum_requirements_html=_minimum_requirements(data.get("pc_requirements")),
             metacritic_score=(data.get("metacritic") or {}).get("score"),

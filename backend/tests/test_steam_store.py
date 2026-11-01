@@ -71,4 +71,3 @@ class ReleaseDateTests(unittest.TestCase):
         for text in ("Coming soon", "Q3 2027", "24 févr. 2022", ""):
             with self.subTest(text=text):
                 self.assertIsNone(parse_release_date(text))
-

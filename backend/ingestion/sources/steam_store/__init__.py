@@ -1,5 +1,6 @@
 from ingestion.sources.steam_store.steam_store_client import SteamStoreClient
 from ingestion.sources.steam_store.store_app_details import StoreAppDetails
 from ingestion.sources.steam_store.store_price import StorePrice
+from ingestion.sources.steam_store.store_record import store_record
 
-__all__ = ["SteamStoreClient", "StoreAppDetails", "StorePrice"]
+__all__ = ["SteamStoreClient", "StoreAppDetails", "StorePrice", "store_record"]

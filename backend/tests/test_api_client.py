@@ -113,3 +113,31 @@ def test_the_api_key_is_never_written_to_disk(tmp_path: Path) -> None:
     for cached_file in tmp_path.iterdir():
         assert "secret-api-key" not in cached_file.name
         assert "secret-api-key" not in cached_file.read_text()
+
+
+IGDB_URL = "https://api.igdb.com/v4/games"
+
+
+@respx.mock
+def test_post_sends_the_body_and_headers() -> None:
+    route = respx.post(IGDB_URL).respond(json=[{"id": 1}])
+
+    body = make_client(FakeTime()).post_json(
+        IGDB_URL, "fields name; where id = 1;", headers={"Client-ID": "abc"}
+    )
+
+    assert body == [{"id": 1}]
+    assert route.calls.last.request.content == b"fields name; where id = 1;"
+    assert route.calls.last.request.headers["Client-ID"] == "abc"
+
+
+@respx.mock
+def test_post_is_cached_by_body(tmp_path: Path) -> None:
+    route = respx.post(IGDB_URL).respond(json=[{"id": 1}])
+    client = make_client(FakeTime(), ResponseCache(tmp_path, time_to_live_seconds=60))
+
+    client.post_json(IGDB_URL, "fields name; where id = 1;")
+    client.post_json(IGDB_URL, "fields name; where id = 1;")
+    client.post_json(IGDB_URL, "fields name; where id = 2;")
+
+    assert route.call_count == 2

@@ -12,6 +12,7 @@ MIN_INTERVAL_SECONDS: dict[str, float] = {
     "steamspy_all": SECONDS_PER_MINUTE,
     # 4 requêtes par seconde.
     "igdb": 1 / 4,
+    "twitch_auth": 1.0,
     # 800 points par minute.
     "twitch": SECONDS_PER_MINUTE / 800,
     # 20 000 requêtes par mois : on espace un peu pour ne pas tout brûler d'un coup.

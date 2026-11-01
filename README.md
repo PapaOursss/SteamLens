@@ -31,12 +31,17 @@ uv sync          # crée .venv et installe les dépendances (Python compris)
 uv run backend   # lance le point d'entrée du backend
 ```
 
-Une fois Django en place, le serveur se lancera avec :
+Le serveur Django :
 
 ```bash
+cp .env.example .env                 # puis y coller les clés d'API qu'on a (facultatif)
 uv run python manage.py migrate      # prépare la base de données
-uv run python manage.py runserver    # http://127.0.0.1:8000
+uv run python manage.py runserver    # http://127.0.0.1:8000/api/docs/
+uv run pytest                        # les tests, sans réseau
 ```
+
+Les imports planifiés tournent avec `uv run python manage.py run_scheduler`
+(`--list` affiche le planning) ; leurs traces sont dans l'admin (`/admin/`, « Import runs »).
 
 `uv run` utilise toujours l'environnement du projet : pas besoin d'activer le `.venv`.
 Pour ajouter une dépendance : `uv add <paquet>`.

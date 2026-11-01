@@ -24,3 +24,6 @@ respx.get(STEAMSPY_URL).respond(json=load_fixture("steamspy_appdetails_413150"))
 Ajouter une source : enregistrer sa réponse ici (`curl … -o`, puis indenter), sans clé d'API
 ni donnée personnelle dedans, et l'ajouter au tableau. Les sources à clé (Steam Web API,
 IGDB, Twitch, RAWG, IsThereAnyDeal) s'ajoutent quand la clé existe (`docs/backlog/urgent.md`).
+
+`kaggle/*.csv` : quelques lignes écrites à la main au format des datasets Kaggle (colonnes
+d'origine), faute de pouvoir les télécharger sans compte.

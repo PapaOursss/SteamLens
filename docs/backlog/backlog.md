@@ -112,19 +112,6 @@ backend importe, met en cache et sert des agrégats. Aucune donnée personnelle 
   et « pas de données »
 - [ ] Types TypeScript des réponses dans `types/`
 
-### T-06 · Import Kaggle « Steam Games Complete Dataset »
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Nathan · **Due**: —
-- **Origin**: `docs/suivi.md` · kaggle.com/datasets/trolukovich/steam-games-complete-dataset
-
-Première vraie donnée : ~40 000 jeux avec genres, tags, prix, dates, avis.
-- [ ] Téléchargement par `uv add kaggle` (ou à la main dans `backend/data/raw/`, ignoré)
-- [ ] `manage.py import_kaggle_steam_complete` : nettoyage avec polars, appid tiré de l'URL,
-  dates en ISO, prix en euros, tags éclatés
-- [ ] Import idempotent (relancer ne crée pas de doublons) ; trace dans `ImportRun`
-
 ## 🟠 Important
 
 ### T-07 · Import Kaggle « Steam Games Dataset » (fronkongames)
@@ -585,6 +572,7 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 One line per closed ticket, most recent first:
 `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
 
+- **2026-11-01** · T-06 · Import Kaggle « Steam Games Complete Dataset » — `manage.py import_kaggle_steam_complete` (`--file` ou téléchargement par l'API Kaggle dans `backend/data/raw/`) : nettoyage polars, appid tiré de l'URL, dates ISO, prix USD convertis en euros, tags éclatés, avis ; idempotent, tracé dans `ImportRun` ; à lancer une fois le jeton Kaggle dans `.env` (feat/T-06-kaggle-steam-complete) · opened 2026-10-23
 - **2026-11-01** · T-10 · Steam Store : fiche détaillée et prix dans chaque pays — `manage.py import_steam_store` : prix du top 1 000 dans 44 pays par paquets de 50 (`PricePoint`, euros au taux BCE de Frankfurter via `pricing.EuroConverter`), 200 fiches par passage (description, captures, catégories, configuration, Metacritic), pays dans `geography.country_table`, planifié chaque jour (feat/T-10-steam-store) · opened 2026-10-23
 - **2026-11-01** · T-09 · Steam Web API : joueurs connectés en direct et historique maison — `manage.py snapshot_players` (top 500 par propriétaires, sans clé, toutes les heures) et `import_steamcharts_history` (passé comblé par SteamCharts depuis 2012, mensuel), dans `PlayerCountSnapshot` (feat/T-09-player-count) · opened 2026-10-23
 - **2026-11-01** · T-08 · SteamSpy : propriétaires, joueurs, tags pondérés — `manage.py import_steamspy` (catalogue par pages, top 100 dans `RankingEntry`, tags votés du top 500), propriétaires min / max / milieu et pic de joueurs sur `Game`, écriture commune `ingestion.writing.GameWriter`, planifié chaque nuit (feat/T-08-steamspy) · opened 2026-10-23

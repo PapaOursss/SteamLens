@@ -48,6 +48,7 @@ TODO :
 
 
 cmd : 
+- pour lancer antigravity mettre agy
 - /usage = suivie de consomation limite de 5h et limite de token hebdo
 - /model = changer de modèle 
 - /effort = modifie les perf du model

@@ -1,35 +1,33 @@
+import logging
 from collections.abc import Iterator
 from typing import Any
 
-from ingestion.sources.json_fetcher import JsonFetcher, fetch_json_over_http
-from ingestion.sources.request_pacer import RequestPacer
+from ingestion.sources.json_fetcher import JsonFetcher, cached_fetcher
 from ingestion.sources.steamspy.steamspy_game import SteamSpyGame
 
+logger = logging.getLogger(__name__)
+
 API_URL = "https://steamspy.com/api.php"
-DEFAULT_INTERVAL_SECONDS = 1.0
-ALL_PAGES_INTERVAL_SECONDS = 60.0
 
 
 class SteamSpyClient:
     """Lit l'API SteamSpy (sans clé) en respectant ses limites : 1 appel/s, `all` 1 appel/min.
 
-    `fetch_json` est injectable : les tests passent des fixtures, et le client HTTP partagé
-    (cache, reprises) pourra le remplacer.
+    Les deux débits viennent de `source_limits` (`steamspy`, `steamspy_all`) ; les tests
+    passent des fixtures à la place des deux `JsonFetcher`.
     """
 
     def __init__(
         self,
-        fetch_json: JsonFetcher = fetch_json_over_http,
-        default_pacer: RequestPacer | None = None,
-        all_pages_pacer: RequestPacer | None = None,
+        fetch_json: JsonFetcher | None = None,
+        fetch_all_pages_json: JsonFetcher | None = None,
     ) -> None:
-        self._fetch_json = fetch_json
-        self._default_pacer = default_pacer or RequestPacer(DEFAULT_INTERVAL_SECONDS)
-        self._all_pages_pacer = all_pages_pacer or RequestPacer(ALL_PAGES_INTERVAL_SECONDS)
+        self._fetch_json = fetch_json or cached_fetcher("steamspy")
+        self._fetch_all_pages_json = fetch_all_pages_json or cached_fetcher("steamspy_all")
 
     def all_games_page(self, page: int) -> list[SteamSpyGame]:
         """Une page de 1 000 jeux ; une page vide signifie qu'on a tout lu."""
-        payload = self._request(self._all_pages_pacer, request="all", page=str(page))
+        payload = self._fetch_all_pages_json(API_URL, {"request": "all", "page": str(page)})
         return _games_from_mapping(payload)
 
     def iter_all_games(self, first_page: int = 0) -> Iterator[SteamSpyGame]:
@@ -39,22 +37,27 @@ class SteamSpyClient:
             page += 1
 
     def app_details(self, appid: int) -> SteamSpyGame:
-        payload = self._request(self._default_pacer, request="appdetails", appid=str(appid))
+        payload = self._fetch_json(API_URL, {"request": "appdetails", "appid": str(appid)})
         return SteamSpyGame.from_payload(payload)
 
     def top_100_in_2_weeks(self) -> list[SteamSpyGame]:
-        return _games_from_mapping(self._request(self._default_pacer, request="top100in2weeks"))
+        return _games_from_mapping(self._fetch_json(API_URL, {"request": "top100in2weeks"}))
 
     def top_100_forever(self) -> list[SteamSpyGame]:
-        return _games_from_mapping(self._request(self._default_pacer, request="top100forever"))
-
-    def _request(self, pacer: RequestPacer, **params: str) -> Any:
-        pacer.wait()
-        return self._fetch_json(API_URL, params)
+        return _games_from_mapping(self._fetch_json(API_URL, {"request": "top100forever"}))
 
 
 def _games_from_mapping(payload: dict[str, dict[str, Any]] | list) -> list[SteamSpyGame]:
-    """SteamSpy indexe ses listes par appid, dans l'ordre du classement."""
+    """SteamSpy indexe ses listes par appid, dans l'ordre du classement.
+
+    Un jeu illisible (fourchette de propriétaires inconnue…) est sauté, pas toute la page.
+    """
     if not isinstance(payload, dict):
         return []
-    return [SteamSpyGame.from_payload(game) for game in payload.values()]
+    games = []
+    for entry in payload.values():
+        try:
+            games.append(SteamSpyGame.from_payload(entry))
+        except (KeyError, ValueError) as error:
+            logger.warning("Jeu SteamSpy illisible sauté : %s", error)
+    return games

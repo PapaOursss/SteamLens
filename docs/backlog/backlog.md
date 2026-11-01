@@ -98,67 +98,6 @@ backend importe, met en cache et sert des agrégats. Aucune donnée personnelle 
 
 ## 🔴 Critical
 
-### T-01 · Backend Django prêt à servir une API REST
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Antoine · **Due**: —
-- **Origin**: plan initial du projet
-
-Socle sur lequel tout le reste se branche.
-- [ ] `uv add djangorestframework django-cors-headers django-filter`
-- [ ] Créer les apps `catalog`, `pricing`, `players`, `geography`, `ingestion`
-- [ ] CORS ouvert sur `http://localhost:3000` en dev
-- [ ] Route `/api/health/` qui répond `{"status": "ok"}`
-- [ ] Régénérer `requirements.txt` (`uv export …`, voir `GEMINI.md`)
-
-### T-02 · Modèle de données commun à toutes les sources
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Antoine · **Due**: —
-- **Origin**: plan initial du projet
-
-La clé de voûte : **l'appid Steam** relie toutes les sources. Une classe par fichier.
-- [ ] `Game` (appid, nom, date de sortie, gratuit ?, image, ids externes IGDB / RAWG / ITAD)
-- [ ] `Genre`, `Tag` (avec poids des votes), `Theme`, `GameMode`, `Platform`
-- [ ] `Company` (développeur / éditeur, pays d'origine)
-- [ ] `Country` (ISO-2, ISO-3, nom français, continent, langue principale)
-- [ ] `PricePoint` (jeu, pays, devise, prix, prix en euros, remise, date, source)
-- [ ] `PlayerCountSnapshot` (jeu, date-heure, joueurs connectés, source)
-- [ ] `ReviewSummary` (jeu, langue, positifs, négatifs, date)
-- [ ] `ImportRun` (source, début, fin, nombre de lignes, erreurs) pour suivre les imports
-- [ ] Schéma dessiné dans `docs/donnees.md`
-
-### T-03 · Clés d'API en variables d'environnement
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: Antoine · **Due**: —
-- **Origin**: règle « jamais de secret dans le code » (`GEMINI.md`)
-
-- [ ] `uv add django-environ`, lecture de `backend/.env` (ignoré par git)
-- [ ] `backend/.env.example` commité avec toutes les variables vides : `STEAM_API_KEY`,
-  `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET`, `RAWG_API_KEY`, `ITAD_API_KEY`,
-  `KAGGLE_USERNAME`, `KAGGLE_KEY`
-- [ ] Une source dont la clé manque est sautée avec un message clair, sans planter
-- [ ] `compose.yml` : `env_file: backend/.env`
-
-### T-04 · Client HTTP partagé : cache, débit limité, reprises
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Antoine · **Due**: —
-- **Origin**: limites des API gratuites
-
-Toutes les API gratuites limitent le débit ; se faire bannir pendant la démo serait bête.
-- [ ] `uv add httpx requests-cache tenacity` (ou `hishel` pour le cache httpx)
-- [ ] Une classe `ApiClient` dans `ingestion/` : cache disque, pause entre deux appels,
-  reprise exponentielle sur 429 / 5xx
-- [ ] Limites à régler par source : Steam Store ~200 req / 5 min, SteamSpy 1 req/s
-  (`request=all` : 1 req/min), IGDB 4 req/s, Twitch 800 points/min, RAWG 20 000 req/mois
-- [ ] Les réponses brutes de test sont enregistrées en fixtures (voir T-49)
-
 ### T-05 · Front Nuxt : Tailwind, ECharts, mise en page et navigation
 - **Type**: task
 - **Status**: todo
@@ -200,34 +139,6 @@ supportées, Metacritic, propriétaires estimés.
 - [ ] Fusion par appid avec T-06 : la donnée la plus récente gagne
 - [ ] Garder les « langues supportées » : elles servent aux cartes (T-23)
 
-### T-08 · SteamSpy : propriétaires, joueurs, tags pondérés
-- **Type**: task
-- **Status**: in progress — branch feat/T-08-steamspy, since 2026-10-23
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: @NathanBarrachin · **Due**: —
-- **Origin**: steamspy.com/api.php (sans clé)
-
-Client et lecture des réponses faits dans `backend/ingestion/sources/steamspy/` (testés sur
-fixtures) ; il reste à enregistrer en base, ce qui attend les modèles de T-02.
-- [x] `request=all&page=N` (1 000 jeux par page, 1 appel/min) pour la base
-- [x] `request=appdetails&appid=` pour les tags avec leur nombre de votes
-- [x] `request=top100in2weeks` et `top100forever` pour les classements
-- [x] Les fourchettes « 1 000 000 .. 2 000 000 » lues en min / max / milieu
-- [ ] `manage.py import_steamspy` vers `Game`, `Tag` et `ImportRun` (après T-02)
-
-### T-09 · Steam Web API : joueurs connectés en direct et historique maison
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Nathan · **Due**: —
-- **Origin**: steamcommunity.com/dev · `ISteamUserStats/GetNumberOfCurrentPlayers`
-
-Pas d'historique officiel : on le fabrique nous-mêmes en photographiant les joueurs.
-- [ ] `manage.py snapshot_players` sur le top 500 (SteamSpy) → `PlayerCountSnapshot`
-- [ ] Le lancer toutes les heures (cron du poste ou T-45) dès que possible : plus on commence
-  tôt, plus les courbes seront belles à la soutenance
-- [ ] Compléter le passé avec un dataset Kaggle d'historique SteamCharts (voir T-28)
-
 ### T-10 · Steam Store : fiche détaillée et prix dans chaque pays
 - **Type**: task
 - **Status**: in progress — branch feat/T-10-steam-store, since 2026-10-23
@@ -257,20 +168,6 @@ IGDB a une classification plus fine que Steam.
 - [ ] Genres, thèmes (horreur, SF…), `game_modes`, `player_perspectives`, studios et pays
 - [ ] `popularity_primitives` (PopScore : visites, envies, joueurs) pour un second avis
   sur la popularité
-
-### T-12 · API du backend : un endpoint par visualisation
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Antoine · **Due**: —
-- **Origin**: règle d'or des données (Vue d'ensemble)
-
-Le backend renvoie des données déjà agrégées, prêtes à tracer.
-- [ ] `/api/games/?search=&genre=&tag=&order=` paginé
-- [ ] `/api/games/<appid>/` et `/api/games/<appid>/players/`, `/prices/`
-- [ ] `/api/stats/genres/`, `/api/stats/tags/`, `/api/stats/top-played/`
-- [ ] `/api/map/<indicateur>/` qui renvoie `{iso3: valeur}` pour toutes les cartes
-- [ ] Documentation automatique (`drf-spectacular`, page `/api/docs/`)
 
 ### T-13 · Page d'accueil : tableau de bord en direct
 - **Type**: idea
@@ -530,9 +427,9 @@ Seule source officielle sur **qui** sont les joueurs.
 - **Effort**: S · **Owner**: Samuel · **Due**: —
 - **Origin**: T-09 + T-21
 
-- [ ] Double courbe spectateurs Twitch / joueurs Steam pour un jeu
-- [ ] Ratio spectateurs ÷ joueurs : jeux « regardés plus que joués » vs « joués en silence »
-- [ ] Classement des deux extrêmes
+- [x] Double courbe spectateurs Twitch / joueurs Steam pour un jeu
+- [x] Ratio spectateurs ÷ joueurs : jeux « regardés plus que joués » vs « joués en silence »
+- [x] Classement des deux extrêmes
 
 ### T-35 · Succès : les jeux que personne ne finit
 - **Type**: idea
@@ -557,14 +454,15 @@ Seule source officielle sur **qui** sont les joueurs.
 
 ### T-49 · Tests sans réseau : fixtures des réponses d'API
 - **Type**: task
-- **Status**: todo
+- **Status**: blocked — waiting for the import commands (T-06 to T-11)
 - **Opened**: 2026-10-23
 - **Effort**: M · **Owner**: Antoine · **Due**: —
 - **Origin**: fiabilité des imports
 
-- [ ] Une réponse réelle par source enregistrée dans `backend/tests/fixtures/`
+- [x] Une réponse réelle par source sans clé enregistrée dans `backend/tests/fixtures/`
+  (`load_fixture()`) ; les sources à clé suivront leurs clés (`urgent.md`)
 - [ ] Un test par commande d'import (parsing, idempotence) avec `respx` ou `responses`
-- [ ] Un test par endpoint de T-12
+- [x] Un test par endpoint de T-12
 
 ### T-50 · Page « Sources et méthode » pour la soutenance
 - **Type**: task
@@ -573,9 +471,9 @@ Seule source officielle sur **qui** sont les joueurs.
 - **Effort**: S · **Owner**: Samuel · **Due**: —
 - **Origin**: projet scolaire, à présenter
 
-- [ ] Chaque source : logo, ce qu'on en tire, fraîcheur (dernier `ImportRun`), licence
-- [ ] Limites honnêtes (propriétaires estimés, pays approximés par la langue…)
-- [ ] Schéma du flux : sources → commandes d'import → base → API → graphiques
+- [x] Chaque source : logo, ce qu'on en tire, fraîcheur (dernier `ImportRun`), licence
+- [x] Limites honnêtes (propriétaires estimés, pays approximés par la langue…)
+- [x] Schéma du flux : sources → commandes d'import → base → API → graphiques
 
 ## ⚪ Background — long-running work, debt and ideas
 
@@ -599,8 +497,8 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Effort**: S · **Owner**: Samuel · **Due**: —
 - **Origin**: `protondb.com/api/v1/reports/summaries/<appid>.json` (non officiel)
 
-- [ ] Niveau (platinum, gold…) par jeu ; répartition par genre en barres empilées
-- [ ] Badge sur la fiche jeu
+- [x] Niveau (platinum, gold…) par jeu ; répartition par genre en barres empilées
+- [x] Badge sur la fiche jeu
 
 ### T-39 · Durée de vie des jeux par genre
 - **Type**: idea
@@ -609,8 +507,8 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Effort**: S · **Owner**: Samuel · **Due**: —
 - **Origin**: temps de jeu moyen SteamSpy (T-08) et Kaggle (T-07)
 
-- [ ] Ridgeline (courbes de densité empilées) du temps de jeu médian par genre
-- [ ] « Prix par heure de jeu » : classement des jeux les plus rentables
+- [x] Ridgeline (courbes de densité empilées) du temps de jeu médian par genre
+- [x] « Prix par heure de jeu » : classement des jeux les plus rentables
 
 ### T-40 · Nuage de mots des avis positifs et négatifs
 - **Type**: idea
@@ -640,8 +538,8 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Effort**: S · **Owner**: Samuel · **Due**: —
 - **Origin**: idée fun pour la démo
 
-- [ ] Deux jaquettes : lequel a le plus de joueurs / coûte le plus cher / est le mieux noté ?
-- [ ] Score et série en cours ; parfait pour lancer la soutenance avec la classe
+- [x] Deux jaquettes : lequel a le plus de joueurs / coûte le plus cher / est le mieux noté ?
+- [x] Score et série en cours ; parfait pour lancer la soutenance avec la classe
 
 ### T-43 · « Steam Wrapped » de l'année
 - **Type**: idea
@@ -650,7 +548,7 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Effort**: M · **Owner**: Samuel · **Due**: —
 - **Origin**: idée fun pour la démo
 
-- [ ] Page en cartes défilantes façon Spotify Wrapped : jeu de l'année, genre qui monte,
+- [x] Page en cartes défilantes façon Spotify Wrapped : jeu de l'année, genre qui monte,
   plus grosse promo, plus gros flop, pays le plus cher
 
 ### T-44 · Ventes par région (Kaggle vgsales)
@@ -661,19 +559,8 @@ La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
 - **Origin**: kaggle.com/datasets/gregorut/videogamesales
 
 Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
-- [ ] Genres préférés Amérique du Nord / Europe / Japon (barres groupées + mini-carte)
-- [ ] Comparaison avec ce que donne notre carte n°2 (T-23)
-
-### T-45 · Rafraîchissement automatique des données
-- **Type**: improvement
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Antoine · **Due**: —
-- **Origin**: T-09, T-21 (snapshots horaires)
-
-- [ ] Planificateur (APScheduler ou `django-q2`) dans un conteneur `worker` de `compose.yml`
-- [ ] Horaire : joueurs et Twitch ; quotidien : prix et avis ; mensuel : enquête matériel
-- [ ] Page d'admin qui liste les derniers `ImportRun` et leurs erreurs
+- [x] Genres préférés Amérique du Nord / Europe / Japon (barres groupées + mini-carte)
+- [x] Comparaison avec ce que donne notre carte n°2 (T-23)
 
 ### T-46 · Thème Steam et mode sombre
 - **Type**: improvement
@@ -713,3 +600,12 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 
 One line per closed ticket, most recent first:
 `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
+
+- **2026-11-01** · T-09 · Steam Web API : joueurs connectés en direct et historique maison — `manage.py snapshot_players` (top 500 par propriétaires, sans clé, toutes les heures) et `import_steamcharts_history` (passé comblé par SteamCharts depuis 2012, mensuel), dans `PlayerCountSnapshot` (feat/T-09-player-count) · opened 2026-10-23
+- **2026-11-01** · T-08 · SteamSpy : propriétaires, joueurs, tags pondérés — `manage.py import_steamspy` (catalogue par pages, top 100 dans `RankingEntry`, tags votés du top 500), propriétaires min / max / milieu et pic de joueurs sur `Game`, écriture commune `ingestion.writing.GameWriter`, planifié chaque nuit (feat/T-08-steamspy) · opened 2026-10-23
+- **2026-10-23** · T-45 · Rafraîchissement automatique des données — `manage.py run_scheduler` (APScheduler), conteneur `worker`, admin des `ImportRun` ; planning dans `ingestion/scheduling/schedule.py` (feat/socle-backend) · opened 2026-10-23
+- **2026-10-23** · T-12 · API du backend : un endpoint par visualisation — `/api/games/` filtré et paginé, fiche, `/players/`, `/prices/`, `/api/stats/…`, `/api/map/<indicateur>/`, `/api/docs/` (feat/socle-backend) · opened 2026-10-23
+- **2026-10-23** · T-04 · Client HTTP partagé : cache, débit limité, reprises — `ingestion.http.ApiClient` (httpx) : cache disque haché, écart minimal par source, reprises 429 / 5xx avec Retry-After (feat/socle-backend) · opened 2026-10-23
+- **2026-10-23** · T-03 · Clés d'API en variables d'environnement — django-environ, `backend/.env.example`, `get_api_keys()` saute la source sans clé, `env_file` dans `compose.yml` (feat/socle-backend) · opened 2026-10-23
+- **2026-10-23** · T-02 · Modèle de données commun à toutes les sources — modèles (une classe par fichier), migrations, admin, schéma dans `docs/donnees.md` (feat/socle-backend) · opened 2026-10-23
+- **2026-10-23** · T-01 · Backend Django prêt à servir une API REST — DRF, CORS, django-filter, cinq apps, `/api/health/`, requirements.txt régénéré (feat/socle-backend) · opened 2026-10-23

@@ -1,0 +1,3 @@
+{
+  "error": "Missing or generic User-Agent header detected. Please identify your client with a descriptive User-Agent (e.g., 'MyApp/1.0 (contact@example.com)')."
+}

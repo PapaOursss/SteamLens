@@ -2,33 +2,27 @@ from collections.abc import Iterable, Iterator
 from itertools import batched
 from typing import Any
 
-from ingestion.sources.json_fetcher import JsonFetcher, fetch_json_over_http
-from ingestion.sources.request_pacer import RequestPacer
+from ingestion.sources.json_fetcher import JsonFetcher, cached_fetcher
 from ingestion.sources.steam_store.price_countries import PRICE_COUNTRY_CODES
 from ingestion.sources.steam_store.store_app_details import StoreAppDetails
 from ingestion.sources.steam_store.store_price import StorePrice
 
 API_URL = "https://store.steampowered.com/api/appdetails"
-SECONDS_PER_REQUEST = 1.5
 APPIDS_PER_PRICE_REQUEST = 50
 DEFAULT_COUNTRY_CODE = "fr"
 DEFAULT_LANGUAGE = "english"
 
 
 class SteamStoreClient:
-    """Lit l'API non documentée du Store (sans clé), à ~200 appels / 5 min au plus.
+    """Lit l'API non documentée du Store (sans clé), à ~200 appels / 5 min au plus
+    (débit `steam_store` de `source_limits`).
 
     La fiche complète ne se demande qu'un jeu à la fois ; les prix (`price_overview`) se
     demandent par paquets de jeux, un pays par appel.
     """
 
-    def __init__(
-        self,
-        fetch_json: JsonFetcher = fetch_json_over_http,
-        pacer: RequestPacer | None = None,
-    ) -> None:
-        self._fetch_json = fetch_json
-        self._pacer = pacer or RequestPacer(SECONDS_PER_REQUEST)
+    def __init__(self, fetch_json: JsonFetcher | None = None) -> None:
+        self._fetch_json = fetch_json or cached_fetcher("steam_store")
 
     def app_details(
         self,
@@ -61,7 +55,6 @@ class SteamStoreClient:
             yield from self.prices(appid_list, country_code)
 
     def _request(self, **params: str) -> Any:
-        self._pacer.wait()
         return self._fetch_json(API_URL, params)
 
 

@@ -86,7 +86,7 @@ erDiagram
 
 | App | Modèles |
 |---|---|
-| `catalog` | `Game`, `Genre`, `Tag`, `GameTag`, `Theme`, `GameMode`, `Platform`, `Company`, `ReviewSummary` |
+| `catalog` | `ReviewExcerpt` (extraits d'avis anonymes, pour T-40), `Game`, `Genre`, `Tag`, `GameTag`, `Theme`, `GameMode`, `Platform`, `Company`, `ReviewSummary` |
 | `geography` | `Country` (rempli par `geography.country_table.ensure_countries`), `RegionalSales` |
 | `pricing` | `PricePoint` |
 | `players` | `PlayerCountSnapshot`, `TwitchStreamSnapshot`, `RankingEntry` (top 100 SteamSpy) |

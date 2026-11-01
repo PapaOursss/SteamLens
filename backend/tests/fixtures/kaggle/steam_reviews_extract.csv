@@ -1,0 +1,9 @@
+app_id,app_name,review_text,review_score,review_votes
+10,Counter-Strike,"Ruined my life, best game ever made, still playing it after fifteen years.",1,1
+10,Counter-Strike,"Classic. The netcode is great and the maps are timeless, highly recommended.",1,0
+10,Counter-Strike,"Too many cheaters on the public servers lately, it ruins every single match.",-1,1
+10,Counter-Strike,Early Access Review,1,1
+70,Half-Life,"A masterpiece of storytelling,
+with a line break inside the quoted review text.",1,1
+70,Half-Life,short,-1,1
+70,,"Opinion without a game name on this line, still counted in the totals.",-1,0

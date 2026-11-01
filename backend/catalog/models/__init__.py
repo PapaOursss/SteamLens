@@ -6,6 +6,7 @@ from catalog.models.game_tag import GameTag
 from catalog.models.genre import Genre
 from catalog.models.platform import Platform
 from catalog.models.proton_report import ProtonReport
+from catalog.models.review_excerpt import ReviewExcerpt
 from catalog.models.review_summary import ReviewSummary
 from catalog.models.tag import Tag
 from catalog.models.theme import Theme
@@ -19,6 +20,7 @@ __all__ = [
     "Genre",
     "Platform",
     "ProtonReport",
+    "ReviewExcerpt",
     "ReviewSummary",
     "Tag",
     "Theme",

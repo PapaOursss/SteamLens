@@ -531,17 +531,6 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 - [ ] Palette sombre bleu-gris façon client Steam, mode clair en option
 - [ ] Thème ECharts commun pour que tous les graphiques se ressemblent
 
-### T-47 · Import Kaggle « Steam Reviews » (6 millions d'avis)
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Nathan · **Due**: —
-- **Origin**: kaggle.com/datasets/andrewmvd/steam-reviews
-
-- [ ] Gros fichier : lecture en flux avec polars, n'importer que les agrégats + un
-  échantillon de textes pour T-40
-- [ ] Sentiment dans le temps par genre
-
 ### T-48 · GamerPower : jeux offerts en ce moment
 - **Type**: idea
 - **Status**: todo
@@ -560,6 +549,7 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 One line per closed ticket, most recent first:
 `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
 
+- **2026-11-01** · T-47 · Import Kaggle « Steam Reviews » (6 millions d'avis) — `manage.py import_kaggle_reviews` : lecture en flux (polars, moteur streaming), positifs / négatifs par jeu dans `ReviewSummary` (anglais, 2017), 20 extraits utiles par jeu et par sens dans `ReviewExcerpt` pour T-40 ; sentiment par genre et année de sortie sur `/api/stats/review-sentiment/` (le dataset ne date pas les avis) ; à lancer une fois le jeton Kaggle dans `.env` (feat/T-47-kaggle-reviews) · opened 2026-10-23
 - **2026-11-01** · T-07 · Import Kaggle « Steam Games Dataset » (fronkongames) — `manage.py import_kaggle_fronkongames` : en-tête cassé du CSV réparé, propriétaires, pic de joueurs, temps de jeu, Metacritic, langues supportées (pour T-23), captures, plateformes ; fusion par appid où la donnée la plus récente gagne (`data_date`), logique commune aux imports Kaggle dans `ingestion/sources/kaggle/games_import.py` ; à lancer une fois le jeton Kaggle dans `.env` (feat/T-07-kaggle-fronkongames) · opened 2026-10-23
 - **2026-11-01** · T-06 · Import Kaggle « Steam Games Complete Dataset » — `manage.py import_kaggle_steam_complete` (`--file` ou téléchargement par l'API Kaggle dans `backend/data/raw/`) : nettoyage polars, appid tiré de l'URL, dates ISO, prix USD convertis en euros, tags éclatés, avis ; idempotent, tracé dans `ImportRun` ; à lancer une fois le jeton Kaggle dans `.env` (feat/T-06-kaggle-steam-complete) · opened 2026-10-23
 - **2026-11-01** · T-10 · Steam Store : fiche détaillée et prix dans chaque pays — `manage.py import_steam_store` : prix du top 1 000 dans 44 pays par paquets de 50 (`PricePoint`, euros au taux BCE de Frankfurter via `pricing.EuroConverter`), 200 fiches par passage (description, captures, catégories, configuration, Metacritic), pays dans `geography.country_table`, planifié chaque jour (feat/T-10-steam-store) · opened 2026-10-23

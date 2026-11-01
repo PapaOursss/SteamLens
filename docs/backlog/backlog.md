@@ -44,13 +44,6 @@ Steam, où, à quel prix et depuis quand — à partir d'au moins dix sources de
   release (`/kiln:backlog plan`); numbers are planned, not promised, until the candidate is cut.
 - **Closing a ticket**: remove it from its section and add a line at the top of the "✅ Done"
   log: `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
-
-- **2026-10-23** · T-45 · Rafraîchissement automatique des données — `manage.py run_scheduler` (APScheduler), conteneur `worker`, admin des `ImportRun` ; planning dans `ingestion/scheduling/schedule.py` (feat/socle-backend) · opened 2026-10-23
-- **2026-10-23** · T-12 · API du backend : un endpoint par visualisation — `/api/games/` filtré et paginé, fiche, `/players/`, `/prices/`, `/api/stats/…`, `/api/map/<indicateur>/`, `/api/docs/` (feat/socle-backend) · opened 2026-10-23
-- **2026-10-23** · T-04 · Client HTTP partagé : cache, débit limité, reprises — `ingestion.http.ApiClient` (httpx) : cache disque haché, écart minimal par source, reprises 429 / 5xx avec Retry-After (feat/socle-backend) · opened 2026-10-23
-- **2026-10-23** · T-03 · Clés d'API en variables d'environnement — django-environ, `backend/.env.example`, `get_api_keys()` saute la source sans clé, `env_file` dans `compose.yml` (feat/socle-backend) · opened 2026-10-23
-- **2026-10-23** · T-02 · Modèle de données commun à toutes les sources — modèles (une classe par fichier), migrations, admin, schéma dans `docs/donnees.md` (feat/socle-backend) · opened 2026-10-23
-- **2026-10-23** · T-01 · Backend Django prêt à servir une API REST — DRF, CORS, django-filter, cinq apps, `/api/health/`, requirements.txt régénéré (feat/socle-backend) · opened 2026-10-23
 - **Details in archived audits**: when a ticket quotes lines of `docs/_archive/`, the original
   finding is there in full; it is old, check it against the current code.
 - **Locations quoted are hints, not addresses.**
@@ -145,21 +138,6 @@ Plus récent et plus gros (~100 000 jeux) : pic de joueurs, temps de jeu moyen, 
 supportées, Metacritic, propriétaires estimés.
 - [ ] Fusion par appid avec T-06 : la donnée la plus récente gagne
 - [ ] Garder les « langues supportées » : elles servent aux cartes (T-23)
-
-### T-08 · SteamSpy : propriétaires, joueurs, tags pondérés
-- **Type**: task
-- **Status**: in progress — branch feat/T-08-steamspy, since 2026-10-23
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: @NathanBarrachin · **Due**: —
-- **Origin**: steamspy.com/api.php (sans clé)
-
-Client et lecture des réponses faits dans `backend/ingestion/sources/steamspy/` (testés sur
-fixtures) ; il reste à enregistrer en base, ce qui attend les modèles de T-02.
-- [x] `request=all&page=N` (1 000 jeux par page, 1 appel/min) pour la base
-- [x] `request=appdetails&appid=` pour les tags avec leur nombre de votes
-- [x] `request=top100in2weeks` et `top100forever` pour les classements
-- [x] Les fourchettes « 1 000 000 .. 2 000 000 » lues en min / max / milieu
-- [ ] `manage.py import_steamspy` vers `Game`, `Tag` et `ImportRun` (après T-02)
 
 ### T-09 · Steam Web API : joueurs connectés en direct et historique maison
 - **Type**: task
@@ -632,6 +610,7 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 One line per closed ticket, most recent first:
 `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
 
+- **2026-11-01** · T-08 · SteamSpy : propriétaires, joueurs, tags pondérés — `manage.py import_steamspy` (catalogue par pages, top 100 dans `RankingEntry`, tags votés du top 500), propriétaires min / max / milieu et pic de joueurs sur `Game`, écriture commune `ingestion.writing.GameWriter`, planifié chaque nuit (feat/T-08-steamspy) · opened 2026-10-23
 - **2026-10-23** · T-45 · Rafraîchissement automatique des données — `manage.py run_scheduler` (APScheduler), conteneur `worker`, admin des `ImportRun` ; planning dans `ingestion/scheduling/schedule.py` (feat/socle-backend) · opened 2026-10-23
 - **2026-10-23** · T-12 · API du backend : un endpoint par visualisation — `/api/games/` filtré et paginé, fiche, `/players/`, `/prices/`, `/api/stats/…`, `/api/map/<indicateur>/`, `/api/docs/` (feat/socle-backend) · opened 2026-10-23
 - **2026-10-23** · T-04 · Client HTTP partagé : cache, débit limité, reprises — `ingestion.http.ApiClient` (httpx) : cache disque haché, écart minimal par source, reprises 429 / 5xx avec Retry-After (feat/socle-backend) · opened 2026-10-23

@@ -33,6 +33,12 @@ erDiagram
         int owners_mid
         int peak_ccu
         json supported_languages
+        text short_description
+        json screenshots
+        json categories
+        text minimum_requirements
+        int metacritic_score
+        datetime store_fetched_at
         date data_date
     }
     GameTag {
@@ -81,7 +87,7 @@ erDiagram
 | App | Modèles |
 |---|---|
 | `catalog` | `Game`, `Genre`, `Tag`, `GameTag`, `Theme`, `GameMode`, `Platform`, `Company`, `ReviewSummary` |
-| `geography` | `Country` |
+| `geography` | `Country` (rempli par `geography.country_table.ensure_countries`), `RegionalSales` |
 | `pricing` | `PricePoint` |
 | `players` | `PlayerCountSnapshot`, `TwitchStreamSnapshot`, `RankingEntry` (top 100 SteamSpy) |
 | `ingestion` | `ImportRun` (une ligne par import lancé : début, fin, lignes, erreurs) |

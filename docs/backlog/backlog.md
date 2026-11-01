@@ -139,18 +139,6 @@ supportées, Metacritic, propriétaires estimés.
 - [ ] Fusion par appid avec T-06 : la donnée la plus récente gagne
 - [ ] Garder les « langues supportées » : elles servent aux cartes (T-23)
 
-### T-10 · Steam Store : fiche détaillée et prix dans chaque pays
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Nathan · **Due**: —
-- **Origin**: `store.steampowered.com/api/appdetails?appids=&cc=` (sans clé, non documentée)
-
-- [ ] Fiche : description courte, captures, catégories, configuration, développeurs
-- [ ] Prix : même jeu interrogé avec `cc=fr,us,gb,br,ar,tr,ru,in,cn,jp,…` (~40 pays),
-  `filters=price_overview` pour alléger
-- [ ] Respecter ~200 req / 5 min : file d'attente, top 1 000 jeux seulement
-
 ### T-11 · IGDB : genres, thèmes, modes de jeu et PopScore
 - **Type**: task
 - **Status**: todo
@@ -597,6 +585,7 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 One line per closed ticket, most recent first:
 `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
 
+- **2026-11-01** · T-10 · Steam Store : fiche détaillée et prix dans chaque pays — `manage.py import_steam_store` : prix du top 1 000 dans 44 pays par paquets de 50 (`PricePoint`, euros au taux BCE de Frankfurter via `pricing.EuroConverter`), 200 fiches par passage (description, captures, catégories, configuration, Metacritic), pays dans `geography.country_table`, planifié chaque jour (feat/T-10-steam-store) · opened 2026-10-23
 - **2026-11-01** · T-09 · Steam Web API : joueurs connectés en direct et historique maison — `manage.py snapshot_players` (top 500 par propriétaires, sans clé, toutes les heures) et `import_steamcharts_history` (passé comblé par SteamCharts depuis 2012, mensuel), dans `PlayerCountSnapshot` (feat/T-09-player-count) · opened 2026-10-23
 - **2026-11-01** · T-08 · SteamSpy : propriétaires, joueurs, tags pondérés — `manage.py import_steamspy` (catalogue par pages, top 100 dans `RankingEntry`, tags votés du top 500), propriétaires min / max / milieu et pic de joueurs sur `Game`, écriture commune `ingestion.writing.GameWriter`, planifié chaque nuit (feat/T-08-steamspy) · opened 2026-10-23
 - **2026-10-23** · T-45 · Rafraîchissement automatique des données — `manage.py run_scheduler` (APScheduler), conteneur `worker`, admin des `ImportRun` ; planning dans `ingestion/scheduling/schedule.py` (feat/socle-backend) · opened 2026-10-23

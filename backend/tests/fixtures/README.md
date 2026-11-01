@@ -18,6 +18,7 @@ respx.get(STEAMSPY_URL).respond(json=load_fixture("steamspy_appdetails_413150"))
 | `steamspy/…` | extraits de `request=all&page=0`, `top100in2weeks`, `appdetails&appid=730` |
 | `steam_web_api/current_players_*.json` | `ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=730` (et un appid inconnu) |
 | `steamcharts/chart_data_413150_extract.json` | `steamcharts.com/app/413150/chart-data.json` (3 premiers et 3 derniers points) |
+| `steam_store/appdetails_413150_en.json` | `store.steampowered.com/api/appdetails?appids=413150&cc=fr&l=english` (allégée) |
 | `frankfurter_latest_eur.json` | `api.frankfurter.dev/v1/latest?base=EUR&symbols=USD,GBP,BRL,TRY,JPY` |
 
 Ajouter une source : enregistrer sa réponse ici (`curl … -o`, puis indenter), sans clé d'API

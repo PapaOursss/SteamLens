@@ -12,6 +12,14 @@ class Game(models.Model):
     igdb_id = models.PositiveIntegerField(null=True, blank=True, unique=True)
     rawg_id = models.PositiveIntegerField(null=True, blank=True, unique=True)
     itad_id = models.CharField(max_length=64, blank=True)
+    # Fourchette de propriétaires estimée (SteamSpy, Kaggle) ; le milieu sert au classement.
+    owners_min = models.PositiveIntegerField(null=True, blank=True)
+    owners_max = models.PositiveIntegerField(null=True, blank=True)
+    owners_mid = models.PositiveIntegerField(null=True, blank=True, db_index=True)
+    peak_ccu = models.PositiveIntegerField(null=True, blank=True)
+    supported_languages = models.JSONField(default=list, blank=True)
+    # Date des données qui ont rempli la fiche : une source plus ancienne ne l'écrase pas.
+    data_date = models.DateField(null=True, blank=True)
 
     genres = models.ManyToManyField("catalog.Genre", blank=True, related_name="games")
     tags = models.ManyToManyField(

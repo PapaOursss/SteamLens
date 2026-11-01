@@ -79,7 +79,7 @@ class ApiClient:
 
     def _parse(self, url: str, response: httpx.Response) -> JsonValue:
         if response.is_error:
-            raise ApiError(self.source, url, f"HTTP {response.status_code}")
+            raise ApiError(self.source, url, f"HTTP {response.status_code}", response.status_code)
         try:
             body: JsonValue = response.json()
         except ValueError as error:

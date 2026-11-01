@@ -18,6 +18,7 @@ erDiagram
     Country ||--o{ PricePoint : ""
     Game ||--o{ PlayerCountSnapshot : "joueurs connectés"
     Game ||--o{ ReviewSummary : avis
+    Game ||--o{ RankingEntry : classements
 
     Game {
         int appid PK
@@ -27,6 +28,12 @@ erDiagram
         int igdb_id
         int rawg_id
         string itad_id
+        int owners_min
+        int owners_max
+        int owners_mid
+        int peak_ccu
+        json supported_languages
+        date data_date
     }
     GameTag {
         int votes
@@ -57,6 +64,11 @@ erDiagram
         int negative
         date date
     }
+    RankingEntry {
+        string chart
+        date date
+        int rank
+    }
     ImportRun {
         string source
         datetime started_at
@@ -71,8 +83,17 @@ erDiagram
 | `catalog` | `Game`, `Genre`, `Tag`, `GameTag`, `Theme`, `GameMode`, `Platform`, `Company`, `ReviewSummary` |
 | `geography` | `Country` |
 | `pricing` | `PricePoint` |
-| `players` | `PlayerCountSnapshot` |
+| `players` | `PlayerCountSnapshot`, `TwitchStreamSnapshot`, `RankingEntry` (top 100 SteamSpy) |
 | `ingestion` | `ImportRun` (une ligne par import lancé : début, fin, lignes, erreurs) |
 
 Les contraintes d'unicité (`GameTag` jeu + tag, `PricePoint` jeu + pays + date + source…)
 rendent les imports idempotents : relancer un import met à jour au lieu de dupliquer.
+
+## Écrire un import
+
+Chaque source traduit ses réponses en `GameRecord` et les confie à
+`ingestion.writing.GameWriter(data_date)` : paquets de 500, aucun doublon, liens (genres, tags,
+studios, plateformes) ajoutés, votes de tags, temps de jeu et avis mis à jour. `data_date` est la
+date des données : un jeu déjà rempli par une source plus récente ne voit que ses champs vides
+comblés (« la donnée la plus récente gagne »). L'import s'enveloppe dans
+`ingestion.import_tracking.tracked_import(source)`, qui remplit `ImportRun`.

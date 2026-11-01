@@ -5,12 +5,20 @@ On est 7 sur le projet : les règles sont courtes exprès. Dans le doute, demand
 
 ## Carte du repo
 
-- `backend/` : Django, géré par `uv` (`config/` = réglages, une app Django par domaine).
+- `backend/` : Django + Django REST Framework, géré par `uv`.
+  - `config/` : réglages (`settings.py` lit `backend/.env`, modèle : `.env.example`) et routes
+    (`api_urls.py` : tout `/api/…` ; doc interactive sur http://localhost:8000/api/docs/).
+  - Une app par domaine : `catalog` (jeux, genres, tags, studios, avis), `pricing` (prix),
+    `players` (joueurs connectés), `geography` (pays, cartes), `ingestion` (imports :
+    client HTTP `ingestion/http/`, planificateur `ingestion/scheduling/`, suivi `ImportRun`).
+  - `tests/` : tests `pytest` (`uv run pytest`), réponses d'API enregistrées dans
+    `tests/fixtures/`. Modèle de données : `docs/donnees.md`.
 - `frontend/` : Nuxt 4 / Vue 3 + TypeScript + Tailwind. Le code est dans `frontend/app/` :
   `pages/` (une page = une route), `components/` (morceaux d'écran), `composables/`
   (logique réutilisable `useXxx`), `layouts/`, `middleware/`, `plugins/`, `types/`, `utils/`,
   `assets/`.
-- `compose.yml` : lance toute la pile dans podman (voir `docs/podman.md`).
+- `compose.yml` : lance toute la pile dans podman (voir `docs/podman.md`) : `backend`,
+  `worker` (imports planifiés), `frontend`.
 - `docs/` : documentation et backlog.
 
 ## Lancer le projet
@@ -38,8 +46,7 @@ On est 7 sur le projet : les règles sont courtes exprès. Dans le doute, demand
 - Message : `type: ce que ça fait`, 50 caractères au plus, en français.
   Types : `feat`, `fix`, `docs`, `refactor`, `test`, `style`, `chore`.
   Exemple : `feat: courbe des prix sur la fiche jeu`.
-- Fini ? Pousser la branche et ouvrir une pull request vers `develop`.
-  Un autre membre relit avant la fusion.
+- Fini ? Fusionner la branche dans `develop` et pousser.
 
 ## Code
 

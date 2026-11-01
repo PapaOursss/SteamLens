@@ -12,8 +12,27 @@ services:
     volumes:
       - ./backend:/app:z
       - /app/.venv
+    # Clés d'API (voir backend/.env.example) ; facultatif : sans lui, les sources à clé sont sautées.
+    env_file:
+      - path: backend/.env
+        required: false
     environment:
       DJANGO_DEBUG: "1"
+
+  # Planificateur des imports (T-45) : même image que le backend, même base SQLite.
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Containerfile
+    command: ["uv", "run", "python", "manage.py", "run_scheduler"]
+    volumes:
+      - ./backend:/app:z
+      - /app/.venv
+    env_file:
+      - path: backend/.env
+        required: false
+    depends_on:
+      - backend
 
   frontend:
     build:

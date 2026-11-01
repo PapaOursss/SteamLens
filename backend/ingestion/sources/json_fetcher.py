@@ -1,28 +1,19 @@
-import json
-import urllib.error
-import urllib.parse
-import urllib.request
 from collections.abc import Callable
-from http import HTTPStatus
 from typing import Any
 
-from ingestion.sources.resource_not_found import ResourceNotFound
-
-REQUEST_TIMEOUT_SECONDS = 30
+from ingestion.http import ApiClient, ResponseCache
 
 JsonFetcher = Callable[[str, dict[str, str]], Any]
 
 
-def fetch_json_over_http(url: str, params: dict[str, str]) -> Any:
-    """Appel GET minimal, en attendant le client HTTP partagé (cache, reprises).
+def cached_fetcher(source: str) -> JsonFetcher:
+    """GET JSON par le client partagé : cache disque, débit de la source, reprises.
 
-    Lève ResourceNotFound sur un 404, que les sources traitent comme « absent ».
+    Les clients des sources reçoivent un `JsonFetcher` : les tests leur passent des fixtures.
     """
-    full_url = f"{url}?{urllib.parse.urlencode(params)}"
-    try:
-        with urllib.request.urlopen(full_url, timeout=REQUEST_TIMEOUT_SECONDS) as response:
-            return json.load(response)
-    except urllib.error.HTTPError as error:
-        if error.code == HTTPStatus.NOT_FOUND:
-            raise ResourceNotFound(full_url) from error
-        raise
+    return ApiClient(source, cache=ResponseCache.for_source(source)).get_json
+
+
+def live_fetcher(source: str) -> JsonFetcher:
+    """Comme `cached_fetcher`, sans cache : pour les chiffres en direct (joueurs connectés)."""
+    return ApiClient(source).get_json

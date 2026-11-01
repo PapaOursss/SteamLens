@@ -139,19 +139,6 @@ supportées, Metacritic, propriétaires estimés.
 - [ ] Fusion par appid avec T-06 : la donnée la plus récente gagne
 - [ ] Garder les « langues supportées » : elles servent aux cartes (T-23)
 
-### T-09 · Steam Web API : joueurs connectés en direct et historique maison
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Nathan · **Due**: —
-- **Origin**: steamcommunity.com/dev · `ISteamUserStats/GetNumberOfCurrentPlayers`
-
-Pas d'historique officiel : on le fabrique nous-mêmes en photographiant les joueurs.
-- [ ] `manage.py snapshot_players` sur le top 500 (SteamSpy) → `PlayerCountSnapshot`
-- [ ] Le lancer toutes les heures (cron du poste ou T-45) dès que possible : plus on commence
-  tôt, plus les courbes seront belles à la soutenance
-- [ ] Compléter le passé avec un dataset Kaggle d'historique SteamCharts (voir T-28)
-
 ### T-10 · Steam Store : fiche détaillée et prix dans chaque pays
 - **Type**: task
 - **Status**: todo
@@ -610,6 +597,7 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 One line per closed ticket, most recent first:
 `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
 
+- **2026-11-01** · T-09 · Steam Web API : joueurs connectés en direct et historique maison — `manage.py snapshot_players` (top 500 par propriétaires, sans clé, toutes les heures) et `import_steamcharts_history` (passé comblé par SteamCharts depuis 2012, mensuel), dans `PlayerCountSnapshot` (feat/T-09-player-count) · opened 2026-10-23
 - **2026-11-01** · T-08 · SteamSpy : propriétaires, joueurs, tags pondérés — `manage.py import_steamspy` (catalogue par pages, top 100 dans `RankingEntry`, tags votés du top 500), propriétaires min / max / milieu et pic de joueurs sur `Game`, écriture commune `ingestion.writing.GameWriter`, planifié chaque nuit (feat/T-08-steamspy) · opened 2026-10-23
 - **2026-10-23** · T-45 · Rafraîchissement automatique des données — `manage.py run_scheduler` (APScheduler), conteneur `worker`, admin des `ImportRun` ; planning dans `ingestion/scheduling/schedule.py` (feat/socle-backend) · opened 2026-10-23
 - **2026-10-23** · T-12 · API du backend : un endpoint par visualisation — `/api/games/` filtré et paginé, fiche, `/players/`, `/prices/`, `/api/stats/…`, `/api/map/<indicateur>/`, `/api/docs/` (feat/socle-backend) · opened 2026-10-23

@@ -5,12 +5,32 @@ from typing import Any
 
 from django.db import models, transaction
 
-from catalog.models import Company, Game, GamePlaytime, GameTag, Genre, Platform, ReviewSummary, Tag
+from catalog.models import (
+    Company,
+    Game,
+    GameMode,
+    GamePlaytime,
+    GameTag,
+    Genre,
+    Platform,
+    PlayerPerspective,
+    ReviewSummary,
+    Tag,
+    Theme,
+)
 from ingestion.writing.game_record import GameRecord
 
 BATCH_SIZE = 500
 ALL_LANGUAGES = "all"
-NAME_LENGTHS = {Genre: 100, Tag: 100, Platform: 100, Company: 255}
+NAME_LENGTHS = {
+    Genre: 100,
+    Tag: 100,
+    Platform: 100,
+    Theme: 100,
+    GameMode: 100,
+    PlayerPerspective: 100,
+    Company: 255,
+}
 
 
 def is_empty(value: Any) -> bool:

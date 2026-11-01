@@ -114,20 +114,6 @@ backend importe, met en cache et sert des agrégats. Aucune donnée personnelle 
 
 ## 🟠 Important
 
-### T-11 · IGDB : genres, thèmes, modes de jeu et PopScore
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Nathan · **Due**: —
-- **Origin**: api-docs.igdb.com (jeton Twitch « client credentials »)
-
-IGDB a une classification plus fine que Steam.
-- [ ] Jeton OAuth Twitch renouvelé automatiquement
-- [ ] Lien appid ↔ IGDB par l'endpoint `external_games` (source Steam)
-- [ ] Genres, thèmes (horreur, SF…), `game_modes`, `player_perspectives`, studios et pays
-- [ ] `popularity_primitives` (PopScore : visites, envies, joueurs) pour un second avis
-  sur la popularité
-
 ### T-13 · Page d'accueil : tableau de bord en direct
 - **Type**: idea
 - **Status**: todo
@@ -549,6 +535,7 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 One line per closed ticket, most recent first:
 `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
 
+- **2026-11-01** · T-11 · IGDB : genres, thèmes, modes de jeu et PopScore — `manage.py import_igdb` (top 2 000, chaque semaine) : jeton Twitch renouvelé seul (avant expiration et sur 401), lien appid ↔ IGDB par `external_games`, genres IGDB à part (`Game.igdb_genres`), thèmes, modes, points de vue, studios et leur pays, `IgdbPopularity` ; `ApiClient.post_json` ; testé sur réponses écrites à la main, à lancer une fois l'application Twitch dans `.env` (feat/T-11-igdb) · opened 2026-10-23
 - **2026-11-01** · T-47 · Import Kaggle « Steam Reviews » (6 millions d'avis) — `manage.py import_kaggle_reviews` : lecture en flux (polars, moteur streaming), positifs / négatifs par jeu dans `ReviewSummary` (anglais, 2017), 20 extraits utiles par jeu et par sens dans `ReviewExcerpt` pour T-40 ; sentiment par genre et année de sortie sur `/api/stats/review-sentiment/` (le dataset ne date pas les avis) ; à lancer une fois le jeton Kaggle dans `.env` (feat/T-47-kaggle-reviews) · opened 2026-10-23
 - **2026-11-01** · T-07 · Import Kaggle « Steam Games Dataset » (fronkongames) — `manage.py import_kaggle_fronkongames` : en-tête cassé du CSV réparé, propriétaires, pic de joueurs, temps de jeu, Metacritic, langues supportées (pour T-23), captures, plateformes ; fusion par appid où la donnée la plus récente gagne (`data_date`), logique commune aux imports Kaggle dans `ingestion/sources/kaggle/games_import.py` ; à lancer une fois le jeton Kaggle dans `.env` (feat/T-07-kaggle-fronkongames) · opened 2026-10-23
 - **2026-11-01** · T-06 · Import Kaggle « Steam Games Complete Dataset » — `manage.py import_kaggle_steam_complete` (`--file` ou téléchargement par l'API Kaggle dans `backend/data/raw/`) : nettoyage polars, appid tiré de l'URL, dates ISO, prix USD convertis en euros, tags éclatés, avis ; idempotent, tracé dans `ImportRun` ; à lancer une fois le jeton Kaggle dans `.env` (feat/T-06-kaggle-steam-complete) · opened 2026-10-23

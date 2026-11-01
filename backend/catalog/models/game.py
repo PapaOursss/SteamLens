@@ -32,6 +32,11 @@ class Game(models.Model):
     tags = models.ManyToManyField(
         "catalog.Tag", through="catalog.GameTag", blank=True, related_name="games"
     )
+    # Genres IGDB, plus fins que ceux de Steam : rangés à part pour ne pas mélanger les treemaps.
+    igdb_genres = models.ManyToManyField("catalog.Genre", blank=True, related_name="igdb_games")
+    player_perspectives = models.ManyToManyField(
+        "catalog.PlayerPerspective", blank=True, related_name="games"
+    )
     themes = models.ManyToManyField("catalog.Theme", blank=True, related_name="games")
     game_modes = models.ManyToManyField("catalog.GameMode", blank=True, related_name="games")
     platforms = models.ManyToManyField("catalog.Platform", blank=True, related_name="games")

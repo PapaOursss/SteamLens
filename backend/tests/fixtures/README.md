@@ -27,3 +27,6 @@ IGDB, Twitch, RAWG, IsThereAnyDeal) s'ajoutent quand la clé existe (`docs/backl
 
 `kaggle/*.csv` : quelques lignes écrites à la main au format des datasets Kaggle (colonnes
 d'origine), faute de pouvoir les télécharger sans compte.
+
+`igdb/*.json` : écrites à la main au format documenté sur api-docs.igdb.com, en attendant
+l'application Twitch ; à remplacer par de vraies réponses dès que la clé existe.

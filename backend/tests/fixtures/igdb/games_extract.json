@@ -1,0 +1,111 @@
+[
+  {
+    "id": 1942,
+    "name": "The Witcher 3: Wild Hunt",
+    "genres": [
+      {
+        "id": 12,
+        "name": "Role-playing (RPG)"
+      },
+      {
+        "id": 31,
+        "name": "Adventure"
+      }
+    ],
+    "themes": [
+      {
+        "id": 1,
+        "name": "Action"
+      },
+      {
+        "id": 17,
+        "name": "Fantasy"
+      },
+      {
+        "id": 38,
+        "name": "Open world"
+      }
+    ],
+    "game_modes": [
+      {
+        "id": 1,
+        "name": "Single player"
+      }
+    ],
+    "player_perspectives": [
+      {
+        "id": 2,
+        "name": "Third person"
+      }
+    ],
+    "involved_companies": [
+      {
+        "id": 1,
+        "developer": true,
+        "publisher": false,
+        "company": {
+          "id": 908,
+          "name": "CD Projekt RED",
+          "country": 616
+        }
+      },
+      {
+        "id": 2,
+        "developer": false,
+        "publisher": true,
+        "company": {
+          "id": 9,
+          "name": "Bandai Namco Entertainment",
+          "country": 392
+        }
+      },
+      {
+        "id": 3,
+        "developer": false,
+        "publisher": true,
+        "company": {
+          "id": 10,
+          "name": "Studio sans pays"
+        }
+      }
+    ]
+  },
+  {
+    "id": 119133,
+    "name": "Elden Ring",
+    "genres": [
+      {
+        "id": 12,
+        "name": "Role-playing (RPG)"
+      }
+    ],
+    "themes": [
+      {
+        "id": 17,
+        "name": "Fantasy"
+      }
+    ],
+    "game_modes": [
+      {
+        "id": 1,
+        "name": "Single player"
+      },
+      {
+        "id": 3,
+        "name": "Co-operative"
+      }
+    ],
+    "involved_companies": [
+      {
+        "id": 4,
+        "developer": true,
+        "publisher": false,
+        "company": {
+          "id": 11,
+          "name": "FromSoftware",
+          "country": 392
+        }
+      }
+    ]
+  }
+]

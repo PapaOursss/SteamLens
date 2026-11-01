@@ -4,7 +4,9 @@ from catalog.models.game_mode import GameMode
 from catalog.models.game_playtime import GamePlaytime
 from catalog.models.game_tag import GameTag
 from catalog.models.genre import Genre
+from catalog.models.igdb_popularity import IgdbPopularity
 from catalog.models.platform import Platform
+from catalog.models.player_perspective import PlayerPerspective
 from catalog.models.proton_report import ProtonReport
 from catalog.models.review_excerpt import ReviewExcerpt
 from catalog.models.review_summary import ReviewSummary
@@ -18,7 +20,9 @@ __all__ = [
     "GamePlaytime",
     "GameTag",
     "Genre",
+    "IgdbPopularity",
     "Platform",
+    "PlayerPerspective",
     "ProtonReport",
     "ReviewExcerpt",
     "ReviewSummary",

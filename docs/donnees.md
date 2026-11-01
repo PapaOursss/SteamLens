@@ -10,6 +10,9 @@ erDiagram
     Tag ||--o{ GameTag : ""
     Game }o--o{ Genre : genres
     Game }o--o{ Theme : thèmes
+    Game }o--o{ Genre : "genres IGDB"
+    Game }o--o{ PlayerPerspective : "points de vue"
+    Game ||--o{ IgdbPopularity : PopScore
     Game }o--o{ GameMode : modes
     Game }o--o{ Platform : plateformes
     Game }o--o{ Company : "développeurs / éditeurs"
@@ -86,7 +89,7 @@ erDiagram
 
 | App | Modèles |
 |---|---|
-| `catalog` | `ReviewExcerpt` (extraits d'avis anonymes, pour T-40), `Game`, `Genre`, `Tag`, `GameTag`, `Theme`, `GameMode`, `Platform`, `Company`, `ReviewSummary` |
+| `catalog` | `PlayerPerspective`, `IgdbPopularity` (PopScore IGDB), `ReviewExcerpt` (extraits d'avis anonymes, pour T-40), `Game`, `Genre`, `Tag`, `GameTag`, `Theme`, `GameMode`, `Platform`, `Company`, `ReviewSummary` |
 | `geography` | `Country` (rempli par `geography.country_table.ensure_countries`), `RegionalSales` |
 | `pricing` | `PricePoint` |
 | `players` | `PlayerCountSnapshot`, `TwitchStreamSnapshot`, `RankingEntry` (top 100 SteamSpy) |

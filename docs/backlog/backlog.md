@@ -114,18 +114,6 @@ backend importe, met en cache et sert des agrégats. Aucune donnée personnelle 
 
 ## 🟠 Important
 
-### T-13 · Page d'accueil : tableau de bord en direct
-- **Type**: idea
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Léandre · **Due**: —
-- **Origin**: plan initial du projet
-
-- [ ] Tuiles chiffres clés : jeux suivis, joueurs connectés au total, genre roi, prix moyen
-- [ ] Top 10 des jeux les plus joués maintenant (barres horizontales + jaquette)
-- [ ] Mini-courbe (sparkline) des 24 dernières heures sur chaque ligne
-- [ ] Bandeau « jeu du jour » tiré au hasard parmi les pépites (T-30)
-
 ### T-14 · Fiche jeu complète
 - **Type**: idea
 - **Status**: todo
@@ -534,6 +522,8 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 
 One line per closed ticket, most recent first:
 `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
+
+- **2026-11-04** · T-13 · Page d'accueil : tableau de bord en direct — endpoint `/api/stats/dashboard/` (chiffres clés consolidés, top 10 des jeux avec sparklines 24h, pépite du jour) et vue Nuxt 4 `pages/index.vue` avec sous-composants `MetricTile`, `TopGameRow`, `SparkLine` et `FeaturedGem` (feat/T-13-tableau-de-bord) · opened 2026-10-23
 
 - **2026-11-01** · T-11 · IGDB : genres, thèmes, modes de jeu et PopScore — `manage.py import_igdb` (top 2 000, chaque semaine) : jeton Twitch renouvelé seul (avant expiration et sur 401), lien appid ↔ IGDB par `external_games`, genres IGDB à part (`Game.igdb_genres`), thèmes, modes, points de vue, studios et leur pays, `IgdbPopularity` ; `ApiClient.post_json` ; testé sur réponses écrites à la main, à lancer une fois l'application Twitch dans `.env` (feat/T-11-igdb) · opened 2026-10-23
 - **2026-11-01** · T-47 · Import Kaggle « Steam Reviews » (6 millions d'avis) — `manage.py import_kaggle_reviews` : lecture en flux (polars, moteur streaming), positifs / négatifs par jeu dans `ReviewSummary` (anglais, 2017), 20 extraits utiles par jeu et par sens dans `ReviewExcerpt` pour T-40 ; sentiment par genre et année de sortie sur `/api/stats/review-sentiment/` (le dataset ne date pas les avis) ; à lancer une fois le jeton Kaggle dans `.env` (feat/T-47-kaggle-reviews) · opened 2026-10-23

@@ -1,45 +1,47 @@
 <template>
-  <div class="sales-page">
-    <header class="page-header">
-      <h1 class="title">Ventes par Région (Kaggle vgsales)</h1>
-      <p class="subtitle">
+  <div class="space-y-6">
+    <header class="border-b border-slate-800 pb-4">
+      <h1 class="text-2xl font-bold text-white tracking-tight">Ventes par Région (Kaggle vgsales)</h1>
+      <p class="text-sm text-slate-400 mt-1">
         Comparaison des préférences culturelles et genres préférés : Amérique du Nord, Europe et Japon.
       </p>
     </header>
 
-    <section class="section favorites-banner">
-      <div class="fav-card">
-        <span class="region-flag">🇺🇸 / 🇨🇦 Amérique du Nord</span>
-        <strong class="fav-genre">Action & Tir</strong>
+    <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col gap-1 shadow-sm">
+        <span class="text-xs text-slate-400 font-medium">🇺🇸 / 🇨🇦 Amérique du Nord</span>
+        <strong class="text-base font-bold text-white">Action & Tir</strong>
       </div>
-      <div class="fav-card">
-        <span class="region-flag">🇪🇺 Europe</span>
-        <strong class="fav-genre">Action & Sports</strong>
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col gap-1 shadow-sm">
+        <span class="text-xs text-slate-400 font-medium">🇪🇺 Europe</span>
+        <strong class="text-base font-bold text-white">Action & Sports</strong>
       </div>
-      <div class="fav-card fav-highlight">
-        <span class="region-flag">🇯🇵 Japon</span>
-        <strong class="fav-genre">Jeux de Rôle (J-RPG)</strong>
+      <div class="bg-slate-900 border border-pink-900/60 rounded-xl p-4 flex flex-col gap-1 shadow-sm bg-gradient-to-br from-slate-900 to-pink-950/20">
+        <span class="text-xs text-pink-400 font-medium">🇯🇵 Japon</span>
+        <strong class="text-base font-bold text-pink-300">Jeux de Rôle (J-RPG)</strong>
       </div>
     </section>
 
-    <section class="section">
-      <h2 class="section-title">Volumes de ventes par genre (Millions d'unités)</h2>
-      <div class="table-container">
-        <table class="sales-table">
+    <section class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+      <h2 class="text-base font-bold text-slate-100">Volumes de ventes par genre (Millions d'unités)</h2>
+      <div class="overflow-x-auto border border-slate-800 rounded-lg">
+        <table class="w-full border-collapse text-left text-sm">
           <thead>
-            <tr>
-              <th>Genre</th>
-              <th>Amérique du Nord</th>
-              <th>Europe</th>
-              <th>Japon</th>
+            <tr class="bg-slate-950 text-slate-300 border-b border-slate-800 text-xs">
+              <th class="p-3">Genre</th>
+              <th class="p-3">Amérique du Nord</th>
+              <th class="p-3">Europe</th>
+              <th class="p-3">Japon</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="item in salesData" :key="item.genre">
-              <td class="font-bold">{{ item.genre }}</td>
-              <td>{{ item.na }} M</td>
-              <td>{{ item.eu }} M</td>
-              <td :class="item.genre === 'Role-Playing' ? 'jp-special' : ''">{{ item.jp }} M</td>
+          <tbody class="divide-y divide-slate-800/60 text-slate-200">
+            <tr v-for="item in salesData" :key="item.genre" class="hover:bg-slate-850/50">
+              <td class="p-3 font-semibold text-slate-100">{{ item.genre }}</td>
+              <td class="p-3 text-slate-300">{{ item.na }} M</td>
+              <td class="p-3 text-slate-300">{{ item.eu }} M</td>
+              <td class="p-3 font-medium" :class="item.genre === 'Role-Playing' ? 'text-pink-400 font-bold' : 'text-slate-300'">
+                {{ item.jp }} M
+              </td>
             </tr>
           </tbody>
         </table>
@@ -50,6 +52,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
+useHead({
+  title: 'Ventes par Région — SteamLens'
+})
 
 interface RegionalGenreSales {
   genre: string
@@ -67,44 +73,3 @@ const salesData = ref<RegionalGenreSales[]>([
   { genre: 'Misc', na: 402.5, eu: 213.8, jp: 107.8 }
 ])
 </script>
-
-<style scoped>
-.sales-page {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-  font-family: system-ui, -apple-system, sans-serif;
-  color: #1f2937;
-}
-.page-header { margin-bottom: 2rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; }
-.title { font-size: 2rem; font-weight: 800; margin: 0 0 0.5rem 0; }
-.subtitle { color: #4b5563; margin: 0; }
-.section { margin-bottom: 2.5rem; }
-.section-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; }
-.favorites-banner {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
-}
-.fav-card {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-.fav-highlight {
-  background: #fdf2f8;
-  border-color: #fbcfe8;
-}
-.region-flag { font-size: 0.85rem; color: #6b7280; font-weight: 600; }
-.fav-genre { font-size: 1.15rem; color: #111827; }
-.table-container { border: 1px solid #e5e7eb; border-radius: 0.5rem; overflow-x: auto; }
-.sales-table { width: 100%; border-collapse: collapse; text-align: left; }
-.sales-table th, .sales-table td { padding: 0.75rem 1rem; border-bottom: 1px solid #e5e7eb; }
-.sales-table th { background: #f9fafb; font-weight: 700; font-size: 0.85rem; color: #374151; }
-.font-bold { font-weight: 600; }
-.jp-special { color: #db2777; font-weight: 700; }
-</style>

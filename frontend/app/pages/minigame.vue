@@ -1,51 +1,74 @@
 <template>
-  <div class="minigame-container">
-    <header class="game-header">
-      <h1 class="title">Mini-jeu : Plus ou Moins</h1>
-      <p class="subtitle">Défiez vos intuitions sur les statistiques de Steam !</p>
-      <div class="scoreboard">
-        <span class="score-pill">Score : {{ score }}</span>
-        <span class="score-pill streak-pill">Série max : {{ bestStreak }}</span>
+  <div class="space-y-6">
+    <header class="border-b border-slate-800 pb-4 text-center">
+      <h1 class="text-2xl font-bold text-white tracking-tight">Mini-jeu : Plus ou Moins</h1>
+      <p class="text-sm text-slate-400 mt-1">Défiez vos intuitions sur les statistiques de Steam !</p>
+      <div class="mt-3 flex justify-center gap-3">
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-900 border border-slate-800 text-slate-300">
+          Score : {{ score }}
+        </span>
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-950/60 border border-amber-800 text-amber-300">
+          Série max : {{ bestStreak }}
+        </span>
       </div>
     </header>
 
-    <div v-if="loading" class="loading-state">
+    <div v-if="loading" class="text-center py-12 text-sm text-slate-400">
       Chargement du prochain duel...
     </div>
 
-    <div v-else class="duel-arena">
-      <div class="metric-banner">
-        Métrique : <strong>{{ metricLabel }}</strong>
+    <div v-else class="space-y-6">
+      <div class="text-center py-2 px-4 rounded-lg bg-cyan-950/40 border border-cyan-800/60 text-cyan-300 text-sm font-medium max-w-md mx-auto">
+        Métrique : <strong class="text-cyan-200">{{ metricLabel }}</strong>
       </div>
 
-      <div class="cards-wrapper">
-        <div class="game-card card-reference">
-          <img :src="gameA.header_image" :alt="gameA.name" class="game-cover" />
-          <h2 class="game-title">{{ gameA.name }}</h2>
-          <div class="metric-value-box">
-            <span class="value-text">{{ formatMetricValue(gameA[currentMetric]) }}</span>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+        <!-- Game A -->
+        <div class="w-72 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg pb-4 text-center">
+          <img :src="gameA.header_image" :alt="gameA.name" class="w-full h-36 object-cover" />
+          <h2 class="font-bold text-base text-white p-3 truncate">{{ gameA.name }}</h2>
+          <div class="px-3 py-2 mx-4 rounded-lg bg-slate-950 border border-slate-800 text-sm font-semibold text-cyan-400">
+            {{ formatMetricValue(gameA[currentMetric]) }}
           </div>
         </div>
 
-        <div class="vs-badge">VS</div>
+        <div class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-black text-slate-300 shadow">
+          VS
+        </div>
 
-        <div class="game-card card-target">
-          <img :src="gameB.header_image" :alt="gameB.name" class="game-cover" />
-          <h2 class="game-title">{{ gameB.name }}</h2>
+        <!-- Game B -->
+        <div class="w-72 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg pb-4 text-center">
+          <img :src="gameB.header_image" :alt="gameB.name" class="w-full h-36 object-cover" />
+          <h2 class="font-bold text-base text-white p-3 truncate">{{ gameB.name }}</h2>
 
-          <div v-if="!revealed" class="choices-actions">
-            <button class="btn btn-higher" @click="handleGuess(true)">
+          <div v-if="!revealed" class="flex flex-col gap-2 px-4">
+            <button
+              class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors shadow"
+              @click="handleGuess(true)"
+            >
               ▲ Plus élevé
             </button>
-            <button class="btn btn-lower" @click="handleGuess(false)">
+            <button
+              class="w-full py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-colors shadow"
+              @click="handleGuess(false)"
+            >
               ▼ Moins élevé
             </button>
           </div>
 
-          <div v-else class="metric-value-box result-box" :class="isCorrect ? 'box-win' : 'box-loss'">
-            <span class="value-text">{{ formatMetricValue(gameB[currentMetric]) }}</span>
-            <span class="result-label">{{ isCorrect ? 'Bien vu !' : 'Raté !' }}</span>
-            <button class="btn btn-next" @click="loadNextDuel">Suivant →</button>
+          <div
+            v-else
+            class="mx-4 p-3 rounded-lg border flex flex-col gap-1.5"
+            :class="isCorrect ? 'bg-emerald-950/60 border-emerald-800 text-emerald-300' : 'bg-rose-950/60 border-rose-800 text-rose-300'"
+          >
+            <span class="text-sm font-bold">{{ formatMetricValue(gameB[currentMetric]) }}</span>
+            <span class="text-xs font-semibold">{{ isCorrect ? 'Bien vu !' : 'Raté !' }}</span>
+            <button
+              class="mt-1 py-1.5 px-3 rounded bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition-colors"
+              @click="loadNextDuel"
+            >
+              Suivant →
+            </button>
           </div>
         </div>
       </div>
@@ -55,6 +78,10 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+
+useHead({
+  title: 'Duel de jeux — SteamLens'
+})
 
 interface GameCardData {
   appid: number
@@ -97,7 +124,7 @@ const gameB = ref<GameCardData>({
 const metricLabel = computed(() => {
   if (currentMetric.value === 'players') return 'Nombre de joueurs en ligne'
   if (currentMetric.value === 'price_eur') return 'Prix en euros'
-  return 'Pourcentage d\'avis positifs'
+  return "Pourcentage d'avis positifs"
 })
 
 function formatMetricValue(val: number | string): string {
@@ -136,91 +163,3 @@ onMounted(() => {
   loadNextDuel()
 })
 </script>
-
-<style scoped>
-.minigame-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-  font-family: system-ui, -apple-system, sans-serif;
-  color: #1f2937;
-  text-align: center;
-}
-.game-header { margin-bottom: 2rem; }
-.title { font-size: 2.2rem; font-weight: 800; margin: 0 0 0.5rem 0; }
-.subtitle { color: #6b7280; margin: 0 0 1rem 0; }
-.scoreboard { display: flex; justify-content: center; gap: 1rem; }
-.score-pill {
-  background: #f3f4f6;
-  padding: 0.35rem 0.9rem;
-  border-radius: 9999px;
-  font-weight: 700;
-  font-size: 0.9rem;
-}
-.streak-pill { background: #fef3c7; color: #b45309; }
-.metric-banner {
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
-  color: #1d4ed8;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  margin-bottom: 2rem;
-  font-size: 1.1rem;
-}
-.cards-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-.game-card {
-  width: 320px;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.75rem;
-  overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-  background: #fff;
-  padding-bottom: 1.5rem;
-}
-.game-cover { width: 100%; height: 160px; object-fit: cover; }
-.game-title { font-size: 1.25rem; font-weight: 700; padding: 1rem 1rem 0.5rem 1rem; margin: 0; }
-.vs-badge {
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: #9ca3af;
-  background: #f3f4f6;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.metric-value-box {
-  background: #f9fafb;
-  padding: 1rem;
-  margin: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-size: 1.25rem;
-  font-weight: 800;
-}
-.choices-actions { display: flex; flex-direction: column; gap: 0.5rem; padding: 0.5rem 1rem; }
-.btn {
-  border: none;
-  cursor: pointer;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  font-weight: 700;
-  font-size: 1rem;
-  transition: opacity 0.2s;
-}
-.btn:hover { opacity: 0.9; }
-.btn-higher { background: #22c55e; color: #fff; }
-.btn-lower { background: #ef4444; color: #fff; }
-.btn-next { background: #2563eb; color: #fff; margin-top: 0.5rem; }
-.box-win { background: #dcfce7; color: #15803d; }
-.box-loss { background: #fee2e2; color: #b91c1c; }
-.result-box { display: flex; flex-direction: column; gap: 0.4rem; }
-.result-label { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; }
-</style>

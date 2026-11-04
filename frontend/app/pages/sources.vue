@@ -1,50 +1,60 @@
 <template>
-  <div class="sources-page">
-    <header class="page-header">
-      <h1 class="title">Sources & Méthodologie</h1>
-      <p class="subtitle">
+  <div class="space-y-6">
+    <header class="border-b border-slate-800 pb-4">
+      <h1 class="text-2xl font-bold text-white tracking-tight">Sources & Méthodologie</h1>
+      <p class="text-sm text-slate-400 mt-1">
         Architecture de collecte, fraîcheur des données et choix méthodologiques pour la soutenance.
       </p>
     </header>
 
-    <section class="section">
-      <h2 class="section-title">Flux de traitement des données</h2>
-      <div class="pipeline-grid">
-        <div v-for="step in pipelineSteps" :key="step.step" class="step-card">
-          <div class="step-badge">Étape {{ step.step }}</div>
-          <h3 class="step-name">{{ step.name }}</h3>
-          <p class="step-description">{{ step.description }}</p>
+    <section class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+      <h2 class="text-base font-bold text-slate-100">Flux de traitement des données</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div v-for="step in pipelineSteps" :key="step.step" class="bg-slate-950 border border-slate-800/80 rounded-lg p-4">
+          <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-cyan-950 text-cyan-300 border border-cyan-800 mb-2">
+            Étape {{ step.step }}
+          </span>
+          <h3 class="font-bold text-sm text-white mb-1">{{ step.name }}</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">{{ step.description }}</p>
         </div>
       </div>
     </section>
 
-    <section class="section">
-      <h2 class="section-title">Sources connectées ({{ sources.length }})</h2>
-      <div class="sources-grid">
-        <article v-for="source in sources" :key="source.key" class="source-card">
-          <div class="source-header">
-            <span class="source-tag">{{ source.logo }}</span>
-            <span class="status-pill" :class="source.last_import?.succeeded ? 'pill-success' : 'pill-idle'">
-              {{ source.last_import?.succeeded ? 'Opérationnel' : 'En attente' }}
-            </span>
-          </div>
-          <h3 class="source-name">{{ source.name }}</h3>
-          <p class="source-role">{{ source.role }}</p>
-          <div class="source-meta">
-            <div class="meta-row"><strong>Licence :</strong> <span>{{ source.license }}</span></div>
-            <div class="meta-row">
-              <strong>Fraîcheur :</strong>
-              <span>{{ source.last_import?.finished_at ? formatDate(source.last_import.finished_at) : 'Pas d\'import' }}</span>
+    <section class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+      <h2 class="text-base font-bold text-slate-100">Sources connectées ({{ sources.length }})</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <article v-for="source in sources" :key="source.key" class="bg-slate-950 border border-slate-800/80 rounded-lg p-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-slate-800 text-cyan-300 border border-slate-700">
+                {{ source.logo }}
+              </span>
+              <span
+                class="px-2 py-0.5 rounded-full text-[10px] font-semibold"
+                :class="source.last_import?.succeeded ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-slate-800 text-slate-400 border border-slate-700'"
+              >
+                {{ source.last_import?.succeeded ? 'Opérationnel' : 'En attente' }}
+              </span>
             </div>
-            <div class="meta-row limits-row"><strong>Limites :</strong> <span>{{ source.limits }}</span></div>
+            <h3 class="font-bold text-sm text-white">{{ source.name }}</h3>
+            <p class="text-xs text-slate-400 mt-1 mb-3">{{ source.role }}</p>
+          </div>
+
+          <div class="pt-3 border-t border-slate-800/80 text-[11px] text-slate-400 space-y-1">
+            <div class="flex gap-1.5"><strong class="text-slate-300">Licence :</strong> <span>{{ source.license }}</span></div>
+            <div class="flex gap-1.5">
+              <strong class="text-slate-300">Fraîcheur :</strong>
+              <span>{{ source.last_import?.finished_at ? formatDate(source.last_import.finished_at) : "Pas d'import" }}</span>
+            </div>
+            <div class="flex gap-1.5 text-amber-400/90"><strong class="text-slate-300">Limites :</strong> <span>{{ source.limits }}</span></div>
           </div>
         </article>
       </div>
     </section>
 
-    <section class="section notes-section">
-      <h2 class="section-title">Limites méthodologiques et éthique</h2>
-      <ul class="notes-list">
+    <section class="bg-amber-950/20 border border-amber-900/40 rounded-xl p-5 space-y-2">
+      <h2 class="text-sm font-bold text-amber-300">Limites méthodologiques et éthique</h2>
+      <ul class="list-disc list-inside space-y-1 text-xs text-amber-200/80">
         <li v-for="(note, index) in notes" :key="index">{{ note }}</li>
       </ul>
     </section>
@@ -53,6 +63,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
+useHead({
+  title: 'Sources & Méthodologie — SteamLens'
+})
 
 interface ImportRunInfo {
   started_at: string | null
@@ -94,7 +108,7 @@ const sources = ref<SourceInfo[]>([
     logo: 'SteamSpy',
     role: 'Fourchettes de propriétaires et tags communautaires.',
     license: 'Données publiques SteamSpy',
-    limits: 'Fourchettes estimées avec marge d\'incertitude.',
+    limits: "Fourchettes estimées avec marge d'incertitude.",
     last_import: { started_at: null, finished_at: null, rows: 0, succeeded: null }
   },
   {
@@ -103,7 +117,7 @@ const sources = ref<SourceInfo[]>([
     logo: 'Steam',
     role: 'Comptage en temps réel des joueurs connectés (CCU).',
     license: 'Valve Steam API Terms',
-    limits: 'Pas d\'historique direct : constitué par nos snapshots.',
+    limits: "Pas d'historique direct : constitué par nos snapshots.",
     last_import: { started_at: null, finished_at: null, rows: 0, succeeded: null }
   },
   {
@@ -118,7 +132,7 @@ const sources = ref<SourceInfo[]>([
 ])
 
 const notes = ref<string[]>([
-  'Aucune donnée personnelle n\'est collectée ni enregistrée (aucun SteamID individuel ou pseudo).',
+  "Aucune donnée personnelle n'est collectée ni enregistrée (aucun SteamID individuel ou pseudo).",
   'Les distributions régionales sont approchées par les langues ou des sondages publics déclarés.',
   'Toutes les estimations sont étiquetées comme telles pour garantir la rigueur de la soutenance.'
 ])
@@ -131,135 +145,3 @@ function formatDate(isoStr: string): string {
   }
 }
 </script>
-
-<style scoped>
-.sources-page {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-  font-family: system-ui, -apple-system, sans-serif;
-  color: #1f2937;
-}
-.page-header {
-  margin-bottom: 2rem;
-  border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 1rem;
-}
-.title {
-  font-size: 2rem;
-  font-weight: 800;
-  margin: 0 0 0.5rem 0;
-}
-.subtitle {
-  color: #4b5563;
-  margin: 0;
-}
-.section {
-  margin-bottom: 2.5rem;
-}
-.section-title {
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
-.pipeline-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-}
-.step-card {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  padding: 1rem;
-}
-.step-badge {
-  display: inline-block;
-  background: #2563eb;
-  color: #fff;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.15rem 0.4rem;
-  border-radius: 0.25rem;
-  margin-bottom: 0.4rem;
-}
-.step-name {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0 0 0.4rem 0;
-}
-.step-description {
-  font-size: 0.85rem;
-  color: #4b5563;
-  margin: 0;
-}
-.sources-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
-}
-.source-card {
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.source-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-.source-tag {
-  background: #e0e7ff;
-  color: #3730a3;
-  font-weight: 600;
-  font-size: 0.75rem;
-  padding: 0.15rem 0.5rem;
-  border-radius: 0.25rem;
-}
-.status-pill {
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 0.15rem 0.4rem;
-  border-radius: 9999px;
-}
-.pill-success { background: #dcfce7; color: #166534; }
-.pill-idle { background: #f3f4f6; color: #6b7280; }
-.source-name {
-  font-size: 1rem;
-  font-weight: 700;
-  margin: 0 0 0.4rem 0;
-}
-.source-role {
-  font-size: 0.85rem;
-  color: #374151;
-  margin: 0 0 0.8rem 0;
-}
-.source-meta {
-  font-size: 0.8rem;
-  color: #4b5563;
-  border-top: 1px dashed #e5e7eb;
-  padding-top: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-.meta-row { display: flex; gap: 0.3rem; }
-.limits-row { color: #9a3412; }
-.notes-section {
-  background: #fffbeb;
-  border: 1px solid #fef3c7;
-  border-radius: 0.5rem;
-  padding: 1.25rem;
-}
-.notes-list {
-  margin: 0;
-  padding-left: 1.2rem;
-  color: #92400e;
-  line-height: 1.5;
-  font-size: 0.9rem;
-}
-</style>

@@ -37,10 +37,10 @@
       <div class="legend-bar">
         <span class="legend-label">Note Metacritic :</span>
         <div class="legend-items">
-          <span class="legend-color score-80">80+</span>
-          <span class="legend-color score-70">70-79</span>
-          <span class="legend-color score-60">60-69</span>
-          <span class="legend-color score-50">&lt;60</span>
+          <span class="legend-color score-80">≥ 80 (Excellent)</span>
+          <span class="legend-color score-70">70 - 79 (Très bon)</span>
+          <span class="legend-color score-60">60 - 69 (Moyen)</span>
+          <span class="legend-color score-50">&lt; 60 (Passable)</span>
           <span class="legend-color score-none">Non noté</span>
         </div>
       </div>
@@ -257,9 +257,9 @@ const sunburstData = ref<SunburstGenre[]>([
   font-weight: 600;
 }
 
-.score-80 { background: #15803d; }
-.score-70 { background: #65a30d; }
-.score-60 { background: #ca8a04; }
+.score-80 { background: #059669; }
+.score-70 { background: #0284c7; }
+.score-60 { background: #d97706; }
 .score-50 { background: #ea580c; }
-.score-none { background: #94a3b8; }
+.score-none { background: #475569; }
 </style>

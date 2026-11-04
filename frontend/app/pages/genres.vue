@@ -7,7 +7,33 @@
       </p>
     </header>
 
-    <!-- Contrôles du Treemap -->
+    <!-- Contrôles globaux de bascule (Nombre de jeux vs Nombre de joueurs) -->
+    <div class="controls-bar">
+      <div class="controls-info">
+        <span class="controls-label">Métrique affichée :</span>
+        <span class="controls-hint">
+          {{ mode === 'games' ? 'Surface basée sur le volume de jeux' : 'Surface basée sur les propriétaires / joueurs réels' }}
+        </span>
+      </div>
+      <div class="mode-toggle">
+        <button
+          class="toggle-btn"
+          :class="{ active: mode === 'games' }"
+          @click="mode = 'games'"
+        >
+          Nombre de jeux
+        </button>
+        <button
+          class="toggle-btn"
+          :class="{ active: mode === 'players' }"
+          @click="mode = 'players'"
+        >
+          Nombre de joueurs
+        </button>
+      </div>
+    </div>
+
+    <!-- Section Treemap -->
     <section class="section">
       <div class="section-header">
         <div>
@@ -15,22 +41,6 @@
           <p class="section-desc">
             La couleur indique la note moyenne Metacritic (vert = excellent, rouge = faible, gris = non noté).
           </p>
-        </div>
-        <div class="mode-toggle">
-          <button
-            class="toggle-btn"
-            :class="{ active: mode === 'games' }"
-            @click="mode = 'games'"
-          >
-            Nombre de jeux
-          </button>
-          <button
-            class="toggle-btn"
-            :class="{ active: mode === 'players' }"
-            @click="mode = 'players'"
-          >
-            Nombre de joueurs
-          </button>
         </div>
       </div>
 
@@ -48,14 +58,14 @@
       <TreemapChart :data="treemapData" :mode="mode" />
     </section>
 
-    <!-- Sunburst IGDB -->
+    <!-- Section Sunburst IGDB -->
     <section class="section">
       <h2 class="section-title">Sunburst IGDB : Genre → Thème → Mode</h2>
       <p class="section-desc">
-        Explorez la taxonomie détaillée d'IGDB à trois niveaux : cliquez sur un genre ou thème pour explorer ses ramifications.
+        Explorez la taxonomie détaillée d'IGDB à trois niveaux : la taille des secteurs s'adapte selon la métrique sélectionnée (jeux ou joueurs).
       </p>
 
-      <SunburstChart :data="sunburstData" />
+      <SunburstChart :data="sunburstData" :mode="mode" />
     </section>
   </div>
 </template>
@@ -123,36 +133,41 @@ const treemapData = ref<TreemapGenreNode[]>([
 const sunburstData = ref<SunburstGenre[]>([
   {
     name: 'Role-playing (RPG)',
-    value: 380,
+    games: 380,
+    owners: 75000000,
     children: [
       {
         name: 'Fantasy',
-        value: 220,
+        games: 220,
+        owners: 52000000,
         children: [
-          { name: 'Single player', value: 160 },
-          { name: 'Co-operative', value: 60 }
+          { name: 'Single player', games: 160, owners: 36000000 },
+          { name: 'Co-operative', games: 60, owners: 16000000 }
         ]
       },
       {
         name: 'Science fiction',
-        value: 110,
+        games: 110,
+        owners: 18000000,
         children: [
-          { name: 'Single player', value: 85 },
-          { name: 'Multiplayer', value: 25 }
+          { name: 'Single player', games: 85, owners: 12000000 },
+          { name: 'Multiplayer', games: 25, owners: 6000000 }
         ]
       }
     ]
   },
   {
     name: 'Shooter',
-    value: 290,
+    games: 290,
+    owners: 140000000,
     children: [
       {
         name: 'Warfare',
-        value: 150,
+        games: 150,
+        owners: 95000000,
         children: [
-          { name: 'Multiplayer', value: 120 },
-          { name: 'Single player', value: 30 }
+          { name: 'Multiplayer', games: 120, owners: 85000000 },
+          { name: 'Single player', games: 30, owners: 10000000 }
         ]
       }
     ]
@@ -170,7 +185,7 @@ const sunburstData = ref<SunburstGenre[]>([
 }
 
 .page-header {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   border-bottom: 1px solid #e5e7eb;
   padding-bottom: 1rem;
 }
@@ -186,16 +201,59 @@ const sunburstData = ref<SunburstGenre[]>([
   margin: 0;
 }
 
+.controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.controls-label {
+  font-weight: 700;
+  color: #0f172a;
+  margin-right: 0.5rem;
+}
+
+.controls-hint {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.mode-toggle {
+  display: flex;
+  background: #e2e8f0;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+}
+
+.toggle-btn {
+  padding: 0.45rem 1rem;
+  border: none;
+  background: transparent;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #475569;
+  border-radius: 0.35rem;
+  cursor: pointer;
+}
+
+.toggle-btn.active {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
 .section {
   margin-bottom: 3rem;
 }
 
 .section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -211,31 +269,6 @@ const sunburstData = ref<SunburstGenre[]>([
   margin: 0;
 }
 
-.mode-toggle {
-  display: flex;
-  background: #f3f4f6;
-  padding: 0.25rem;
-  border-radius: 0.5rem;
-  border: 1px solid #e5e7eb;
-}
-
-.toggle-btn {
-  padding: 0.4rem 0.85rem;
-  border: none;
-  background: transparent;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #4b5563;
-  border-radius: 0.35rem;
-  cursor: pointer;
-}
-
-.toggle-btn.active {
-  background: #ffffff;
-  color: #111827;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
 .legend-bar {
   display: flex;
   align-items: center;
@@ -243,11 +276,13 @@ const sunburstData = ref<SunburstGenre[]>([
   margin-bottom: 1rem;
   font-size: 0.8rem;
   color: #4b5563;
+  flex-wrap: wrap;
 }
 
 .legend-items {
   display: flex;
   gap: 0.35rem;
+  flex-wrap: wrap;
 }
 
 .legend-color {
@@ -258,8 +293,3 @@ const sunburstData = ref<SunburstGenre[]>([
 }
 
 .score-80 { background: #059669; }
-.score-70 { background: #0284c7; }
-.score-60 { background: #d97706; }
-.score-50 { background: #ea580c; }
-.score-none { background: #475569; }
-</style>

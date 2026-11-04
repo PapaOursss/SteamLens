@@ -35,7 +35,12 @@
         </span>
         <h4 class="details-name">{{ hoveredSlice.name }}</h4>
         <div class="details-metric">
-          <strong class="metric-val">{{ hoveredSlice.value }}</strong> jeux
+          <template v-if="mode === 'games'">
+            <strong class="metric-val">{{ hoveredSlice.games }}</strong> jeux
+          </template>
+          <template v-else>
+            <strong class="metric-val">{{ formatOwners(hoveredSlice.owners) }}</strong> joueurs
+          </template>
         </div>
         <p class="details-path">{{ hoveredSlice.breadcrumb }}</p>
       </div>
@@ -50,15 +55,16 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-export interface SunburstMode { name: string; value: number }
-export interface SunburstTheme { name: string; value: number; children?: SunburstMode[] }
-export interface SunburstGenre { name: string; value: number; children?: SunburstTheme[] }
+export interface SunburstMode { name: string; value?: number; games: number; owners: number }
+export interface SunburstTheme { name: string; value?: number; games: number; owners: number; children?: SunburstMode[] }
+export interface SunburstGenre { name: string; value?: number; games: number; owners: number; children?: SunburstTheme[] }
 
 interface ArcSlice {
   id: string
   name: string
   shortName: string
-  value: number
+  games: number
+  owners: number
   levelName: string
   breadcrumb: string
   path: string
@@ -67,7 +73,11 @@ interface ArcSlice {
   labelTransform: string
 }
 
-const props = defineProps<{ data: SunburstGenre[] }>()
+const props = defineProps<{
+  data: SunburstGenre[]
+  mode: 'games' | 'players'
+}>()
+
 const hoveredSlice = ref<ArcSlice | null>(null)
 
 const GENRE_COLORS: Record<string, string[]> = {
@@ -76,6 +86,20 @@ const GENRE_COLORS: Record<string, string[]> = {
   'Simulator': ['#10b981', '#34d399', '#6ee7b7'],
   'Action': ['#f59e0b', '#fbbf24', '#fde68a'],
   'Default': ['#8b5cf6', '#a78bfa', '#c4b5fd']
+}
+
+function getNodeWeight(node: { games: number; owners: number }): number {
+  if (props.mode === 'players') {
+    return Math.max(node.owners || 0, 1)
+  }
+  return Math.max(node.games || 0, 1)
+}
+
+function formatOwners(num: number): string {
+  if (!num) return '0'
+  if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1)}M`
+  if (num >= 1_000) return `${(num / 1_000).toFixed(0)}k`
+  return num.toString()
 }
 
 function polarToCartesian(r: number, angleDeg: number) {
@@ -92,37 +116,37 @@ function makeArc(rIn: number, rOut: number, a0: number, a1: number): string {
 
 const slices = computed<ArcSlice[]>(() => {
   const result: ArcSlice[] = []
-  const total = props.data.reduce((acc, g) => acc + g.value, 0) || 1
+  const total = props.data.reduce((acc, g) => acc + getNodeWeight(g), 0) || 1
   let currentAngle = 0
 
   props.data.forEach((genre, gIdx) => {
-    const genreSpan = (genre.value / total) * 360
+    const genreSpan = (getNodeWeight(genre) / total) * 360
     const gStart = currentAngle, gEnd = currentAngle + genreSpan
     const palette = GENRE_COLORS[genre.name] || GENRE_COLORS.Default
 
     pushSlice(result, {
-      id: `g-${gIdx}`, name: genre.name, value: genre.value,
+      id: `g-${gIdx}`, name: genre.name, games: genre.games, owners: genre.owners,
       levelName: 'Genre', breadcrumb: genre.name,
       rIn: 52, rOut: 115, a0: gStart, a1: gEnd, color: palette[0]
     })
 
     let tAngle = gStart
-    const gTotal = genre.children?.reduce((acc, t) => acc + t.value, 0) || genre.value
+    const gTotal = genre.children?.reduce((acc, t) => acc + getNodeWeight(t), 0) || getNodeWeight(genre)
     genre.children?.forEach((theme, tIdx) => {
-      const themeSpan = (theme.value / gTotal) * genreSpan
+      const themeSpan = (getNodeWeight(theme) / gTotal) * genreSpan
       const tStart = tAngle, tEnd = tAngle + themeSpan
       pushSlice(result, {
-        id: `g-${gIdx}-t-${tIdx}`, name: theme.name, value: theme.value,
+        id: `g-${gIdx}-t-${tIdx}`, name: theme.name, games: theme.games, owners: theme.owners,
         levelName: 'Thème', breadcrumb: `${genre.name} > ${theme.name}`,
         rIn: 120, rOut: 180, a0: tStart, a1: tEnd, color: palette[1]
       })
 
       let mAngle = tStart
-      const tTotal = theme.children?.reduce((acc, m) => acc + m.value, 0) || theme.value
+      const tTotal = theme.children?.reduce((acc, m) => acc + getNodeWeight(m), 0) || getNodeWeight(theme)
       theme.children?.forEach((mode, mIdx) => {
-        const modeSpan = (mode.value / tTotal) * themeSpan
+        const modeSpan = (getNodeWeight(mode) / tTotal) * themeSpan
         pushSlice(result, {
-          id: `g-${gIdx}-t-${tIdx}-m-${mIdx}`, name: mode.name, value: mode.value,
+          id: `g-${gIdx}-t-${tIdx}-m-${mIdx}`, name: mode.name, games: mode.games, owners: mode.owners,
           levelName: 'Mode de jeu', breadcrumb: `${genre.name} > ${theme.name} > ${mode.name}`,
           rIn: 185, rOut: 245, a0: mAngle, a1: mAngle + modeSpan, color: palette[2]
         })
@@ -136,7 +160,7 @@ const slices = computed<ArcSlice[]>(() => {
 })
 
 function pushSlice(list: ArcSlice[], item: {
-  id: string; name: string; value: number; levelName: string;
+  id: string; name: string; games: number; owners: number; levelName: string;
   breadcrumb: string; rIn: number; rOut: number; a0: number; a1: number; color: string
 }) {
   const span = item.a1 - item.a0
@@ -146,7 +170,7 @@ function pushSlice(list: ArcSlice[], item: {
   list.push({
     id: item.id, name: item.name,
     shortName: item.name.length > 10 ? `${item.name.slice(0, 8)}…` : item.name,
-    value: item.value, levelName: item.levelName, breadcrumb: item.breadcrumb,
+    games: item.games, owners: item.owners, levelName: item.levelName, breadcrumb: item.breadcrumb,
     path, color: item.color, showLabel: span > 14,
     labelTransform: `translate(${pos.x}, ${pos.y})`
   })

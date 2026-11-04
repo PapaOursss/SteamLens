@@ -100,17 +100,17 @@ backend importe, met en cache et sert des agrégats. Aucune donnée personnelle 
 
 ### T-05 · Front Nuxt : Tailwind, ECharts, mise en page et navigation
 - **Type**: task
-- **Status**: todo
+- **Status**: done
 - **Opened**: 2026-10-23
 - **Effort**: M · **Owner**: Dorian · **Due**: —
 - **Origin**: plan initial du projet
 
-- [ ] Installer `@nuxtjs/tailwindcss`, `echarts`, `vue-echarts`
-- [ ] Layout : barre latérale (Accueil, Jeux, Genres, Monde, Prix, Tendances, Labo)
-- [ ] Composable `useApi()` qui appelle le backend (`runtimeConfig.public.apiBase`)
-- [ ] Composant `ChartCard.vue` réutilisable : titre, source citée, état « chargement »
+- [x] Installer `@nuxtjs/tailwindcss`, `echarts`, `vue-echarts`
+- [x] Layout : barre latérale (Accueil, Jeux, Genres, Monde, Prix, Tendances, Labo)
+- [x] Composable `useApi()` qui appelle le backend (`runtimeConfig.public.apiBase`)
+- [x] Composant `ChartCard.vue` réutilisable : titre, source citée, état « chargement »
   et « pas de données »
-- [ ] Types TypeScript des réponses dans `types/`
+- [x] Types TypeScript des réponses dans `types/`
 
 ## 🟠 Important
 

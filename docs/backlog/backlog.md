@@ -142,15 +142,15 @@ backend importe, met en cache et sert des agrégats. Aucune donnée personnelle 
 
 ### T-15 · Treemap et sunburst des genres et tags
 - **Type**: idea
-- **Status**: todo
+- **Status**: done
 - **Opened**: 2026-10-23
 - **Effort**: S · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
-- [ ] Treemap genre → tags, surface = propriétaires estimés, couleur = note moyenne
-- [ ] Bascule « nombre de jeux » / « nombre de joueurs » : on voit que les jeux indés sont
+- [x] Treemap genre → tags, surface = propriétaires estimés, couleur = note moyenne
+- [x] Bascule « nombre de jeux » / « nombre de joueurs » : on voit que les jeux indés sont
   partout mais qu'une poignée de genres prend les joueurs
-- [ ] Sunburst équivalent avec les genres IGDB (genre → thème → mode)
+- [x] Sunburst équivalent avec les genres IGDB (genre → thème → mode)
 
 ### T-16 · Carte du monde n°1 : le prix d'un jeu dans chaque pays
 - **Type**: idea

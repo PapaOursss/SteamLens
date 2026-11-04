@@ -7,6 +7,8 @@ from catalog.views.minigame import game_duel
 from catalog.views.playtime import playtime_stats
 from catalog.views.proton import proton_stats
 from catalog.views.review_sentiment import review_sentiment
+from catalog.views.sunburst import sunburst_igdb
+from catalog.views.treemap import genre_tags_treemap
 from catalog.views.wrapped import steam_wrapped
 from config.health import health
 from geography.views import world_map
@@ -29,6 +31,8 @@ urlpatterns = [
     path("stats/regional-sales/", regional_sales_stats, name="stats-regional-sales"),
     path("stats/genres/", genre_stats, name="stats-genres"),
     path("stats/tags/", tag_stats, name="stats-tags"),
+    path("stats/treemap/", genre_tags_treemap, name="stats-treemap"),
+    path("stats/sunburst-igdb/", sunburst_igdb, name="stats-sunburst-igdb"),
     path("stats/review-sentiment/", review_sentiment, name="stats-review-sentiment"),
     path("stats/top-played/", top_played, name="stats-top-played"),
     path("map/<slug:indicator>/", world_map, name="world-map"),

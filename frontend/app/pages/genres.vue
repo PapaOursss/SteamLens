@@ -293,3 +293,8 @@ const sunburstData = ref<SunburstGenre[]>([
 }
 
 .score-80 { background: #059669; }
+.score-70 { background: #0284c7; }
+.score-60 { background: #d97706; }
+.score-50 { background: #ea580c; }
+.score-none { background: #475569; }
+</style>

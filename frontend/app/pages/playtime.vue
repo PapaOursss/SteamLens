@@ -45,7 +45,7 @@
               </td>
               <td class="p-3 text-slate-300">{{ game.median_hours }} h</td>
               <td class="p-3 text-slate-300">{{ game.price_eur > 0 ? `${game.price_eur.toFixed(2)} €` : 'Gratuit' }}</td>
-              <td class="p-3 font-bold text-emerald-400">{{ game.cost_per_hour.toFixed(2)} €/h</td>
+              <td class="p-3 font-bold text-emerald-400">{{ game.cost_per_hour.toFixed(2) }} €/h</td>
             </tr>
           </tbody>
         </table>

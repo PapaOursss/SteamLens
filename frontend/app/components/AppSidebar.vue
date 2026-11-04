@@ -61,14 +61,10 @@
     </nav>
 
     <!-- Footer Meta -->
-    <div class="p-4 border-t border-slate-800/80 text-[11px] text-slate-400 flex flex-col gap-1">
-      <div class="flex items-center justify-between">
-        <span>Version 1.0</span>
-        <NuxtLink to="/sources" class="text-cyan-400 hover:underline">
-          Sources (12)
-        </NuxtLink>
-      </div>
-      <span class="text-slate-400">Projet L3 · Promo 7</span>
+    <div class="p-4 border-t border-slate-800/80 text-[11px]">
+      <NuxtLink to="/sources" class="text-slate-400 hover:text-cyan-400 transition-colors">
+        Sources & Méthodologie
+      </NuxtLink>
     </div>
   </aside>
 </template>

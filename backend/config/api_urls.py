@@ -11,6 +11,7 @@ from catalog.views.wrapped import steam_wrapped
 from config.health import health
 from geography.views import world_map
 from geography.views_sales import regional_sales_stats
+from geography.views_trends import trends_map_stats
 from ingestion.views import sources_overview
 from players.views import top_played
 from players.views_hype import hype_stats
@@ -31,6 +32,7 @@ urlpatterns = [
     path("stats/tags/", tag_stats, name="stats-tags"),
     path("stats/review-sentiment/", review_sentiment, name="stats-review-sentiment"),
     path("stats/top-played/", top_played, name="stats-top-played"),
+    path("stats/trends/", trends_map_stats, name="stats-trends"),
     path("map/<slug:indicator>/", world_map, name="world-map"),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="docs"),

@@ -90,7 +90,7 @@ erDiagram
 | App | Modèles |
 |---|---|
 | `catalog` | `PlayerPerspective`, `IgdbPopularity` (PopScore IGDB), `ReviewExcerpt` (extraits d'avis anonymes, pour T-40), `Game`, `Genre`, `Tag`, `GameTag`, `Theme`, `GameMode`, `Platform`, `Company`, `ReviewSummary` |
-| `geography` | `Country` (rempli par `geography.country_table.ensure_countries`), `RegionalSales` |
+| `geography` | `Country` (rempli par `geography.country_table.ensure_countries`), `GoogleTrendsInterest`, `RegionalSales` |
 | `pricing` | `PricePoint` |
 | `players` | `PlayerCountSnapshot`, `TwitchStreamSnapshot`, `RankingEntry` (top 100 SteamSpy) |
 | `ingestion` | `ImportRun` (une ligne par import lancé : début, fin, lignes, erreurs) |

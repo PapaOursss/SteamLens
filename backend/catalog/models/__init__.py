@@ -10,6 +10,7 @@ from catalog.models.player_perspective import PlayerPerspective
 from catalog.models.proton_report import ProtonReport
 from catalog.models.review_excerpt import ReviewExcerpt
 from catalog.models.review_summary import ReviewSummary
+from catalog.models.review_week import ReviewWeek
 from catalog.models.tag import Tag
 from catalog.models.theme import Theme
 
@@ -26,6 +27,7 @@ __all__ = [
     "ProtonReport",
     "ReviewExcerpt",
     "ReviewSummary",
+    "ReviewWeek",
     "Tag",
     "Theme",
 ]

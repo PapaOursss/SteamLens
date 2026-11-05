@@ -4,6 +4,7 @@
       class="h-full w-full"
       :style="height ? { height: `${height}px` } : undefined"
       :option="option"
+      :init-options="{ locale: 'FR' }"
       role="img"
       :aria-label="label"
       autoresize

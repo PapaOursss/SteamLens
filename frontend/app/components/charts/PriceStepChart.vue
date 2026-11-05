@@ -32,7 +32,7 @@ function stepLine(name: string, color: string, type: string, pick: (change: Pric
 const option = computed(() => ({
   ...chartBase(),
   grid: GRID,
-  legend: { data: [PAID, REGULAR], textStyle: { color: COLORS.text } },
+  legend: { top: 0, left: 0, data: [PAID, REGULAR], textStyle: { color: COLORS.text } },
   tooltip: {
     ...chartBase().tooltip,
     trigger: 'axis',

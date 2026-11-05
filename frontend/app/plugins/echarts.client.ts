@@ -1,6 +1,7 @@
 import { defineNuxtPlugin } from '#app'
 import VChart from 'vue-echarts'
-import { use } from 'echarts/core'
+import { registerLocale, use } from 'echarts/core'
+import frenchLocale from 'echarts/i18n/langFR-obj'
 import { CanvasRenderer } from 'echarts/renderers'
 import {
   BarChart,
@@ -34,5 +35,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     DataZoomComponent
   ])
 
+  registerLocale('FR', frenchLocale)
   nuxtApp.vueApp.component('VChart', VChart)
 })

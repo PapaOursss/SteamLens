@@ -35,15 +35,14 @@ const option = computed(() => {
         type: 'line',
         lineStyle: { color: COLORS.soft, width: LINE_WIDTH },
         itemStyle: { color: COLORS.soft },
-        showSymbol: false,
+        showAllSymbol: true,
         data: props.weeks.map((week) => {
           const isBombed = bombed.has(week.week_start)
           return {
             value: [week.week_start, Math.round(week.positive_share * PERCENT)],
-            symbol: 'circle',
+            symbol: isBombed ? 'circle' : 'none',
             symbolSize: POINT_SIZE,
-            showSymbol: isBombed,
-            itemStyle: { color: isBombed ? COLORS.hot : COLORS.soft }
+            itemStyle: { color: COLORS.hot }
           }
         })
       }

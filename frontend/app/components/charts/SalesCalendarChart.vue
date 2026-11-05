@@ -26,7 +26,7 @@ function tooltipText({ value: [week, yearIndex, count] }: CellTooltipParam): str
 
 const option = computed(() => ({
   ...chartBase(),
-  grid: GRID,
+  grid: { ...GRID, show: true, backgroundColor: NO_DATA_COLOR, borderWidth: 0 },
   tooltip: { ...chartBase().tooltip, formatter: tooltipText },
   xAxis: {
     type: 'category',

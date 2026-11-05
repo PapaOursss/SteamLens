@@ -2,7 +2,7 @@ from django.urls import path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import DefaultRouter
 
-from catalog.views import GameViewSet, genre_stats, tag_stats
+from catalog.views import GameViewSet, dashboard_stats, genre_stats, tag_stats
 from catalog.views.minigame import game_duel
 from catalog.views.playtime import playtime_stats
 from catalog.views.proton import proton_stats
@@ -29,6 +29,7 @@ urlpatterns = [
     path("stats/hype/", hype_stats, name="stats-hype"),
     path("stats/wrapped/", steam_wrapped, name="stats-wrapped"),
     path("stats/regional-sales/", regional_sales_stats, name="stats-regional-sales"),
+    path("stats/dashboard/", dashboard_stats, name="stats-dashboard"),
     path("stats/genres/", genre_stats, name="stats-genres"),
     path("stats/tags/", tag_stats, name="stats-tags"),
     path("stats/treemap/", genre_tags_treemap, name="stats-treemap"),

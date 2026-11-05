@@ -22,6 +22,11 @@ erDiagram
     Game ||--o{ PlayerCountSnapshot : "joueurs connectés"
     Game ||--o{ ReviewSummary : avis
     Game ||--o{ RankingEntry : classements
+    Game ||--o{ ReviewWeek : "avis par semaine"
+    Game ||--o{ AchievementStat : succès
+    Game ||--o{ PriceChange : "historique ITAD"
+    Game ||--o{ ProfileCountryCount : "pays des profils"
+    Country ||--o{ ProfileCountryCount : ""
 
     Game {
         int appid PK
@@ -89,10 +94,10 @@ erDiagram
 
 | App | Modèles |
 |---|---|
-| `catalog` | `PlayerPerspective`, `IgdbPopularity` (PopScore IGDB), `ReviewExcerpt` (extraits d'avis anonymes, pour T-40), `Game`, `Genre`, `Tag`, `GameTag`, `Theme`, `GameMode`, `Platform`, `Company`, `ReviewSummary` |
-| `geography` | `Country` (rempli par `geography.country_table.ensure_countries`), `RegionalSales` |
-| `pricing` | `PricePoint` |
-| `players` | `PlayerCountSnapshot`, `TwitchStreamSnapshot`, `RankingEntry` (top 100 SteamSpy) |
+| `catalog` | `ReviewWeek` (avis récents comptés par semaine, T-22), `AchievementStat` (part des joueurs par succès, T-35), `PlayerPerspective`, `IgdbPopularity` (PopScore IGDB), `ReviewExcerpt` (extraits d'avis anonymes, pour T-40), `Game`, `Genre`, `Tag`, `GameTag`, `Theme`, `GameMode`, `Platform`, `Company`, `ReviewSummary` |
+| `geography` | `Country` (rempli par `geography.country_table.ensure_countries`), `RegionalSales`, `ProfileCountryCount` et `ProfileSample` (pays déclarés des profils publics, comptes seulement, T-37) |
+| `pricing` | `PricePoint`, `PriceChange` (chaque changement de prix Steam d'après IsThereAnyDeal, T-18) |
+| `players` | `PlayerCountSnapshot`, `TwitchStreamSnapshot`, `RankingEntry` (top 100 SteamSpy), `HardwareShare` (enquête matériel Steam par mois, T-27) |
 | `ingestion` | `ImportRun` (une ligne par import lancé : début, fin, lignes, erreurs) |
 
 Les contraintes d'unicité (`GameTag` jeu + tag, `PricePoint` jeu + pays + date + source…)

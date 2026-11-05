@@ -5,9 +5,10 @@ Ajouter une carte = écrire une fonction ici et l'inscrire dans `MAP_INDICATORS`
 
 from collections.abc import Callable
 
-from django.db.models import Avg, Count
+from django.db.models import Avg, Count, Max, Sum
 
 from catalog.models import Company
+from geography.models import ProfileCountryCount
 from pricing.models import PricePoint
 
 PRICE_DECIMALS = 2
@@ -35,7 +36,19 @@ def average_price_eur() -> MapValues:
     return {row["country__iso3"]: round(float(row["value"]), PRICE_DECIMALS) for row in rows}
 
 
+def declared_profile_countries() -> MapValues:
+    """Profils publics par pays déclaré, parmi les auteurs d'avis récents (T-37)."""
+    latest = ProfileCountryCount.objects.aggregate(day=Max("date"))["day"]
+    rows = (
+        ProfileCountryCount.objects.filter(date=latest)
+        .values("country__iso3")
+        .annotate(value=Sum("profiles"))
+    )
+    return {row["country__iso3"]: row["value"] for row in rows}
+
+
 MAP_INDICATORS: dict[str, Callable[[], MapValues]] = {
     "studios": studios_per_country,
     "average-price-eur": average_price_eur,
+    "profile-countries": declared_profile_countries,
 }

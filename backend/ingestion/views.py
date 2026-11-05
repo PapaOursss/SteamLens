@@ -48,6 +48,22 @@ KNOWN_SOURCES = [
         "limits": "API non documentée, débit limité.",
     },
     {
+        "key": "steam_reviews",
+        "name": "Steam Store — avis (appreviews)",
+        "logo": "steam",
+        "role": "Avis positifs et négatifs par langue, ratio par semaine, review bombings.",
+        "license": "Valve Steam Store Terms",
+        "limits": "Seuls des comptes sont gardés : ni auteur ni SteamID.",
+    },
+    {
+        "key": "steam_hwsurvey",
+        "name": "Enquête matériel et logiciels de Steam",
+        "logo": "steam",
+        "role": "Langues, OS, cartes graphiques, RAM et casques VR des joueurs, mois par mois.",
+        "license": "Page publique Valve",
+        "limits": "Enquête facultative ; l'historique se construit à partir de l'import mensuel.",
+    },
+    {
         "key": "igdb",
         "name": "IGDB (Twitch)",
         "logo": "igdb",

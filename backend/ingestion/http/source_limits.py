@@ -7,6 +7,12 @@ MIN_INTERVAL_SECONDS: dict[str, float] = {
     "steam_store": 5 * SECONDS_PER_MINUTE / 200,
     # 100 000 appels par jour : une seconde suffit largement.
     "steam_web_api": 1.0,
+    # Avis du Store (`appreviews`) : limite non publiée, une requête par seconde reste sage.
+    "steam_reviews": 1.0,
+    # IsThereAnyDeal : pas de limite publiée pour une clé gratuite, on reste prudent.
+    "isthereanydeal": 1.0,
+    # Page publique de l'enquête matériel : un appel par mois, l'écart importe peu.
+    "steam_hwsurvey": 2.0,
     # 1 requête par seconde, sauf `request=all` : 1 par minute.
     "steamspy": 1.0,
     "steamspy_all": SECONDS_PER_MINUTE,

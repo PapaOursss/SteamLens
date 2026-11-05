@@ -1,5 +1,5 @@
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 
 import httpx
 
@@ -53,20 +53,45 @@ class ApiClient:
             cached = self.cache.get(url, query)
             if cached is not None:
                 return cached
-        body = self._fetch_with_retries(url, query)
+        body = self._fetch_with_retries(url, lambda: self.http.get(url, params=query))
         if self.cache is not None:
             self.cache.set(url, query, body)
+        return body
+
+    def post_json(
+        self,
+        url: str,
+        content: str = "",
+        params: QueryParams | None = None,
+        headers: Mapping[str, str] | None = None,
+    ) -> JsonValue:
+        """POST qui renvoie le JSON (IGDB, jeton OAuth), mis en cache par URL, paramètres et corps.
+
+        Les en-têtes (jeton d'accès) n'entrent pas dans la clé du cache.
+        """
+        query = params or {}
+        cache_key = {**query, "__body__": content}
+        if self.cache is not None:
+            cached = self.cache.get(url, cache_key)
+            if cached is not None:
+                return cached
+        body = self._fetch_with_retries(
+            url,
+            lambda: self.http.post(url, params=query, content=content, headers=headers),
+        )
+        if self.cache is not None:
+            self.cache.set(url, cache_key, body)
         return body
 
     def close(self) -> None:
         self.http.close()
 
-    def _fetch_with_retries(self, url: str, params: QueryParams) -> JsonValue:
+    def _fetch_with_retries(self, url: str, send: Callable[[], httpx.Response]) -> JsonValue:
         reason = ""
         for attempt in range(self.max_attempts):
             self._wait_for_rate_limit()
             try:
-                response = self.http.get(url, params=params)
+                response = send()
             except httpx.TransportError as error:
                 reason = type(error).__name__
                 self.sleep(self._backoff_delay(attempt, None))
@@ -79,7 +104,7 @@ class ApiClient:
 
     def _parse(self, url: str, response: httpx.Response) -> JsonValue:
         if response.is_error:
-            raise ApiError(self.source, url, f"HTTP {response.status_code}")
+            raise ApiError(self.source, url, f"HTTP {response.status_code}", response.status_code)
         try:
             body: JsonValue = response.json()
         except ValueError as error:

@@ -51,6 +51,12 @@ jsonschema==4.26.0
     # via drf-spectacular
 jsonschema-specifications==2025.9.1
     # via jsonschema
+polars==2.1.0
+    # via backend
+polars-runtime-32==2.1.0
+    # via polars
+polars-runtime-compat==2.1.0
+    # via polars
 pyyaml==6.0.3
     # via drf-spectacular
 referencing==0.37.0

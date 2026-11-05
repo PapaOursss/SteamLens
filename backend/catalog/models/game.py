@@ -12,10 +12,30 @@ class Game(models.Model):
     igdb_id = models.PositiveIntegerField(null=True, blank=True, unique=True)
     rawg_id = models.PositiveIntegerField(null=True, blank=True, unique=True)
     itad_id = models.CharField(max_length=64, blank=True)
+    # Fourchette de propriétaires estimée (SteamSpy, Kaggle) ; le milieu sert au classement.
+    owners_min = models.PositiveIntegerField(null=True, blank=True)
+    owners_max = models.PositiveIntegerField(null=True, blank=True)
+    owners_mid = models.PositiveIntegerField(null=True, blank=True, db_index=True)
+    peak_ccu = models.PositiveIntegerField(null=True, blank=True)
+    supported_languages = models.JSONField(default=list, blank=True)
+    # Fiche du Steam Store (T-10).
+    short_description = models.TextField(blank=True)
+    screenshots = models.JSONField(default=list, blank=True)
+    categories = models.JSONField(default=list, blank=True)
+    minimum_requirements = models.TextField(blank=True)
+    metacritic_score = models.PositiveSmallIntegerField(null=True, blank=True)
+    store_fetched_at = models.DateTimeField(null=True, blank=True)
+    # Date des données qui ont rempli la fiche : une source plus ancienne ne l'écrase pas.
+    data_date = models.DateField(null=True, blank=True)
 
     genres = models.ManyToManyField("catalog.Genre", blank=True, related_name="games")
     tags = models.ManyToManyField(
         "catalog.Tag", through="catalog.GameTag", blank=True, related_name="games"
+    )
+    # Genres IGDB, plus fins que ceux de Steam : rangés à part pour ne pas mélanger les treemaps.
+    igdb_genres = models.ManyToManyField("catalog.Genre", blank=True, related_name="igdb_games")
+    player_perspectives = models.ManyToManyField(
+        "catalog.PlayerPerspective", blank=True, related_name="games"
     )
     themes = models.ManyToManyField("catalog.Theme", blank=True, related_name="games")
     game_modes = models.ManyToManyField("catalog.GameMode", blank=True, related_name="games")

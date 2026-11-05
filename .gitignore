@@ -1,37 +1,45 @@
-# Virtual environment
-.venv*
-venv/
-ENV/
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Byte-compiled / optimized files
-__pycache__/
-*.py[cod]
-*$py.class
-.mypy_cache/
-.pytest_cache/
+node_modules
+dist
+dist-ssr
+*.local
 
-# Secrets (backend/.env.example, lui, est commité)
-.env
-
-# Données téléchargées et cache des API
-backend/data/
-
-# Databases
-*.sqlite3
-db.sqlite3
-
-# Node / Nuxt
-node_modules/
-.output/
-.nuxt/
-dist/
-
-# OS / IDE
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
 .DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environnement et base locale
+.venv/
+backend/.env
+backend/db.sqlite3
+
+# Cache et builds
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+frontend/.nuxt/
+frontend/.output/
 Thumbs.db
 .idea/
 .vscode/
 *.swp
 
-
+#doc_sam
 rapport_tache_sam.md

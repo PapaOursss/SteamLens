@@ -6,7 +6,9 @@ from catalog.models import (
     GameMode,
     Genre,
     Platform,
+    PlayerPerspective,
     ReviewSummary,
+    ReviewWeek,
     Tag,
     Theme,
 )
@@ -25,4 +27,4 @@ class ReviewSummaryAdmin(admin.ModelAdmin):
     list_filter = ("language",)
 
 
-admin.site.register((Company, GameMode, Genre, Platform, Tag, Theme))
+admin.site.register((ReviewWeek, Company, GameMode, Genre, Platform, PlayerPerspective, Tag, Theme))

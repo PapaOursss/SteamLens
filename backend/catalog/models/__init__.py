@@ -1,25 +1,35 @@
+from catalog.models.achievement_stat import AchievementStat
 from catalog.models.company import Company
 from catalog.models.game import Game
 from catalog.models.game_mode import GameMode
 from catalog.models.game_playtime import GamePlaytime
 from catalog.models.game_tag import GameTag
 from catalog.models.genre import Genre
+from catalog.models.igdb_popularity import IgdbPopularity
 from catalog.models.platform import Platform
+from catalog.models.player_perspective import PlayerPerspective
 from catalog.models.proton_report import ProtonReport
+from catalog.models.review_excerpt import ReviewExcerpt
 from catalog.models.review_summary import ReviewSummary
+from catalog.models.review_week import ReviewWeek
 from catalog.models.tag import Tag
 from catalog.models.theme import Theme
 
 __all__ = [
+    "AchievementStat",
     "Company",
     "Game",
     "GameMode",
     "GamePlaytime",
     "GameTag",
     "Genre",
+    "IgdbPopularity",
     "Platform",
+    "PlayerPerspective",
     "ProtonReport",
+    "ReviewExcerpt",
     "ReviewSummary",
+    "ReviewWeek",
     "Tag",
     "Theme",
 ]

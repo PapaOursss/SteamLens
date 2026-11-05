@@ -91,7 +91,9 @@ def hype_stats(request: Request) -> Response:
     watched_more = sorted(all_stats, key=lambda x: x["hype_ratio"], reverse=True)[:5]
     played_in_silence = sorted(all_stats, key=lambda x: x["hype_ratio"])[:5]
 
-    return Response({
-        "watched_more": watched_more,
-        "played_in_silence": played_in_silence,
-    })
+    return Response(
+        {
+            "watched_more": watched_more,
+            "played_in_silence": played_in_silence,
+        }
+    )

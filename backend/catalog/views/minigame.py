@@ -86,8 +86,10 @@ def game_duel(request: Request) -> Response:
         sample = random.sample(games, 2)
         game_a, game_b = _serialize_card(sample[0]), _serialize_card(sample[1])
 
-    return Response({
-        "game_a": game_a,
-        "game_b": game_b,
-        "metric": metric,
-    })
+    return Response(
+        {
+            "game_a": game_a,
+            "game_b": game_b,
+            "metric": metric,
+        }
+    )

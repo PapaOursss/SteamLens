@@ -23,9 +23,7 @@ def test_hype_stats_fallback():
 def test_hype_stats_with_data():
     now = timezone.now()
     game = Game.objects.create(appid=730, name="CS2")
-    PlayerCountSnapshot.objects.create(
-        game=game, taken_at=now, players=1000000, source="steam"
-    )
+    PlayerCountSnapshot.objects.create(game=game, taken_at=now, players=1000000, source="steam")
     TwitchStreamSnapshot.objects.create(
         game=game, taken_at=now, viewer_count=50000, stream_count=100
     )

@@ -17,9 +17,13 @@ def no_wait(seconds: float) -> None:
     """`sleep` des tests : on ne fait pas vraiment attendre."""
 
 
-@pytest.mark.parametrize("path", sorted(FIXTURES_DIR.glob("*.json")), ids=lambda path: path.stem)
+def fixture_name(path: Path) -> str:
+    return str(path.relative_to(FIXTURES_DIR).with_suffix(""))
+
+
+@pytest.mark.parametrize("path", sorted(FIXTURES_DIR.rglob("*.json")), ids=fixture_name)
 def test_every_fixture_is_valid_json(path: Path) -> None:
-    assert load_fixture(path.stem) is not None
+    assert load_fixture(fixture_name(path)) is not None
 
 
 @respx.mock

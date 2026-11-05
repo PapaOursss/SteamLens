@@ -56,11 +56,11 @@ const tooltip = computed(() => {
 .badge-icon { font-size: 0.6rem; }
 .badge-score { opacity: 0.8; font-weight: 500; font-size: 0.7rem; }
 
-.tier-native { background: #dcfce7; color: #15803d; border-color: #86efac; }
-.tier-platinum { background: #e0e7ff; color: #4338ca; border-color: #a5b4fc; }
-.tier-gold { background: #fef9c3; color: #a16207; border-color: #fde047; }
-.tier-silver { background: #f1f5f9; color: #475569; border-color: #cbd5e1; }
-.tier-bronze { background: #ffedd5; color: #c2410c; border-color: #fdba74; }
-.tier-borked { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
-.tier-pending { background: #f3f4f6; color: #6b7280; border-color: #e5e7eb; }
+.tier-native { background: #052e16; color: #4ade80; border-color: #166534; }
+.tier-platinum { background: #1e1b4b; color: #a5b4fc; border-color: #3730a3; }
+.tier-gold { background: #422006; color: #fde047; border-color: #854d0e; }
+.tier-silver { background: #1e293b; color: #cbd5e1; border-color: #475569; }
+.tier-bronze { background: #431407; color: #fdba74; border-color: #9a3412; }
+.tier-borked { background: #450a0a; color: #f87171; border-color: #991b1b; }
+.tier-pending { background: #1e293b; color: #94a3b8; border-color: #334155; }
 </style>

@@ -10,6 +10,9 @@ erDiagram
     Tag ||--o{ GameTag : ""
     Game }o--o{ Genre : genres
     Game }o--o{ Theme : thèmes
+    Game }o--o{ Genre : "genres IGDB"
+    Game }o--o{ PlayerPerspective : "points de vue"
+    Game ||--o{ IgdbPopularity : PopScore
     Game }o--o{ GameMode : modes
     Game }o--o{ Platform : plateformes
     Game }o--o{ Company : "développeurs / éditeurs"
@@ -18,6 +21,12 @@ erDiagram
     Country ||--o{ PricePoint : ""
     Game ||--o{ PlayerCountSnapshot : "joueurs connectés"
     Game ||--o{ ReviewSummary : avis
+    Game ||--o{ RankingEntry : classements
+    Game ||--o{ ReviewWeek : "avis par semaine"
+    Game ||--o{ AchievementStat : succès
+    Game ||--o{ PriceChange : "historique ITAD"
+    Game ||--o{ ProfileCountryCount : "pays des profils"
+    Country ||--o{ ProfileCountryCount : ""
 
     Game {
         int appid PK
@@ -27,6 +36,18 @@ erDiagram
         int igdb_id
         int rawg_id
         string itad_id
+        int owners_min
+        int owners_max
+        int owners_mid
+        int peak_ccu
+        json supported_languages
+        text short_description
+        json screenshots
+        json categories
+        text minimum_requirements
+        int metacritic_score
+        datetime store_fetched_at
+        date data_date
     }
     GameTag {
         int votes
@@ -57,6 +78,11 @@ erDiagram
         int negative
         date date
     }
+    RankingEntry {
+        string chart
+        date date
+        int rank
+    }
     ImportRun {
         string source
         datetime started_at
@@ -68,11 +94,20 @@ erDiagram
 
 | App | Modèles |
 |---|---|
-| `catalog` | `Game`, `Genre`, `Tag`, `GameTag`, `Theme`, `GameMode`, `Platform`, `Company`, `ReviewSummary` |
-| `geography` | `Country` |
-| `pricing` | `PricePoint` |
-| `players` | `PlayerCountSnapshot` |
+| `catalog` | `ReviewWeek` (avis récents comptés par semaine, T-22), `AchievementStat` (part des joueurs par succès, T-35), `PlayerPerspective`, `IgdbPopularity` (PopScore IGDB), `ReviewExcerpt` (extraits d'avis anonymes, pour T-40), `Game`, `Genre`, `Tag`, `GameTag`, `Theme`, `GameMode`, `Platform`, `Company`, `ReviewSummary` |
+| `geography` | `Country` (rempli par `geography.country_table.ensure_countries`), `GoogleTrendsInterest`, `RegionalSales`, `ProfileCountryCount` et `ProfileSample` (pays déclarés des profils publics, comptes seulement, T-37) |
+| `pricing` | `PricePoint`, `PriceChange` (chaque changement de prix Steam d'après IsThereAnyDeal, T-18) |
+| `players` | `PlayerCountSnapshot`, `TwitchStreamSnapshot`, `RankingEntry` (top 100 SteamSpy), `HardwareShare` (enquête matériel Steam par mois, T-27) |
 | `ingestion` | `ImportRun` (une ligne par import lancé : début, fin, lignes, erreurs) |
 
 Les contraintes d'unicité (`GameTag` jeu + tag, `PricePoint` jeu + pays + date + source…)
 rendent les imports idempotents : relancer un import met à jour au lieu de dupliquer.
+
+## Écrire un import
+
+Chaque source traduit ses réponses en `GameRecord` et les confie à
+`ingestion.writing.GameWriter(data_date)` : paquets de 500, aucun doublon, liens (genres, tags,
+studios, plateformes) ajoutés, votes de tags, temps de jeu et avis mis à jour. `data_date` est la
+date des données : un jeu déjà rempli par une source plus récente ne voit que ses champs vides
+comblés (« la donnée la plus récente gagne »). L'import s'enveloppe dans
+`ingestion.import_tracking.tracked_import(source)`, qui remplit `ImportRun`.

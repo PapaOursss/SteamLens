@@ -5,16 +5,14 @@ import { CanvasRenderer } from 'echarts/renderers'
 import {
   BarChart,
   LineChart,
-  PieChart,
-  ScatterChart,
   TreemapChart,
+  SunburstChart,
   MapChart
 } from 'echarts/charts'
 import {
   GridComponent,
   TooltipComponent,
   LegendComponent,
-  TitleComponent,
   VisualMapComponent,
   DataZoomComponent
 } from 'echarts/components'
@@ -24,14 +22,12 @@ export default defineNuxtPlugin((nuxtApp) => {
     CanvasRenderer,
     BarChart,
     LineChart,
-    PieChart,
-    ScatterChart,
     TreemapChart,
+    SunburstChart,
     MapChart,
     GridComponent,
     TooltipComponent,
     LegendComponent,
-    TitleComponent,
     VisualMapComponent,
     DataZoomComponent
   ])

@@ -1,38 +1,43 @@
-/**
- * Récupère la liste paginée des jeux pour le sélecteur de la carte.
- * Renvoie appid + name, triés par popularité.
- */
+import type { Ref } from 'vue'
+
 export interface GameOption {
   appid: number
   name: string
+  header_image: string
 }
 
+const MINIMUM_QUERY_LENGTH = 2
+const SEARCH_DELAY_MS = 300
+const RESULT_COUNT = 8
+
+/** Recherche de jeux par nom, lancée quand la frappe se calme ; seule la dernière réponse compte. */
 export function useGameSearch(query: Ref<string>) {
-  const config = useRuntimeConfig()
+  const { get } = useApi()
+  const settledQuery = useDebounced(query, SEARCH_DELAY_MS)
   const options = ref<GameOption[]>([])
-  const loading = ref(false)
+  const isFetching = ref(false)
+  const hasError = ref(false)
+  let latestSearch = 0
 
-  async function search(q: string) {
-    if (q.length < 2) { options.value = []; return }
-    loading.value = true
+  watch(settledQuery, async (text) => {
+    const searchId = ++latestSearch
+    const search = text.trim()
+    hasError.value = false
+    options.value = []
+    isFetching.value = search.length >= MINIMUM_QUERY_LENGTH
+    if (!isFetching.value) return
     try {
-      const data = await $fetch<{ results: GameOption[] }>(
-        `${config.public.apiBase}/games/`,
-        { query: { search: q, page_size: 10 } }
-      )
-      options.value = data.results ?? []
+      const data = await get<{ results: GameOption[] }>('/games/', { search, page_size: RESULT_COUNT })
+      if (searchId === latestSearch) options.value = data.results
     } catch {
-      options.value = []
+      if (searchId === latestSearch) hasError.value = true
     } finally {
-      loading.value = false
+      if (searchId === latestSearch) isFetching.value = false
     }
-  }
-
-  let timer: ReturnType<typeof setTimeout> | null = null
-  watch(query, (q) => {
-    if (timer) clearTimeout(timer)
-    timer = setTimeout(() => search(q), 300)
   })
 
-  return { options, loading }
+  // La frappe en attente compte comme une recherche : pas de « aucun résultat » prématuré.
+  const isLoading = computed(() => isFetching.value || query.value !== settledQuery.value)
+
+  return { options, isLoading, hasError }
 }

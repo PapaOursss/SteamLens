@@ -19,6 +19,7 @@ SCHEDULE: tuple[ScheduledCommand, ...] = (
     ScheduledCommand("snapshot_twitch", HOURLY, "T-21"),
     ScheduledCommand("import_steam_store", DAILY, "T-10"),
     ScheduledCommand("import_reviews", DAILY, "T-22"),
+    ScheduledCommand("import_google_trends", WEEKLY, "T-24"),
     ScheduledCommand("import_igdb", WEEKLY, "T-11"),
     ScheduledCommand("import_hardware_survey", MONTHLY, "T-27"),
     ScheduledCommand("import_steamcharts_history", MONTHLY, "T-09"),

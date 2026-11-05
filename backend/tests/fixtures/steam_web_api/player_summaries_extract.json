@@ -1,0 +1,9 @@
+{
+  "response": {
+    "players": [
+      {"steamid": "76561198000000001", "personaname": "anonyme-1", "communityvisibilitystate": 3, "loccountrycode": "FR"},
+      {"steamid": "76561198000000002", "personaname": "anonyme-2", "communityvisibilitystate": 3},
+      {"steamid": "76561198000000003", "personaname": "anonyme-3", "communityvisibilitystate": 3, "loccountrycode": "AQ"}
+    ]
+  }
+}

@@ -1,3 +1,4 @@
+from catalog.models.achievement_stat import AchievementStat
 from catalog.models.company import Company
 from catalog.models.game import Game
 from catalog.models.game_mode import GameMode
@@ -15,6 +16,7 @@ from catalog.models.tag import Tag
 from catalog.models.theme import Theme
 
 __all__ = [
+    "AchievementStat",
     "Company",
     "Game",
     "GameMode",

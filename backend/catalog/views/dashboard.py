@@ -1,5 +1,6 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
+
 from django.db.models import Avg, Count, OuterRef, Subquery, Sum
 from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework import serializers
@@ -26,18 +27,14 @@ def _build_overview() -> dict:
     total_players = latest_snaps.aggregate(total=Sum("players"))["total"] or 0
 
     top_genre_row = (
-        Genre.objects.annotate(games_count=Count("games"))
-        .order_by("-games_count", "name")
-        .first()
+        Genre.objects.annotate(games_count=Count("games")).order_by("-games_count", "name").first()
     )
     top_genre = top_genre_row.name if top_genre_row else "Inconnu"
 
     avg_price_row = PricePoint.objects.filter(price_eur__isnull=False).aggregate(
         avg_price=Avg("price_eur")
     )
-    avg_price = (
-        float(avg_price_row["avg_price"]) if avg_price_row["avg_price"] is not None else 0.0
-    )
+    avg_price = float(avg_price_row["avg_price"]) if avg_price_row["avg_price"] is not None else 0.0
 
     return {
         "games_count": total_games,
@@ -59,7 +56,7 @@ def _build_top_games() -> list[dict]:
         .order_by("-players")[:DASHBOARD_TOP_LIMIT]
     )
 
-    since = datetime.now(timezone.utc) - timedelta(hours=SPARKLINE_HOURS)
+    since = datetime.now(UTC) - timedelta(hours=SPARKLINE_HOURS)
     game_ids = [snap.game_id for snap in top_snaps]
     history_rows = (
         PlayerCountSnapshot.objects.filter(game_id__in=game_ids, taken_at__gte=since)
@@ -102,7 +99,9 @@ def _build_featured_gem() -> dict | None:
         "name": gem.name,
         "header_image": gem.header_image,
         "short_description": gem.short_description,
-        "price_eur": float(latest_price.price_eur) if (latest_price and latest_price.price_eur) else 0.0,
+        "price_eur": float(latest_price.price_eur)
+        if (latest_price and latest_price.price_eur)
+        else 0.0,
     }
 
 

@@ -20,11 +20,7 @@ from catalog.models import Genre, ProtonReport
 @api_view(["GET"])
 def proton_stats(request: Request) -> Response:
     """Statistiques globales et répartition par genre des niveaux de compatibilité Proton."""
-    tier_counts = (
-        ProtonReport.objects.values("tier")
-        .annotate(total=Count("id"))
-        .order_by("-total")
-    )
+    tier_counts = ProtonReport.objects.values("tier").annotate(total=Count("id")).order_by("-total")
 
     genres = Genre.objects.prefetch_related("games__proton_report")[:15]
     genre_breakdown = []
@@ -35,12 +31,16 @@ def proton_stats(request: Request) -> Response:
                 t = game.proton_report.tier
                 if t in t_counts:
                     t_counts[t] += 1
-        genre_breakdown.append({
-            "genre": genre.name,
-            "counts": t_counts,
-        })
+        genre_breakdown.append(
+            {
+                "genre": genre.name,
+                "counts": t_counts,
+            }
+        )
 
-    return Response({
-        "tiers": list(tier_counts),
-        "by_genre": genre_breakdown,
-    })
+    return Response(
+        {
+            "tiers": list(tier_counts),
+            "by_genre": genre_breakdown,
+        }
+    )

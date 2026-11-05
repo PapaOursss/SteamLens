@@ -59,11 +59,7 @@ def _aggregate_genre_tags() -> dict[int, list[dict[str, Any]]]:
             data_map[key]["votes"] += row.votes
 
     for (genre_id, tag_id, tag_name), stat in data_map.items():
-        avg_score = (
-            round(sum(stat["scores"]) / len(stat["scores"]), 1)
-            if stat["scores"]
-            else 0.0
-        )
+        avg_score = round(sum(stat["scores"]) / len(stat["scores"]), 1) if stat["scores"] else 0.0
         mapping[genre_id].append(
             {
                 "id": f"tag-{genre_id}-{tag_id}",

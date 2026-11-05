@@ -78,11 +78,13 @@ def steam_wrapped(request: Request) -> Response:
         "reason": "Prix de base systématiquement ajustés au-dessus de la zone Euro.",
     }
 
-    return Response({
-        "year": year,
-        "game_of_the_year": game_of_the_year,
-        "trending_genre": trending_genre,
-        "biggest_discount": biggest_discount,
-        "biggest_flop": biggest_flop,
-        "most_expensive_country": most_expensive_country,
-    })
+    return Response(
+        {
+            "year": year,
+            "game_of_the_year": game_of_the_year,
+            "trending_genre": trending_genre,
+            "biggest_discount": biggest_discount,
+            "biggest_flop": biggest_flop,
+            "most_expensive_country": most_expensive_country,
+        }
+    )

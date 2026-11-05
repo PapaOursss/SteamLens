@@ -14,9 +14,7 @@ def _build_mode_node(mode_name: str, games_count: int, owners_count: int) -> dic
     return {"name": mode_name, "value": games_count, "games": games_count, "owners": owners_count}
 
 
-def _build_theme_node(
-    theme_name: str, modes: dict[str, dict[str, int]]
-) -> dict[str, Any]:
+def _build_theme_node(theme_name: str, modes: dict[str, dict[str, int]]) -> dict[str, Any]:
     children = [
         _build_mode_node(m_name, counts["games"], counts["owners"])
         for m_name, counts in modes.items()

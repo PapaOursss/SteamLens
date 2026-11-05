@@ -21,9 +21,7 @@ def test_proton_stats_with_data():
     game = Game.objects.create(appid=413150, name="Stardew Valley")
     genre = Genre.objects.create(name="RPG")
     game.genres.add(genre)
-    ProtonReport.objects.create(
-        game=game, tier="platinum", score=0.98, total_reports=150
-    )
+    ProtonReport.objects.create(game=game, tier="platinum", score=0.98, total_reports=150)
 
     client = APIClient()
     url = reverse("stats-proton")

@@ -61,7 +61,9 @@ def regional_sales_stats(request: Request) -> Response:
         "notes": "Les joueurs japonais plébiscitent massivement le RPG par rapport au reste du monde.",
     }
 
-    return Response({
-        "by_genre": by_genre,
-        "top_regions": top_regions,
-    })
+    return Response(
+        {
+            "by_genre": by_genre,
+            "top_regions": top_regions,
+        }
+    )

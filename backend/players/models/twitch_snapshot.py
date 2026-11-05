@@ -13,11 +13,11 @@ class TwitchStreamSnapshot(models.Model):
 
     class Meta:
         constraints = (
-            models.UniqueConstraint(
-                fields=["game", "taken_at"], name="unique_twitch_snapshot"
-            ),
+            models.UniqueConstraint(fields=["game", "taken_at"], name="unique_twitch_snapshot"),
         )
         ordering = ("-taken_at",)
 
     def __str__(self) -> str:
-        return f"{self.game.name} · {self.viewer_count} spectateurs · {self.taken_at:%Y-%m-%d %H:%M}"
+        return (
+            f"{self.game.name} · {self.viewer_count} spectateurs · {self.taken_at:%Y-%m-%d %H:%M}"
+        )

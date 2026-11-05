@@ -179,8 +179,10 @@ def sources_overview(request: Request) -> Response:
         "Les estimations de propriétaires (SteamSpy) sont présentées par fourchettes.",
     ]
 
-    return Response({
-        "pipeline": pipeline,
-        "sources": sources_data,
-        "methodology_notes": notes,
-    })
+    return Response(
+        {
+            "pipeline": pipeline,
+            "sources": sources_data,
+            "methodology_notes": notes,
+        }
+    )

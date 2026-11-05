@@ -215,14 +215,14 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 
 ### T-24 · Carte du monde n°3 : l'intérêt pour un jeu selon Google Trends
 - **Type**: idea
-- **Status**: todo
-- **Opened**: 2026-10-23
+- **Status**: done
+- **Opened**: 2026-10-23 · **Closed**: 2026-11-05
 - **Effort**: M · **Owner**: Sterenn · **Due**: —
 - **Origin**: Google Trends (`pytrends`, non officiel)
 
-- [ ] `interest_by_region` pour le top 50 des jeux et les grands genres (« jeu de survie »…)
-- [ ] Carte animée dans le temps (curseur par mois) : on voit un jeu « se propager »
-- [ ] `pytrends` est fragile (bloqué souvent) : résultats mis en cache longtemps, plan B =
+- [x] `interest_by_region` pour le top 50 des jeux et les grands genres (« jeu de survie »…)
+- [x] Carte animée dans le temps (curseur par mois) : on voit un jeu « se propager »
+- [x] `pytrends` est fragile (bloqué souvent) : résultats mis en cache longtemps, plan B =
   export CSV à la main depuis trends.google.com
 
 ### T-25 · Carte du monde n°4 : le prix rapporté au pouvoir d'achat

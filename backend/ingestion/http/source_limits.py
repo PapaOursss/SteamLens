@@ -23,6 +23,8 @@ MIN_INTERVAL_SECONDS: dict[str, float] = {
     "twitch": SECONDS_PER_MINUTE / 800,
     # 20 000 requêtes par mois : on espace un peu pour ne pas tout brûler d'un coup.
     "rawg": 0.5,
+    # Google Trends : espacer pour éviter d'être bloqué (429).
+    "google_trends": 2.0,
 }
 
 DEFAULT_MIN_INTERVAL_SECONDS = 1.0

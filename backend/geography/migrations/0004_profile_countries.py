@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('catalog', '0008_reviewweek'),
-        ('geography', '0002_regionalsales'),
+        ('geography', '0003_googletrendsinterest'),
     ]
 
     operations = [

@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('catalog', '0009_achievementstat'),
-        ('geography', '0003_profile_countries'),
+        ('geography', '0004_profile_countries'),
         ('pricing', '0001_initial'),
     ]
 

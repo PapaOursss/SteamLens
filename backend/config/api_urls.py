@@ -16,6 +16,7 @@ from config.health import health
 from geography.views import world_map
 from geography.views_profiles import profile_countries
 from geography.views_sales import regional_sales_stats
+from geography.views_trends import trends_map_stats
 from ingestion.views import sources_overview
 from players.views import top_played
 from players.views_hardware import hardware_survey
@@ -49,6 +50,7 @@ urlpatterns = [
     path("stats/least-finished/", least_finished_games, name="stats-least-finished"),
     path("stats/review-bombings/", review_bombings, name="stats-review-bombings"),
     path("stats/profile-countries/", profile_countries, name="stats-profile-countries"),
+    path("stats/trends/", trends_map_stats, name="stats-trends"),
     path("map/<slug:indicator>/", world_map, name="world-map"),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="docs"),

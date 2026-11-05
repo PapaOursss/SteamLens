@@ -95,7 +95,7 @@ erDiagram
 | App | Modèles |
 |---|---|
 | `catalog` | `ReviewWeek` (avis récents comptés par semaine, T-22), `AchievementStat` (part des joueurs par succès, T-35), `PlayerPerspective`, `IgdbPopularity` (PopScore IGDB), `ReviewExcerpt` (extraits d'avis anonymes, pour T-40), `Game`, `Genre`, `Tag`, `GameTag`, `Theme`, `GameMode`, `Platform`, `Company`, `ReviewSummary` |
-| `geography` | `Country` (rempli par `geography.country_table.ensure_countries`), `RegionalSales`, `ProfileCountryCount` et `ProfileSample` (pays déclarés des profils publics, comptes seulement, T-37) |
+| `geography` | `Country` (rempli par `geography.country_table.ensure_countries`), `GoogleTrendsInterest`, `RegionalSales`, `ProfileCountryCount` et `ProfileSample` (pays déclarés des profils publics, comptes seulement, T-37) |
 | `pricing` | `PricePoint`, `PriceChange` (chaque changement de prix Steam d'après IsThereAnyDeal, T-18) |
 | `players` | `PlayerCountSnapshot`, `TwitchStreamSnapshot`, `RankingEntry` (top 100 SteamSpy), `HardwareShare` (enquête matériel Steam par mois, T-27) |
 | `ingestion` | `ImportRun` (une ligne par import lancé : début, fin, lignes, erreurs) |

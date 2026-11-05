@@ -13,6 +13,7 @@ from catalog.views.treemap import genre_tags_treemap
 from catalog.views.wrapped import steam_wrapped
 from config.health import health
 from geography.views import world_map
+from geography.views_profiles import profile_countries
 from geography.views_sales import regional_sales_stats
 from ingestion.views import sources_overview
 from players.views import top_played
@@ -39,6 +40,7 @@ urlpatterns = [
     path("stats/top-played/", top_played, name="stats-top-played"),
     path("stats/reviews/<int:appid>/", game_reviews, name="stats-game-reviews"),
     path("stats/review-bombings/", review_bombings, name="stats-review-bombings"),
+    path("stats/profile-countries/", profile_countries, name="stats-profile-countries"),
     path("map/<slug:indicator>/", world_map, name="world-map"),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="docs"),

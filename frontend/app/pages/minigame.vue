@@ -1,165 +1,112 @@
 <template>
-  <div class="space-y-6">
-    <header class="border-b border-slate-800 pb-4 text-center">
-      <h1 class="text-2xl font-bold text-white tracking-tight">Mini-jeu : Plus ou Moins</h1>
-      <p class="text-sm text-slate-400 mt-1">Défiez vos intuitions sur les statistiques de Steam !</p>
-      <div class="mt-3 flex justify-center gap-3">
-        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-900 border border-slate-800 text-slate-300">
-          Score : {{ score }}
-        </span>
-        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-950/60 border border-amber-800 text-amber-300">
-          Série max : {{ bestStreak }}
-        </span>
-      </div>
-    </header>
+  <div>
+    <PageIntro title="Plus ou moins" is-lab>
+      <p v-if="round">Le chiffre de ce duel : <strong class="font-semibold text-text">{{ METRICS[round.metric].label }}</strong>.</p>
+      <p class="figure mt-1">Bonnes réponses : {{ score }}. Meilleure série : {{ bestStreak }}.</p>
+    </PageIntro>
 
-    <div v-if="loading" class="text-center py-12 text-sm text-slate-400">
-      Chargement du prochain duel...
+    <div v-if="isDrawing" class="aspect-[2/1] animate-pulse bg-deep motion-reduce:animate-none" />
+    <div v-else-if="hasError" class="gutter flex flex-wrap items-center gap-4 bg-deep py-8" role="alert">
+      <p>Le duel n'arrive pas : l'API de SteamLens ne répond pas.</p>
+      <button type="button" class="button" @click="nextRound()">Réessayer</button>
     </div>
+    <div v-else-if="round" class="grid gap-px md:grid-cols-2">
+      <article class="bg-deep">
+        <GameCover :sources="wideCoverSources(round.game_a.appid, round.game_a.header_image)" :name="round.game_a.name" :width="460" :height="215" is-priority class="aspect-[460/215] w-full" />
+        <div class="p-4 md:p-6">
+          <h2 class="text-2xl leading-tight md:text-3xl">{{ round.game_a.name }}</h2>
+          <p class="figure mt-2 font-display text-4xl font-extrabold">{{ valueOf(round.game_a) }}</p>
+        </div>
+      </article>
 
-    <div v-else class="space-y-6">
-      <div class="text-center py-2 px-4 rounded-lg bg-cyan-950/40 border border-cyan-800/60 text-cyan-300 text-sm font-medium max-w-md mx-auto">
-        Métrique : <strong class="text-cyan-200">{{ metricLabel }}</strong>
-      </div>
-
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-        <!-- Game A -->
-        <div class="w-72 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg pb-4 text-center">
-          <img :src="gameA.header_image" :alt="gameA.name" class="w-full h-36 object-cover" />
-          <h2 class="font-bold text-base text-white p-3 truncate">{{ gameA.name }}</h2>
-          <div class="px-3 py-2 mx-4 rounded-lg bg-slate-950 border border-slate-800 text-sm font-semibold text-cyan-400">
-            {{ formatMetricValue(gameA[currentMetric]) }}
+      <article class="bg-deep">
+        <GameCover :sources="wideCoverSources(round.game_b.appid, round.game_b.header_image)" :name="round.game_b.name" :width="460" :height="215" is-priority class="aspect-[460/215] w-full" />
+        <div class="p-4 md:p-6">
+          <h2 class="text-2xl leading-tight md:text-3xl">{{ round.game_b.name }}</h2>
+          <p v-if="!guess" class="mt-2 text-lg text-soft">Plus ou moins que {{ valueOf(round.game_a) }} ?</p>
+          <div v-if="!guess" class="mt-3 flex flex-wrap gap-2">
+            <button type="button" class="button text-lg" @click="answer('higher')">Plus</button>
+            <button type="button" class="button text-lg" @click="answer('lower')">Moins</button>
+          </div>
+          <div v-else aria-live="polite">
+            <p class="figure mt-2 font-display text-4xl font-extrabold">{{ valueOf(round.game_b) }}</p>
+            <p class="mt-1 text-lg">{{ verdict }}</p>
+            <button type="button" class="button mt-3" @click="nextRound()">Duel suivant</button>
           </div>
         </div>
-
-        <div class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-black text-slate-300 shadow">
-          VS
-        </div>
-
-        <!-- Game B -->
-        <div class="w-72 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg pb-4 text-center">
-          <img :src="gameB.header_image" :alt="gameB.name" class="w-full h-36 object-cover" />
-          <h2 class="font-bold text-base text-white p-3 truncate">{{ gameB.name }}</h2>
-
-          <div v-if="!revealed" class="flex flex-col gap-2 px-4">
-            <button
-              class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors shadow"
-              @click="handleGuess(true)"
-            >
-              ▲ Plus élevé
-            </button>
-            <button
-              class="w-full py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-colors shadow"
-              @click="handleGuess(false)"
-            >
-              ▼ Moins élevé
-            </button>
-          </div>
-
-          <div
-            v-else
-            class="mx-4 p-3 rounded-lg border flex flex-col gap-1.5"
-            :class="isCorrect ? 'bg-emerald-950/60 border-emerald-800 text-emerald-300' : 'bg-rose-950/60 border-rose-800 text-rose-300'"
-          >
-            <span class="text-sm font-bold">{{ formatMetricValue(gameB[currentMetric]) }}</span>
-            <span class="text-xs font-semibold">{{ isCorrect ? 'Bien vu !' : 'Raté !' }}</span>
-            <button
-              class="mt-1 py-1.5 px-3 rounded bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition-colors"
-              @click="loadNextDuel"
-            >
-              Suivant →
-            </button>
-          </div>
-        </div>
-      </div>
+      </article>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import type { DuelGame, DuelMetric, DuelRound } from '~/types'
 
-useHead({
-  title: 'Duel de jeux — SteamLens'
-})
+type Guess = 'higher' | 'lower'
 
-interface GameCardData {
-  appid: number
-  name: string
-  header_image: string
-  players: number
-  price_eur: number
-  review_score: number
-  [key: string]: number | string
+const METRICS: Record<DuelMetric, { label: string; format: (value: number) => string }> = {
+  players: { label: 'joueurs connectés', format: (value) => `${formatNumber(value)} joueurs` },
+  price_eur: { label: 'prix en euros', format: (value) => (value > 0 ? formatPrice(value) : 'Gratuit') },
+  review_score: { label: "part d'avis positifs", format: (value) => `${value} %` }
 }
 
-type MetricKey = 'players' | 'price_eur' | 'review_score'
+useHead({ title: 'Plus ou moins' })
 
-const loading = ref(false)
-const revealed = ref(false)
-const isCorrect = ref(false)
-const score = ref(0)
-const bestStreak = ref(0)
-const currentStreak = ref(0)
-const currentMetric = ref<MetricKey>('players')
+const { data: round, isLoading, hasError, refresh } = useApiResource<DuelRound>('/minigame/duel/')
 
-const gameA = ref<GameCardData>({
-  appid: 730,
-  name: 'Counter-Strike 2',
-  header_image: 'https://cdn.akamai.steamstatic.com/steam/apps/730/header.jpg',
-  players: 1250000,
-  price_eur: 0.0,
-  review_score: 88
-})
+/** Prix 0 = jeu gratuit ; joueurs ou avis à 0 = pas de relevé, donc rien à deviner. */
+const ZERO_MEANS_MISSING: DuelMetric[] = ['players', 'review_score']
+const MAX_REDRAWS = 5
 
-const gameB = ref<GameCardData>({
-  appid: 570,
-  name: 'Dota 2',
-  header_image: 'https://cdn.akamai.steamstatic.com/steam/apps/570/header.jpg',
-  players: 650000,
-  price_eur: 0.0,
-  review_score: 82
-})
+const redraws = ref(0)
 
-const metricLabel = computed(() => {
-  if (currentMetric.value === 'players') return 'Nombre de joueurs en ligne'
-  if (currentMetric.value === 'price_eur') return 'Prix en euros'
-  return "Pourcentage d'avis positifs"
-})
-
-function formatMetricValue(val: number | string): string {
-  const num = typeof val === 'number' ? val : parseFloat(val)
-  if (currentMetric.value === 'players') return `${num.toLocaleString('fr-FR')} joueurs`
-  if (currentMetric.value === 'price_eur') return num === 0 ? 'Gratuit' : `${num.toFixed(2)} €`
-  return `${num} % positifs`
+function isComparable({ game_a: first, game_b: second, metric }: DuelRound): boolean {
+  return !ZERO_MEANS_MISSING.includes(metric) || (first[metric] > 0 && second[metric] > 0)
 }
 
-function handleGuess(guessHigher: boolean) {
-  const valA = Number(gameA.value[currentMetric.value])
-  const valB = Number(gameB.value[currentMetric.value])
-  const win = guessHigher ? valB >= valA : valB <= valA
-
-  isCorrect.value = win
-  revealed.value = true
-
-  if (win) {
-    score.value += 1
-    currentStreak.value += 1
-    if (currentStreak.value > bestStreak.value) bestStreak.value = currentStreak.value
+watch(round, (drawn) => {
+  if (drawn && !isComparable(drawn) && redraws.value < MAX_REDRAWS) {
+    redraws.value++
+    refresh()
   } else {
-    currentStreak.value = 0
+    redraws.value = 0
   }
-}
-
-async function loadNextDuel() {
-  loading.value = true
-  revealed.value = false
-  const metrics: MetricKey[] = ['players', 'price_eur', 'review_score']
-  currentMetric.value = metrics[Math.floor(Math.random() * metrics.length)]
-  loading.value = false
-}
-
-onMounted(() => {
-  loadNextDuel()
 })
+
+const isDrawing = computed(() => isLoading.value || (round.value ? !isComparable(round.value) && redraws.value > 0 : false))
+
+const guess = ref<Guess | null>(null)
+const score = ref(0)
+const streak = ref(0)
+const bestStreak = ref(0)
+const isRight = ref(false)
+
+function metricOf(game: DuelGame): number {
+  return game[round.value!.metric]
+}
+
+function valueOf(game: DuelGame): string {
+  return METRICS[round.value!.metric].format(metricOf(game))
+}
+
+const isTie = computed(() => round.value !== null && round.value !== undefined && metricOf(round.value.game_a) === metricOf(round.value.game_b))
+const verdict = computed(() => {
+  if (isTie.value) return 'Égalité : le point est pour vous.'
+  return isRight.value ? 'Bien vu.' : 'Raté.'
+})
+
+function answer(choice: Guess) {
+  const first = metricOf(round.value!.game_a)
+  const second = metricOf(round.value!.game_b)
+  isRight.value = choice === 'higher' ? second >= first : second <= first
+  guess.value = choice
+  streak.value = isRight.value ? streak.value + 1 : 0
+  if (isRight.value) score.value++
+  bestStreak.value = Math.max(bestStreak.value, streak.value)
+}
+
+function nextRound() {
+  guess.value = null
+  refresh()
+}
 </script>

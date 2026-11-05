@@ -117,6 +117,11 @@ const labLinks = [
   { label: 'Duel de jeux', to: '/minigame' },
   { label: 'Steam Wrapped', to: '/wrapped' },
   { label: 'Ventes régionales', to: '/regional-sales' },
+  { label: 'Historique des prix', to: '/price-history' },
+  { label: 'Avis & bombings', to: '/reviews' },
+  { label: 'Matériel des joueurs', to: '/hardware' },
+  { label: 'Succès jamais finis', to: '/achievements' },
+  { label: 'Pays des profils', to: '/profile-map' },
   { label: 'Sources de données', to: '/sources' }
 ]
 </script>

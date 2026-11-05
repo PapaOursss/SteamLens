@@ -13,7 +13,10 @@ export function useGameSearch(query: Ref<string>) {
   const loading = ref(false)
 
   async function search(q: string) {
-    if (q.length < 2) { options.value = []; return }
+    if (q.length < 2) {
+      options.value = []
+      return
+    }
     loading.value = true
     try {
       const data = await $fetch<{ results: GameOption[] }>(

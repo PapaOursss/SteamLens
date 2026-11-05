@@ -3,6 +3,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import DefaultRouter
 
 from catalog.views import GameViewSet, dashboard_stats, genre_stats, tag_stats
+from catalog.views.achievements import game_achievements, least_finished_games
 from catalog.views.game_reviews import game_reviews, review_bombings
 from catalog.views.minigame import game_duel
 from catalog.views.playtime import playtime_stats
@@ -39,6 +40,8 @@ urlpatterns = [
     path("stats/review-sentiment/", review_sentiment, name="stats-review-sentiment"),
     path("stats/top-played/", top_played, name="stats-top-played"),
     path("stats/reviews/<int:appid>/", game_reviews, name="stats-game-reviews"),
+    path("stats/achievements/<int:appid>/", game_achievements, name="stats-game-achievements"),
+    path("stats/least-finished/", least_finished_games, name="stats-least-finished"),
     path("stats/review-bombings/", review_bombings, name="stats-review-bombings"),
     path("stats/profile-countries/", profile_countries, name="stats-profile-countries"),
     path("map/<slug:indicator>/", world_map, name="world-map"),

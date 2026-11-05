@@ -1,44 +1,62 @@
 <template>
-  <div class="wrapped-container">
-    <header class="wrapped-header">
-      <span class="wrapped-tag">SteamLens Rewind</span>
-      <h1 class="title">Steam Wrapped {{ year }}</h1>
-      <p class="subtitle">L'année du jeu vidéo résumée en cartes interactives.</p>
+  <div class="space-y-6">
+    <header class="border-b border-slate-800 pb-4 text-center">
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-pink-950/60 text-pink-400 border border-pink-800/60 mb-2">
+        SteamLens Rewind
+      </span>
+      <h1 class="text-3xl font-extrabold text-white tracking-tight">Steam Wrapped {{ year }}</h1>
+      <p class="text-sm text-slate-400 mt-1">L'année du jeu vidéo résumée en cartes interactives.</p>
     </header>
 
-    <div class="cards-carousel">
-      <article class="card card-hero">
-        <div class="card-badge">Jeu de l'année</div>
-        <img :src="wrappedData.game_of_the_year.header_image" :alt="wrappedData.game_of_the_year.name" class="cover-img" />
-        <h2 class="card-title">{{ wrappedData.game_of_the_year.name }}</h2>
-        <p class="card-stat">Pic historique : {{ wrappedData.game_of_the_year.peak_players.toLocaleString('fr-FR') }} joueurs</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <article class="bg-gradient-to-br from-slate-900 to-slate-950 border border-cyan-800/50 rounded-xl p-5 shadow-lg flex flex-col items-center text-center">
+        <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-800 mb-2">
+          Jeu de l'année
+        </span>
+        <img :src="wrappedData.game_of_the_year.header_image" :alt="wrappedData.game_of_the_year.name" class="w-full h-32 object-cover rounded-lg my-2" />
+        <h2 class="text-base font-bold text-white">{{ wrappedData.game_of_the_year.name }}</h2>
+        <p class="text-xs text-slate-400 mt-1">
+          Pic historique : <strong class="text-cyan-400">{{ wrappedData.game_of_the_year.peak_players.toLocaleString('fr-FR') }}</strong> joueurs
+        </p>
       </article>
 
-      <article class="card card-trend">
-        <div class="card-badge badge-trend">Genre en essor</div>
-        <h2 class="card-title">{{ wrappedData.trending_genre.name }}</h2>
-        <div class="growth-box">+{{ wrappedData.trending_genre.growth_percent }}%</div>
-        <p class="card-desc">Porté par le succès phénoménal de <strong>{{ wrappedData.trending_genre.flagship_game }}</strong>.</p>
+      <article class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg flex flex-col items-center text-center">
+        <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 mb-2">
+          Genre en essor
+        </span>
+        <h2 class="text-base font-bold text-white mt-2">{{ wrappedData.trending_genre.name }}</h2>
+        <div class="text-3xl font-extrabold text-emerald-400 my-2">+{{ wrappedData.trending_genre.growth_percent }}%</div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Porté par le succès de <strong class="text-slate-200">{{ wrappedData.trending_genre.flagship_game }}</strong>.
+        </p>
       </article>
 
-      <article class="card card-deal">
-        <div class="card-badge badge-deal">Plus grosse promo</div>
-        <h2 class="card-title">{{ wrappedData.biggest_discount.name }}</h2>
-        <div class="discount-pill">-{{ wrappedData.biggest_discount.discount_percent }}%</div>
-        <p class="card-desc">Tombé à seulement {{ wrappedData.biggest_discount.final_price_eur.toFixed(2) }} € lors des soldes.</p>
+      <article class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg flex flex-col items-center text-center">
+        <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-950 text-amber-300 border border-amber-800 mb-2">
+          Plus grosse promo
+        </span>
+        <h2 class="text-base font-bold text-white mt-2">{{ wrappedData.biggest_discount.name }}</h2>
+        <div class="text-3xl font-extrabold text-amber-400 my-2">-{{ wrappedData.biggest_discount.discount_percent }}%</div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Tombé à seulement <strong class="text-slate-200">{{ wrappedData.biggest_discount.final_price_eur.toFixed(2) }} €</strong> lors des soldes.
+        </p>
       </article>
 
-      <article class="card card-flop">
-        <div class="card-badge badge-flop">Le coup dur</div>
-        <h2 class="card-title">{{ wrappedData.biggest_flop.name }}</h2>
-        <p class="card-desc">{{ wrappedData.biggest_flop.reason }}</p>
+      <article class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg flex flex-col items-center text-center">
+        <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-950 text-rose-300 border border-rose-800 mb-2">
+          Le coup dur
+        </span>
+        <h2 class="text-base font-bold text-white mt-2">{{ wrappedData.biggest_flop.name }}</h2>
+        <p class="text-xs text-slate-400 mt-3 leading-relaxed">{{ wrappedData.biggest_flop.reason }}</p>
       </article>
 
-      <article class="card card-country">
-        <div class="card-badge badge-country">Zone la plus chère</div>
-        <h2 class="card-title">{{ wrappedData.most_expensive_country.country }}</h2>
-        <div class="premium-stat">+{{ wrappedData.most_expensive_country.premium_percent }}%</div>
-        <p class="card-desc">{{ wrappedData.most_expensive_country.reason }}</p>
+      <article class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg flex flex-col items-center text-center sm:col-span-2 lg:col-span-1">
+        <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-950 text-purple-300 border border-purple-800 mb-2">
+          Zone la plus chère
+        </span>
+        <h2 class="text-base font-bold text-white mt-2">{{ wrappedData.most_expensive_country.country }}</h2>
+        <div class="text-3xl font-extrabold text-purple-400 my-2">+{{ wrappedData.most_expensive_country.premium_percent }}%</div>
+        <p class="text-xs text-slate-400 leading-relaxed">{{ wrappedData.most_expensive_country.reason }}</p>
       </article>
     </div>
   </div>
@@ -46,6 +64,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
+useHead({
+  title: 'Steam Wrapped — SteamLens'
+})
 
 const year = ref(2026)
 
@@ -68,7 +90,7 @@ const wrappedData = ref({
   },
   biggest_flop: {
     name: 'The Day Before',
-    reason: 'Retiré des ventes 4 jours après son lancement suite à 85% d\'avis négatifs.'
+    reason: "Retiré des ventes 4 jours après son lancement suite à 85% d'avis négatifs."
   },
   most_expensive_country: {
     country: 'Suisse (CHF)',
@@ -77,65 +99,3 @@ const wrappedData = ref({
   }
 })
 </script>
-
-<style scoped>
-.wrapped-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 2.5rem 1.5rem;
-  font-family: system-ui, -apple-system, sans-serif;
-  color: #1f2937;
-  text-align: center;
-}
-.wrapped-tag {
-  text-transform: uppercase;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  font-size: 0.8rem;
-  background: #fdf2f8;
-  color: #db2777;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-}
-.title { font-size: 2.5rem; font-weight: 900; margin: 0.75rem 0 0.5rem 0; }
-.subtitle { color: #6b7280; margin: 0 0 2.5rem 0; font-size: 1.1rem; }
-.cards-carousel {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-.card {
-  border-radius: 1rem;
-  padding: 1.75rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e5e7eb;
-  background: #fff;
-}
-.card-hero { background: linear-gradient(145deg, #1e293b, #0f172a); color: #fff; }
-.card-hero .card-title { color: #fff; }
-.card-hero .card-stat { color: #94a3b8; }
-.cover-img { width: 100%; height: 130px; object-fit: cover; border-radius: 0.5rem; margin: 1rem 0; }
-.card-badge {
-  font-size: 0.75rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  padding: 0.2rem 0.6rem;
-  border-radius: 9999px;
-  background: #38bdf8;
-  color: #0369a1;
-  margin-bottom: 0.5rem;
-}
-.badge-trend { background: #dcfce7; color: #166534; }
-.badge-deal { background: #fef08a; color: #854d0e; }
-.badge-flop { background: #fee2e2; color: #991b1b; }
-.badge-country { background: #ede9fe; color: #5b21b6; }
-.card-title { font-size: 1.35rem; font-weight: 800; margin: 0.5rem 0; }
-.growth-box { font-size: 2.2rem; font-weight: 900; color: #16a34a; margin: 0.5rem 0; }
-.discount-pill { font-size: 2.2rem; font-weight: 900; color: #ea580c; margin: 0.5rem 0; }
-.premium-stat { font-size: 2.2rem; font-weight: 900; color: #7c3aed; margin: 0.5rem 0; }
-.card-desc { font-size: 0.9rem; color: #4b5563; line-height: 1.4; margin: 0; }
-</style>

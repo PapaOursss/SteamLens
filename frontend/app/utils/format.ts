@@ -28,3 +28,14 @@ export function formatDateTime(isoDate: string): string {
 export function formatDate(isoDate: string): string {
   return DATE_FORMAT.format(new Date(isoDate))
 }
+
+export function formatPercent(value: number): string {
+  return `${formatNumber(value)} %`
+}
+
+/** Montant dans la devise relevée ; le nombre seul si l'API n'en donne pas. */
+export function formatAmount(value: number, currency: string | null): string {
+  const options = { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+  const format = new Intl.NumberFormat('fr-FR', currency ? { ...options, style: 'currency', currency } : options)
+  return widenSpaces(format.format(value))
+}

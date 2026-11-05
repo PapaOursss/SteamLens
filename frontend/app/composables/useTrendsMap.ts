@@ -11,7 +11,7 @@ export function useTrendsMap(target: { appid?: Ref<number | null>; genre?: Ref<s
   const series = ref<Record<string, Record<string, number>>>({})
   const currentIndex = ref(0)
   const isPlaying = ref(false)
-  const loading = ref(false)
+  const loading = ref(true)
   const error = ref<string | null>(null)
 
   let timer: ReturnType<typeof setInterval> | null = null

@@ -1,5 +1,5 @@
 <template>
-  <div role="group" :aria-label="label" class="inline-flex gap-1 rounded-md bg-deep p-1">
+  <div role="group" :aria-label="label" class="inline-flex flex-wrap gap-1 rounded-md bg-deep p-1">
     <button
       v-for="option in options"
       :key="option.value"

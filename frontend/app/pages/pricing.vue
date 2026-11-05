@@ -2,7 +2,7 @@
   <div>
     <PageIntro :title="game?.name ?? 'Prix d\'un jeu'">
       <template #under-title>
-        <GameSearch field-id="recherche-prix" label="Un autre jeu" class="mt-5 max-w-md" @select="onSelect" />
+        <GameSearch field-id="recherche-prix" label="Un autre jeu" class="mt-5 max-w-md" @select="selectGame" />
       </template>
       <GameCover
         v-if="game"
@@ -47,16 +47,12 @@
 </template>
 
 <script setup lang="ts">
-import type { GameOption } from '~/composables/useGameSearch'
 import type { GameDetail } from '~/types'
 
-/** Jeu affiché sans choix : payant, suivi, et dont les prix sont relevés. */
-const DEFAULT_APPID = 1091500
 const MINIMUM_HISTORY = 2
 const HISTORY_COUNTRY = 'FR'
 
-const route = useRoute()
-const appid = computed(() => Number(route.query.appid) || DEFAULT_APPID)
+const { appid, selectGame } = useGameFromRoute()
 
 const { data: game } = useApiResource<GameDetail>(() => `/games/${appid.value}/`)
 const { prices, points, isLoading, hasError, refresh } = useGamePriceMap(appid)
@@ -72,8 +68,4 @@ const history = computed(() =>
 const emptyMessage = computed(() =>
   game.value?.is_free ? 'Ce jeu est gratuit : aucun prix à comparer.' : 'Pas encore de prix relevé pour ce jeu.'
 )
-
-function onSelect(selected: GameOption) {
-  navigateTo({ query: { appid: selected.appid } })
-}
 </script>

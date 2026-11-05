@@ -3,32 +3,32 @@
   <div v-else class="aspect-[3/2] w-full sm:aspect-[2/1]">
     <ChartFrame v-if="isReady" :option="option" :label="label" />
   </div>
-  <p v-if="!hasError" class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
-    <span class="figure">{{ formatPrice(bounds.min) }}</span>
-    <span class="h-3 w-36 rounded-sm" :style="{ background: LEGEND_GRADIENT }" aria-hidden="true" />
-    <span class="figure">{{ formatPrice(bounds.max) }}</span>
-    <span class="ml-3 flex items-center gap-2 text-soft">
-      <span class="h-3 w-6 rounded-sm bg-deep" aria-hidden="true" />
-      Pas de relevé
-    </span>
-  </p>
+  <ScaleLegend v-if="!hasError" :low="formatValue(bounds.min)" :high="formatValue(bounds.max)" no-data-label="Pas de relevé" />
 </template>
 
 <script setup lang="ts">
 import type { CountryValue } from '~/types'
-
-const LEGEND_GRADIENT = `linear-gradient(to right, ${SEQUENTIAL_COLORS.join(', ')})`
 
 interface MapTooltipParam {
   name: string
   value: number
 }
 
-const props = defineProps<{ values: CountryValue[]; label: string }>()
+/** `scale` : échelle fixe, pour qu'une carte animée garde ses couleurs d'une date à l'autre. */
+const props = withDefaults(
+  defineProps<{
+    values: CountryValue[]
+    label: string
+    formatValue?: (value: number) => string
+    scale?: { min: number; max: number }
+  }>(),
+  { formatValue: formatPrice, scale: undefined }
+)
 
 const { isReady, hasError } = useWorldMap()
 
 const bounds = computed(() => {
+  if (props.scale) return props.scale
   const numbers = props.values.map((entry) => entry.value)
   return { min: Math.min(...numbers), max: Math.max(...numbers) }
 })
@@ -36,7 +36,7 @@ const bounds = computed(() => {
 function tooltipText(params: MapTooltipParam): string {
   const name = escapeHtml(countryName(params.name))
   return Number.isFinite(params.value)
-    ? `${name}<br><strong>${formatPrice(params.value)}</strong>`
+    ? `${name}<br><strong>${props.formatValue(params.value)}</strong>`
     : `${name}<br>Pas de relevé`
 }
 

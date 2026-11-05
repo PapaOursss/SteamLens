@@ -1,9 +1,12 @@
 <template>
-  <div>
-    <NuxtRouteAnnouncer />
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </div>
+  <NuxtRouteAnnouncer />
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
 
+<script setup lang="ts">
+useHead({
+  titleTemplate: (title) => (title ? `${title} · SteamLens` : 'SteamLens')
+})
+</script>

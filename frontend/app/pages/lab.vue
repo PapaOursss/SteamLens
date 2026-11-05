@@ -1,100 +1,34 @@
 <template>
-  <div class="space-y-6">
-    <header class="border-b border-slate-800 pb-4">
-      <h1 class="text-2xl font-bold text-white tracking-tight">Laboratoire d'Expérimentations</h1>
-      <p class="text-sm text-slate-400 mt-1">
-        Visualisations alternatives, mini-jeux et modules d'analyse transversaux.
-      </p>
-    </header>
+  <div>
+    <PageIntro title="Le labo">
+      Les vues qui sortent du cadre : des questions plus étroites, et un jeu.
+    </PageIntro>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <article
-        v-for="exp in experiments"
-        :key="exp.to"
-        class="flex flex-col justify-between p-5 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/50 transition-all shadow-md group"
-      >
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-slate-800 text-cyan-400 border border-slate-700">
-              {{ exp.tag }}
-            </span>
-            <span class="text-slate-400 text-xs">T-{{ exp.task }}</span>
-          </div>
-          <h2 class="text-base font-bold text-white group-hover:text-cyan-400 transition-colors">
-            {{ exp.title }}
-          </h2>
-          <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-            {{ exp.description }}
-          </p>
-        </div>
-
-        <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between">
-          <span class="text-xs text-slate-400">Source : {{ exp.source }}</span>
-          <NuxtLink
-            :to="exp.to"
-            class="text-xs font-medium text-cyan-400 hover:underline flex items-center gap-1"
-          >
-            Lancer →
-          </NuxtLink>
-        </div>
-      </article>
-    </div>
+    <ul class="gutter">
+      <li v-for="experiment in EXPERIMENTS" :key="experiment.to" class="border-t border-line">
+        <NuxtLink :to="experiment.to" class="group grid gap-1 py-5 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:items-baseline md:gap-8">
+          <span class="font-display text-3xl font-extrabold tracking-tight group-hover:text-hot md:text-4xl">{{ experiment.title }}</span>
+          <span class="max-w-prose leading-relaxed text-soft">{{ experiment.description }}</span>
+        </NuxtLink>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script setup lang="ts">
-useHead({
-  title: 'Labo — SteamLens'
-})
-
-const experiments = [
-  {
-    title: 'Steam Deck & Proton',
-    description: 'Statut de compatibilité ProtonDB et validation des tiers Linux (Gold, Platinum).',
-    tag: 'Hardware',
-    task: '38',
-    source: 'ProtonDB',
-    to: '/steam-deck'
-  },
-  {
-    title: 'Durée de vie & Rentabilité',
-    description: 'Calcul du coût par heure jouée et temps médian par genre.',
-    tag: 'Gameplay',
-    task: '39',
-    source: 'Kaggle & HowLongToBeat',
-    to: '/playtime'
-  },
-  {
-    title: 'Duel de jeux',
-    description: 'Devinez quel jeu réunit le plus de joueurs ou le meilleur score Metacritic.',
-    tag: 'Mini-jeu',
-    task: '40',
-    source: 'Steam Web API',
-    to: '/minigame'
-  },
-  {
-    title: 'Steam Wrapped Annuel',
-    description: 'Cartes interactives retraçant les moments forts et records de l\'année Steam.',
-    tag: 'Rétrospective',
-    task: '43',
-    source: 'Catalogue global',
-    to: '/wrapped'
-  },
-  {
-    title: 'Ventes régionales',
-    description: 'Part de marché globale et distribution historique des ventes (VGChartz).',
-    tag: 'Économie',
-    task: '44',
-    source: 'VGChartz Kaggle',
-    to: '/regional-sales'
-  },
-  {
-    title: 'Twitch Hype vs Joueurs',
-    description: 'Comparaison entre spectateurs Twitch et joueurs Steam réels.',
-    tag: 'Streaming',
-    task: '34',
-    source: 'Twitch Helix',
-    to: '/hype'
-  }
+const EXPERIMENTS = [
+  { title: 'Plus ou moins', to: '/minigame', description: 'Deux jeux, un chiffre caché : à vous de deviner lequel gagne.' },
+  { title: 'Steam Wrapped', to: '/wrapped', description: "L'année de Steam en quelques records." },
+  { title: 'Steam Deck', to: '/steam-deck', description: 'Ce qui tourne sous Linux, genre par genre, selon ProtonDB.' },
+  { title: 'Durée de vie', to: '/playtime', description: "Le temps de jeu médian par genre, et ce que coûte une heure de jeu." },
+  { title: 'Ventes régionales', to: '/regional-sales', description: "Ce qui se vend en Amérique du Nord, en Europe et au Japon." },
+  { title: 'Historique des prix', to: '/price-history', description: 'Chaque changement de prix, et les soldes qui reviennent chaque année.' },
+  { title: 'Avis et review bombings', to: '/reviews', description: "Le ratio d'avis positifs par langue et par semaine, et ses chutes brutales." },
+  { title: 'Matériel des joueurs', to: '/hardware', description: "L'enquête de Steam mois après mois : langues, systèmes, cartes graphiques." },
+  { title: 'Les jeux jamais finis', to: '/achievements', description: "Où les joueurs décrochent, d'après leurs succès." },
+  { title: 'Pays des profils', to: '/profile-map', description: "Le pays affiché sur les profils publics d'auteurs d'avis." },
+  { title: 'Google Trends', to: '/trends', description: "L'intérêt pour un jeu ou un genre, pays par pays, date après date." }
 ]
+
+useHead({ title: 'Labo' })
 </script>

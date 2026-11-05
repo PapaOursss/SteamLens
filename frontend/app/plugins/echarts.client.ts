@@ -1,13 +1,13 @@
 import { defineNuxtPlugin } from '#app'
 import VChart from 'vue-echarts'
-import { use } from 'echarts/core'
+import { registerLocale, use } from 'echarts/core'
+import frenchLocale from 'echarts/i18n/langFR-obj'
 import { CanvasRenderer } from 'echarts/renderers'
 import {
   BarChart,
   LineChart,
-  PieChart,
-  ScatterChart,
   TreemapChart,
+  SunburstChart,
   MapChart,
   HeatmapChart
 } from 'echarts/charts'
@@ -15,7 +15,6 @@ import {
   GridComponent,
   TooltipComponent,
   LegendComponent,
-  TitleComponent,
   VisualMapComponent,
   DataZoomComponent
 } from 'echarts/components'
@@ -25,18 +24,17 @@ export default defineNuxtPlugin((nuxtApp) => {
     CanvasRenderer,
     BarChart,
     LineChart,
-    PieChart,
-    ScatterChart,
     TreemapChart,
+    SunburstChart,
     MapChart,
     HeatmapChart,
     GridComponent,
     TooltipComponent,
     LegendComponent,
-    TitleComponent,
     VisualMapComponent,
     DataZoomComponent
   ])
 
+  registerLocale('FR', frenchLocale)
   nuxtApp.vueApp.component('VChart', VChart)
 })

@@ -1,134 +1,82 @@
 <template>
-  <div class="space-y-6">
-    <header class="border-b border-slate-800 pb-4">
-      <h1 class="text-2xl font-bold text-white tracking-tight">Les jeux que personne ne finit</h1>
-      <p class="text-sm text-slate-400 mt-1">
-        Part des joueurs qui débloquent chaque succès : la courbe d'abandon montre où ils lâchent,
-        le succès de fin d'histoire donne le taux de fin.
-      </p>
-    </header>
+  <div>
+    <PageIntro title="Les jeux que personne ne finit" is-lab>
+      La part des joueurs qui débloquent chaque succès montre où ils lâchent ; le succès de fin d'histoire donne le taux de fin.
+    </PageIntro>
 
-    <ChartCard
-      title="Plus faibles taux de fin"
-      subtitle="Part des joueurs qui ont le succès de fin d'histoire"
-      source="Steam Web API"
-      :loading="rankingLoading"
-      :empty="!ranking.length"
-      empty-message="Aucun succès de fin repéré : lancer manage.py import_achievements."
-      height="160px"
+    <DataBlock
+      id="courbe"
+      :title="details ? `Courbe d'abandon : ${details.name}` : 'Courbe d\'abandon'"
+      note="Succès du plus courant au plus rare. En jaune, la fin de l'histoire."
+      :is-loading="isLoading"
+      :has-error="hasError"
+      :is-empty="!details?.curve.length"
+      empty-message="Pas encore de succès importés pour ce jeu."
+      :height="320"
+      @retry="refresh()"
     >
-      <table class="w-full text-sm text-left">
-        <thead class="text-xs text-slate-400 border-b border-slate-800">
-          <tr>
-            <th class="p-2">Jeu</th>
-            <th class="p-2">Taux de fin</th>
-            <th class="p-2">Succès médian</th>
-            <th class="p-2">Succès</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-800/60 text-slate-200">
-          <tr
-            v-for="game in ranking"
-            :key="game.appid"
-            class="cursor-pointer hover:bg-slate-800/40"
-            @click="selectedAppid = game.appid"
-          >
-            <td class="p-2 font-semibold">{{ game.name }}</td>
-            <td class="p-2 text-rose-400 font-bold">{{ game.completion_rate.toFixed(1) }} %</td>
-            <td class="p-2">{{ game.median_percent.toFixed(1) }} %</td>
-            <td class="p-2">{{ game.achievements }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </ChartCard>
-
-    <section class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
-      <GameSelector @select="(game) => (selectedAppid = game.appid)" />
-      <p v-if="error" class="text-sm text-rose-400">{{ error }}</p>
-      <template v-if="details">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <StatTile
-            label="Taux de fin"
-            :value="details.completion_rate === null ? 'non repéré' : `${details.completion_rate} %`"
-          />
-          <StatTile
-            label="Plus gros décrochage"
-            :value="details.biggest_drop ? `−${details.biggest_drop.drop} points` : '—'"
-            :hint="dropHint"
-          />
-        </div>
-        <ChartCard
-          :title="`Courbe d'abandon — ${details.name}`"
-          subtitle="Succès du plus courant au plus rare ; en rouge, la fin de l'histoire"
-          source="Steam Web API"
-          :empty="!details.curve.length"
-        >
-          <VChart class="w-full h-80" :option="curveOption" autoresize />
-        </ChartCard>
+      <template #actions>
+        <GameSearch field-id="recherche-succes" label="Un autre jeu" class="w-full sm:w-80" @select="selectGame" />
       </template>
-    </section>
+      <template v-if="details">
+        <div class="mb-6 grid gap-x-8 gap-y-4 md:grid-cols-2">
+          <StatTile label="Taux de fin" :value="details.completion_rate === null ? 'Non repéré' : formatPercent(details.completion_rate)" />
+          <StatTile label="Plus gros décrochage" :value="details.biggest_drop ? `${formatNumber(details.biggest_drop.drop)} points` : '—'" :hint="dropHint" />
+        </div>
+        <AchievementCurveChart :curve="details.curve" :label="`Courbe d'abandon de ${details.name}`" />
+      </template>
+    </DataBlock>
+
+    <DataBlock
+      title="Les plus faibles taux de fin"
+      note="Part des joueurs qui ont le succès de fin d'histoire. Source : Steam Web API."
+      :is-loading="rankingLoading"
+      :has-error="rankingError"
+      :is-empty="!ranking?.length"
+      empty-message="Pas encore de succès de fin repérés : l'import n'a pas tourné sur cette base."
+      @retry="refreshRanking()"
+    >
+      <div class="overflow-x-auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th scope="col">Jeu</th>
+              <th scope="col">Taux de fin</th>
+              <th scope="col">Succès médian</th>
+              <th scope="col">Succès</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="game in ranking" :key="game.appid">
+              <td><NuxtLink :to="{ query: { appid: game.appid }, hash: '#courbe' }" class="link font-semibold">{{ game.name }}</NuxtLink></td>
+              <td class="figure font-semibold">{{ formatPercent(game.completion_rate) }}</td>
+              <td class="figure">{{ formatPercent(game.median_percent) }}</td>
+              <td class="figure">{{ formatNumber(game.achievements) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </DataBlock>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { GameAchievements, LeastFinishedGame } from '~/types'
 
-useHead({ title: 'Succès Steam — SteamLens' })
+useHead({ title: 'Les jeux jamais finis' })
 
-const { get } = useApi()
-const ranking = ref<LeastFinishedGame[]>([])
-const rankingLoading = ref(true)
-const selectedAppid = ref<number | null>(null)
-const details = ref<GameAchievements | null>(null)
-const error = ref('')
+const { appid, selectGame } = useGameFromRoute()
 
-onMounted(async () => {
-  try {
-    ranking.value = await get<LeastFinishedGame[]>('/stats/least-finished/')
-  } finally {
-    rankingLoading.value = false
-  }
-})
-
-watch(selectedAppid, async (appid) => {
-  if (appid === null) return
-  error.value = ''
-  try {
-    details.value = await get<GameAchievements>(`/stats/achievements/${appid}/`)
-  } catch {
-    error.value = 'Impossible de charger les succès de ce jeu.'
-  }
-})
+const {
+  data: ranking,
+  isLoading: rankingLoading,
+  hasError: rankingError,
+  refresh: refreshRanking
+} = useApiResource<LeastFinishedGame[]>('/stats/least-finished/')
+const { data: details, isLoading, hasError, refresh } = useApiResource<GameAchievements>(() => `/stats/achievements/${appid.value}/`)
 
 const dropHint = computed(() => {
   const drop = details.value?.biggest_drop
-  return drop ? `entre « ${drop.from_achievement} » et « ${drop.to_achievement} »` : undefined
-})
-
-const curveOption = computed(() => {
-  const curve = details.value?.curve ?? []
-  return {
-    tooltip: {
-      trigger: 'axis',
-      formatter: (params: { dataIndex: number }[]) => {
-        const step = curve[params[0]?.dataIndex ?? 0]
-        return step ? `${step.name}<br/>${step.percent} % des joueurs` : ''
-      }
-    },
-    grid: { left: 50, right: 20, top: 10, bottom: 40 },
-    xAxis: { type: 'category', data: curve.map((step) => step.rank), axisLabel: { color: '#94a3b8' } },
-    yAxis: { type: 'value', min: 0, max: 100, axisLabel: { color: '#94a3b8', formatter: '{value} %' } },
-    series: [
-      {
-        type: 'line',
-        areaStyle: { opacity: 0.15 },
-        data: curve.map((step) => ({
-          value: step.percent,
-          itemStyle: { color: step.is_ending ? '#f43f5e' : '#22d3ee' },
-          symbolSize: step.is_ending ? 12 : 4
-        }))
-      }
-    ]
-  }
+  return drop ? `Entre « ${drop.from_achievement} » et « ${drop.to_achievement} »` : undefined
 })
 </script>

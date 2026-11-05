@@ -1,31 +1,10 @@
+/** Appel ponctuel à l'API ; pour une ressource affichée par une page, voir `useApiResource`. */
 export function useApi() {
   const config = useRuntimeConfig()
-  const apiBase = (config.public.apiBase as string) || 'http://localhost:8000/api'
 
-  function buildUrl(endpoint: string): string {
-    const cleanBase = apiBase.replace(/\/+$/, '')
-    const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
-    return `${cleanBase}${cleanEndpoint}`
+  function get<T>(endpoint: string, query?: Record<string, string | number>): Promise<T> {
+    return $fetch<T>(`${config.public.apiBase}${endpoint}`, { query })
   }
 
-  function get<T>(endpoint: string, params?: Record<string, unknown>): Promise<T> {
-    return $fetch<T>(buildUrl(endpoint), {
-      method: 'GET',
-      query: params
-    })
-  }
-
-  function post<T>(endpoint: string, body?: unknown): Promise<T> {
-    return $fetch<T>(buildUrl(endpoint), {
-      method: 'POST',
-      body
-    })
-  }
-
-  return {
-    apiBase,
-    buildUrl,
-    get,
-    post
-  }
+  return { get }
 }

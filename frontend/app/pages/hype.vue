@@ -1,109 +1,46 @@
 <template>
-  <div class="space-y-6">
-    <header class="border-b border-slate-800 pb-4">
-      <h1 class="text-2xl font-bold text-white tracking-tight">Hype contre Réalité : Twitch vs Steam</h1>
-      <p class="text-sm text-slate-400 mt-1">
-        Comparaison entre l'audience Twitch (spectateurs) et la fréquentation réelle Steam (joueurs en jeu).
-      </p>
-    </header>
+  <div>
+    <PageIntro title="Regardés ou joués ?">
+      Les spectateurs Twitch face aux joueurs Steam. Le chiffre à droite donne le nombre de spectateurs par joueur.
+    </PageIntro>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <section class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm">
-        <h2 class="text-base font-bold text-purple-400 mb-1">Regardés plus que joués (Hype forte)</h2>
-        <p class="text-xs text-slate-400 mb-4">Ces jeux attirent proportionnellement beaucoup plus de spectateurs que de joueurs actifs.</p>
-        <div class="flex flex-col gap-2.5">
-          <div v-for="game in watchedMore" :key="game.appid" class="flex items-center gap-3 p-3 rounded-lg bg-slate-950 border border-slate-800/80">
-            <img :src="game.header_image" :alt="game.name" class="w-16 h-8 object-cover rounded" />
-            <div class="flex-1 min-w-0">
-              <span class="font-semibold text-sm text-slate-100 truncate block">{{ game.name }}</span>
-              <div class="text-xs text-slate-400 flex items-center gap-1.5 mt-0.5">
-                <span>{{ game.viewers.toLocaleString('fr-FR') }} viewers</span>
-                <span>/</span>
-                <span>{{ game.players.toLocaleString('fr-FR') }} joueurs</span>
-              </div>
-            </div>
-            <div class="font-bold text-xs px-2.5 py-1 rounded bg-purple-950 text-purple-300 border border-purple-800">
-              x{{ game.hype_ratio }}
-            </div>
-          </div>
-        </div>
-      </section>
+    <SampleNotice v-if="isSample" class="mb-6">
+      L'import Twitch n'a pas encore tourné : ces lignes illustrent la page, ce ne sont pas des mesures.
+    </SampleNotice>
 
-      <section class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm">
-        <h2 class="text-base font-bold text-cyan-400 mb-1">Joués en silence (Fidélité discrète)</h2>
-        <p class="text-xs text-slate-400 mb-4">Ces jeux rassemblent des communautés très actives mais peu regardées en stream.</p>
-        <div class="flex flex-col gap-2.5">
-          <div v-for="game in playedInSilence" :key="game.appid" class="flex items-center gap-3 p-3 rounded-lg bg-slate-950 border border-slate-800/80">
-            <img :src="game.header_image" :alt="game.name" class="w-16 h-8 object-cover rounded" />
-            <div class="flex-1 min-w-0">
-              <span class="font-semibold text-sm text-slate-100 truncate block">{{ game.name }}</span>
-              <div class="text-xs text-slate-400 flex items-center gap-1.5 mt-0.5">
-                <span>{{ game.viewers.toLocaleString('fr-FR') }} viewers</span>
-                <span>/</span>
-                <span>{{ game.players.toLocaleString('fr-FR') }} joueurs</span>
-              </div>
-            </div>
-            <div class="font-bold text-xs px-2.5 py-1 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
-              x{{ game.hype_ratio }}
-            </div>
-          </div>
-        </div>
-      </section>
+    <div v-if="isLoading" class="mx-4 h-80 animate-pulse bg-deep motion-reduce:animate-none md:mx-6" />
+    <div v-else-if="hasError" class="gutter flex flex-wrap items-center gap-4 bg-deep py-8" role="alert">
+      <p>Ces données n'arrivent pas : l'API de SteamLens ne répond pas.</p>
+      <button type="button" class="button" @click="refresh()">Réessayer</button>
+    </div>
+    <div v-else-if="data" class="gutter grid gap-10 pt-2 lg:grid-cols-2">
+      <HypeList
+        title="Plus regardés que joués"
+        description="Beaucoup de spectateurs pour peu de joueurs."
+        :games="data.watched_more"
+      />
+      <HypeList
+        title="Joués en silence"
+        description="Des communautés actives que le streaming ignore."
+        :games="data.played_in_silence"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import type { HypeStats, SourcesOverviewResponse } from '~/types'
 
-useHead({
-  title: 'Hype Twitch vs Steam — SteamLens'
+const TWITCH_SOURCE = 'twitch'
+
+useHead({ title: 'Tendances' })
+
+const { data, isLoading, hasError, refresh } = useApiResource<HypeStats>('/stats/hype/')
+const { data: sources } = useApiResource<SourcesOverviewResponse>('/sources/')
+
+/** L'API renvoie des lignes d'exemple tant que Twitch n'a rien importé. */
+const isSample = computed(() => {
+  const twitch = sources.value?.sources.find((source) => source.key === TWITCH_SOURCE)
+  return twitch ? !twitch.last_import.succeeded : false
 })
-
-interface HypeGame {
-  appid: number
-  name: string
-  header_image: string
-  viewers: number
-  players: number
-  hype_ratio: number
-}
-
-const watchedMore = ref<HypeGame[]>([
-  {
-    appid: 252490,
-    name: 'Rust',
-    header_image: 'https://cdn.akamai.steamstatic.com/steam/apps/252490/header.jpg',
-    viewers: 140000,
-    players: 65000,
-    hype_ratio: 2.15
-  },
-  {
-    appid: 1086940,
-    name: "Baldur's Gate 3",
-    header_image: 'https://cdn.akamai.steamstatic.com/steam/apps/1086940/header.jpg',
-    viewers: 95000,
-    players: 55000,
-    hype_ratio: 1.73
-  }
-])
-
-const playedInSilence = ref<HypeGame[]>([
-  {
-    appid: 413150,
-    name: 'Stardew Valley',
-    header_image: 'https://cdn.akamai.steamstatic.com/steam/apps/413150/header.jpg',
-    viewers: 3500,
-    players: 85000,
-    hype_ratio: 0.04
-  },
-  {
-    appid: 289070,
-    name: 'Civilization VI',
-    header_image: 'https://cdn.akamai.steamstatic.com/steam/apps/289070/header.jpg',
-    viewers: 1200,
-    players: 52000,
-    hype_ratio: 0.02
-  }
-])
 </script>

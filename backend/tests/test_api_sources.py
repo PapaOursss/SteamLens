@@ -15,7 +15,7 @@ def test_sources_overview_empty():
     assert "pipeline" in data
     assert "sources" in data
     assert "methodology_notes" in data
-    assert len(data["sources"]) == 12
+    assert len(data["sources"]) == 14
 
 
 @pytest.mark.django_db

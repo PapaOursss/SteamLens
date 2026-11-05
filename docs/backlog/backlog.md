@@ -166,19 +166,6 @@ Première carte, la plus simple : les données viennent de T-10.
 
 ## 🟡 Normal
 
-### T-18 · IsThereAnyDeal : historique des prix
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Pavel · **Due**: —
-- **Origin**: docs.isthereanydeal.com (clé gratuite)
-
-La « vraie » évolution des prix demandée dans `docs/suivi.md`.
-- [ ] Lien appid → id ITAD (`games/lookup`)
-- [ ] `games/history` : chaque changement de prix sur Steam depuis des années
-- [ ] Plus bas historique, nombre de promos par an, remise moyenne
-- [ ] Vue « calendrier des soldes Steam » : on voit les soldes d'été et d'hiver revenir
-
 ### T-19 · CheapShark : promos du moment, tous magasins
 - **Type**: task
 - **Status**: todo
@@ -211,18 +198,6 @@ La « vraie » évolution des prix demandée dans `docs/suivi.md`.
 - [ ] Langue des streams (`language`) gardée : elle nourrit les cartes (T-23)
 - [ ] Passé complété par un dataset Kaggle des top jeux Twitch 2016-2023 (à vérifier)
 
-### T-22 · Avis Steam : volume, ratio positif et langue
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Pavel · **Due**: —
-- **Origin**: `store.steampowered.com/appreviews/<appid>?json=1` (sans clé)
-
-- [ ] `query_summary` par langue (`language=french`, `english`, `schinese`…) → `ReviewSummary`
-- [ ] Courbe du ratio positif dans le temps (`filter=recent`, pagination par `cursor`)
-- [ ] Détecter les « review bombings » : chute brutale du ratio sur une semaine
-- [ ] Ne stocker ni l'auteur ni son SteamID, seulement des comptes
-
 ### T-23 · Carte du monde n°2 : quels genres joue-t-on par pays ?
 - **Type**: idea
 - **Status**: todo
@@ -240,14 +215,14 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 
 ### T-24 · Carte du monde n°3 : l'intérêt pour un jeu selon Google Trends
 - **Type**: idea
-- **Status**: todo
-- **Opened**: 2026-10-23
+- **Status**: done
+- **Opened**: 2026-10-23 · **Closed**: 2026-11-05
 - **Effort**: M · **Owner**: Sterenn · **Due**: —
 - **Origin**: Google Trends (`pytrends`, non officiel)
 
-- [ ] `interest_by_region` pour le top 50 des jeux et les grands genres (« jeu de survie »…)
-- [ ] Carte animée dans le temps (curseur par mois) : on voit un jeu « se propager »
-- [ ] `pytrends` est fragile (bloqué souvent) : résultats mis en cache longtemps, plan B =
+- [x] `interest_by_region` pour le top 50 des jeux et les grands genres (« jeu de survie »…)
+- [x] Carte animée dans le temps (curseur par mois) : on voit un jeu « se propager »
+- [x] `pytrends` est fragile (bloqué souvent) : résultats mis en cache longtemps, plan B =
   export CSV à la main depuis trends.google.com
 
 ### T-25 · Carte du monde n°4 : le prix rapporté au pouvoir d'achat
@@ -274,18 +249,6 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
   pays (P17 / P495) ; compléter avec les pays des studios IGDB (T-11)
 - [ ] Carte des studios par pays + genre de prédilection de chaque pays
 - [ ] Flux (lignes courbes) « pays du studio → pays où le jeu est joué » en bonus
-
-### T-27 · Enquête matériel et logiciels de Steam
-- **Type**: task
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Pavel · **Due**: —
-- **Origin**: store.steampowered.com/hwsurvey (page publique, chiffres mensuels)
-
-Seule source officielle sur **qui** sont les joueurs.
-- [ ] Récupérer chaque mois : langues, OS, cartes graphiques, RAM, VR
-- [ ] Courbes : montée du chinois simplifié, part de Linux et du Steam Deck, GPU dominants
-- [ ] Les langues recalent les poids de la carte n°2 (T-23)
 
 ### T-28 · Bar chart race des jeux les plus joués
 - **Type**: idea
@@ -364,17 +327,6 @@ Seule source officielle sur **qui** sont les joueurs.
 - [x] Ratio spectateurs ÷ joueurs : jeux « regardés plus que joués » vs « joués en silence »
 - [x] Classement des deux extrêmes
 
-### T-35 · Succès : les jeux que personne ne finit
-- **Type**: idea
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Pavel · **Due**: —
-- **Origin**: `ISteamUserStats/GetGlobalAchievementPercentagesForApp` (Steam Web API)
-
-- [ ] Pourcentage de joueurs pour chaque succès du top 300
-- [ ] « Courbe d'abandon » : succès triés par rareté, la pente montre où les joueurs lâchent
-- [ ] Classement des jeux au plus faible taux de fin (succès de fin d'histoire)
-
 ### T-36 · Comparateur de jeux
 - **Type**: idea
 - **Status**: todo
@@ -409,19 +361,6 @@ Seule source officielle sur **qui** sont les joueurs.
 - [x] Schéma du flux : sources → commandes d'import → base → API → graphiques
 
 ## ⚪ Background — long-running work, debt and ideas
-
-### T-37 · Carte n°6 : pays déclarés des profils publics
-- **Type**: idea
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: L · **Owner**: Pavel · **Due**: —
-- **Origin**: `ISteamUser/GetPlayerSummaries` (champ facultatif `loccountrycode`)
-
-La carte la plus « vraie » des joueurs par pays, mais à manier avec soin.
-- [ ] Échantillon : auteurs des avis récents d'un jeu (T-22) → `GetPlayerSummaries` par lots
-  de 100 → on ne garde que le pays, compté par jeu et par genre
-- [ ] **Aucun SteamID ni pseudo enregistré**, même temporairement sur disque
-- [ ] Afficher la taille de l'échantillon et le % de profils sans pays
 
 ### T-38 · ProtonDB : jouable sous Linux et Steam Deck ?
 - **Type**: idea
@@ -523,6 +462,11 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 One line per closed ticket, most recent first:
 `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
 
+- **2026-11-05** · T-37 · Carte n°6 : pays déclarés des profils publics — `manage.py import_profile_countries` (top 50, chaque semaine, clé `STEAM_API_KEY`) : auteurs des avis récents (T-22) gardés en mémoire seulement, `GetPlayerSummaries` par lots de 100 sans cache disque, comptes par pays dans `ProfileCountryCount` et taille d'échantillon / profils sans pays dans `ProfileSample` ; carte `/api/map/profile-countries/`, `/api/stats/profile-countries/` (échantillon, top pays, pays dominant par genre), page `/profile-map` (feat/taches-pavel-t18-t37) · opened 2026-10-23
+- **2026-11-05** · T-35 · Succès : les jeux que personne ne finit — `manage.py import_achievements` (top 300, chaque semaine ; noms lisibles avec `STEAM_API_KEY`) dans `AchievementStat` ; courbe d'abandon et plus gros décrochage sur `/api/stats/achievements/<appid>/`, classement des plus faibles taux de fin (succès de fin repéré par mots-clés) sur `/api/stats/least-finished/`, page `/achievements` (feat/taches-pavel-t18-t37) · opened 2026-10-23
+- **2026-11-05** · T-27 · Enquête matériel et logiciels de Steam — `manage.py import_hardware_survey` (mensuel) : page publique lue en HTML (langues, OS, GPU, RAM, VR) dans `HardwareShare` ; courbes par catégorie et mises en avant (chinois simplifié, Linux, Steam Deck) sur `/api/stats/hardware-survey/`, page `/hardware` ; le recalage des poids de la carte n°2 reste à faire dans T-23 (feat/taches-pavel-t18-t37) · opened 2026-10-23
+- **2026-11-05** · T-22 · Avis Steam : volume, ratio positif et langue — `manage.py import_reviews` (top 200, chaque jour) : `query_summary` dans 11 langues → `ReviewSummary`, avis récents paginés par `cursor` comptés par semaine dans `ReviewWeek` (ni auteur ni SteamID, pas de cache disque), review bombings (chute de 20 points sous les 4 semaines d'avant) sur `/api/stats/reviews/<appid>/` et `/api/stats/review-bombings/`, page `/reviews` (feat/taches-pavel-t18-t37) · opened 2026-10-23
+- **2026-11-05** · T-18 · IsThereAnyDeal : historique des prix — `manage.py import_itad_history` (top 200, chaque semaine, clé `ITAD_API_KEY`) : lien appid → `Game.itad_id`, chaque changement de prix Steam (France) dans `PriceChange` ; plus bas historique, promos par an et remise moyenne sur `/api/stats/price-history/<appid>/`, calendrier des soldes par semaine sur `/api/stats/sales-calendar/`, page `/price-history` (feat/taches-pavel-t18-t37) · opened 2026-10-23
 - **2026-11-04** · T-13 · Page d'accueil : tableau de bord en direct — endpoint `/api/stats/dashboard/` (chiffres clés consolidés, top 10 des jeux avec sparklines 24h, pépite du jour) et vue Nuxt 4 `pages/index.vue` avec sous-composants `MetricTile`, `TopGameRow`, `SparkLine` et `FeaturedGem` (feat/T-13-tableau-de-bord) · opened 2026-10-23
 
 - **2026-11-01** · T-11 · IGDB : genres, thèmes, modes de jeu et PopScore — `manage.py import_igdb` (top 2 000, chaque semaine) : jeton Twitch renouvelé seul (avant expiration et sur 401), lien appid ↔ IGDB par `external_games`, genres IGDB à part (`Game.igdb_genres`), thèmes, modes, points de vue, studios et leur pays, `IgdbPopularity` ; `ApiClient.post_json` ; testé sur réponses écrites à la main, à lancer une fois l'application Twitch dans `.env` (feat/T-11-igdb) · opened 2026-10-23

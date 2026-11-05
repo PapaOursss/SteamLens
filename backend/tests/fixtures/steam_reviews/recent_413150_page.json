@@ -1,0 +1,34 @@
+{
+  "success": 1,
+  "query_summary": {"num_reviews": 3},
+  "reviews": [
+    {
+      "recommendationid": "201",
+      "author": {"steamid": "76561198000000001", "num_reviews": 4, "playtime_forever": 6000},
+      "language": "french",
+      "review": "Toujours aussi génial.",
+      "timestamp_created": 1793865600,
+      "voted_up": true,
+      "votes_up": 0
+    },
+    {
+      "recommendationid": "202",
+      "author": {"steamid": "76561198000000002", "num_reviews": 1, "playtime_forever": 30},
+      "language": "english",
+      "review": "Not for me.",
+      "timestamp_created": 1793779200,
+      "voted_up": false,
+      "votes_up": 1
+    },
+    {
+      "recommendationid": "203",
+      "author": {"steamid": "76561198000000003", "num_reviews": 12, "playtime_forever": 9000},
+      "language": "english",
+      "review": "Cozy.",
+      "timestamp_created": 1793174400,
+      "voted_up": true,
+      "votes_up": 3
+    }
+  ],
+  "cursor": "AoJ4qNaA0YoDd4bRrwM="
+}

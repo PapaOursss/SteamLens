@@ -17,7 +17,7 @@ def test_unknown_indicator_lists_the_known_ones(
     response = client.get("/api/map/nope/")
 
     assert response.status_code == 404
-    assert "average-price-eur, studios" in response.json()["detail"]
+    assert "average-price-eur, profile-countries, studios" in response.json()["detail"]
 
 
 def test_api_docs_page_is_served(client: Client, db: None) -> None:

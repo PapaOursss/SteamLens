@@ -20,6 +20,7 @@ from ingestion.views import sources_overview
 from players.views import top_played
 from players.views_hardware import hardware_survey
 from players.views_hype import hype_stats
+from pricing.views import price_history, sales_calendar
 
 router = DefaultRouter(trailing_slash=True)
 router.register("games", GameViewSet, basename="game")
@@ -40,6 +41,8 @@ urlpatterns = [
     path("stats/sunburst-igdb/", sunburst_igdb, name="stats-sunburst-igdb"),
     path("stats/review-sentiment/", review_sentiment, name="stats-review-sentiment"),
     path("stats/hardware-survey/", hardware_survey, name="stats-hardware-survey"),
+    path("stats/price-history/<int:appid>/", price_history, name="stats-price-history"),
+    path("stats/sales-calendar/", sales_calendar, name="stats-sales-calendar"),
     path("stats/top-played/", top_played, name="stats-top-played"),
     path("stats/reviews/<int:appid>/", game_reviews, name="stats-game-reviews"),
     path("stats/achievements/<int:appid>/", game_achievements, name="stats-game-achievements"),

@@ -1,5 +1,6 @@
 """Courbe d'abandon et taux de fin d'un jeu à partir de ses succès (T-35)."""
 
+import re
 from collections.abc import Sequence
 from itertools import pairwise
 from statistics import median
@@ -12,12 +13,15 @@ ENDING_KEYWORDS = (
     "complete the story", "complete the campaign", "beat the game", "credits",
     "final boss", "the end", "fin du jeu", "terminer le jeu", "terminer l'histoire",
 )  # fmt: skip
+ENDING_PATTERN = re.compile(rf"\b(?:{'|'.join(map(re.escape, ENDING_KEYWORDS))})\b")
 PERCENT_DECIMALS = 2
 
 
 def is_ending(achievement: AchievementStat) -> bool:
-    text = f"{achievement.name} {achievement.display_name} {achievement.description}".lower()
-    return any(keyword in text for keyword in ENDING_KEYWORDS)
+    # Les noms d'API (`ACH_TRUE_ENDING`) séparent les mots par des tirets bas.
+    raw = f"{achievement.name} {achievement.display_name} {achievement.description}"
+    text = raw.lower().replace("_", " ")
+    return ENDING_PATTERN.search(text) is not None
 
 
 def completion_rate(achievements: Sequence[AchievementStat]) -> float | None:

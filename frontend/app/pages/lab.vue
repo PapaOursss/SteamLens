@@ -27,7 +27,8 @@ const EXPERIMENTS = [
   { title: 'Matériel des joueurs', to: '/hardware', description: "L'enquête de Steam mois après mois : langues, systèmes, cartes graphiques." },
   { title: 'Les jeux jamais finis', to: '/achievements', description: "Où les joueurs décrochent, d'après leurs succès." },
   { title: 'Pays des profils', to: '/profile-map', description: "Le pays affiché sur les profils publics d'auteurs d'avis." },
-  { title: 'Google Trends', to: '/trends', description: "L'intérêt pour un jeu ou un genre, pays par pays, date après date." }
+  { title: 'Google Trends', to: '/trends', description: "L'intérêt pour un jeu ou un genre, pays par pays, date après date." },
+  { title: 'Chercheur de pépites', to: '/gem-finder', description: 'Repérer les jeux pas chers, très bien notés et méconnus (nuage de points).' }
 ]
 
 useHead({ title: 'Labo' })

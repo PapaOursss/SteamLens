@@ -65,7 +65,10 @@ const option = computed(() => ({
     type: 'category',
     data: props.months,
     ...axisStyle(),
-    axisLabel: { color: COLORS.soft, interval: Math.floor(props.months.length / 8) }
+    axisLabel: {
+      color: COLORS.soft,
+      interval: props.months.length > 8 ? Math.floor(props.months.length / 8) : 'auto'
+    }
   },
   yAxis: {
     type: 'value',

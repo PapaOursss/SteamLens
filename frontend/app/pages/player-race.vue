@@ -87,6 +87,6 @@ const {
   currentEntries,
   isPlaying,
   togglePlay,
-  setIndex,
+  setIndex
 } = usePlayerRace()
 </script>

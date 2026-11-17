@@ -18,7 +18,8 @@ import {
   TooltipComponent,
   LegendComponent,
   VisualMapComponent,
-  DataZoomComponent
+  DataZoomComponent,
+  CalendarComponent
 } from 'echarts/components'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -36,7 +37,8 @@ export default defineNuxtPlugin((nuxtApp) => {
     TooltipComponent,
     LegendComponent,
     VisualMapComponent,
-    DataZoomComponent
+    DataZoomComponent,
+    CalendarComponent
   ])
 
   registerLocale('FR', frenchLocale)

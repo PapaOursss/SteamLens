@@ -201,3 +201,12 @@ export interface StreamgraphResponse {
   series: number[][]
   events: StreamgraphEvent[]
 }
+
+export interface ReleaseCalendarResponse {
+  weekday_month: [number, number, number][]
+  daily_contributions: [string, number][]
+  selected_year: number
+  available_years: number[]
+  days: string[]
+  months: string[]
+}

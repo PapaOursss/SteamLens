@@ -29,7 +29,8 @@ const EXPERIMENTS = [
   { title: 'Pays des profils', to: '/profile-map', description: "Le pays affiché sur les profils publics d'auteurs d'avis." },
   { title: 'Google Trends', to: '/trends', description: "L'intérêt pour un jeu ou un genre, pays par pays, date après date." },
   { title: 'Course des jeux', to: '/player-race', description: "L'évolution des jeux les plus joués mois par mois depuis 2012." },
-  { title: 'Chercheur de pépites', to: '/gem-finder', description: 'Repérer les jeux pas chers, très bien notés et méconnus (nuage de points).' }
+  { title: 'Chercheur de pépites', to: '/gem-finder', description: 'Repérer les jeux pas chers, très bien notés et méconnus (nuage de points).' },
+  { title: 'Calendrier des sorties', to: '/releases', description: 'Heatmap jour × mois et calendrier annuel des sorties de jeux.' }
 ]
 
 useHead({ title: 'Labo' })

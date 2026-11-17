@@ -1,9 +1,12 @@
 import datetime
+
+import pytest
 from django.test import Client
 
 from catalog.models import Game
 
 
+@pytest.mark.django_db
 def test_release_calendar_fallback_when_empty(client: Client) -> None:
     response = client.get("/api/stats/release-calendar/")
     assert response.status_code == 200
@@ -16,6 +19,7 @@ def test_release_calendar_fallback_when_empty(client: Client) -> None:
     assert "available_years" in data
 
 
+@pytest.mark.django_db
 def test_release_calendar_with_games(client: Client) -> None:
     Game.objects.create(appid=3001, name="Game A", release_date=datetime.date(2025, 10, 16))  # Jeudi
     Game.objects.create(appid=3002, name="Game B", release_date=datetime.date(2025, 10, 16))  # Jeudi

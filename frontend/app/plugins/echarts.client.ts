@@ -10,8 +10,10 @@ import {
   SunburstChart,
   MapChart,
   HeatmapChart,
+  GraphChart,
   ScatterChart,
-  ThemeRiverChart
+  ThemeRiverChart,
+  SankeyChart
 } from 'echarts/charts'
 import {
   GridComponent,
@@ -31,8 +33,10 @@ export default defineNuxtPlugin((nuxtApp) => {
     SunburstChart,
     MapChart,
     HeatmapChart,
+    GraphChart,
     ScatterChart,
     ThemeRiverChart,
+    SankeyChart,
     GridComponent,
     TooltipComponent,
     LegendComponent,

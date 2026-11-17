@@ -164,6 +164,24 @@ export interface SunburstResponse {
   children: SunburstNode[]
 }
 
+export interface TagNetworkNode {
+  id: number
+  name: string
+  games: number
+  community: number
+}
+
+export interface TagNetworkEdge {
+  source: number
+  target: number
+  weight: number
+}
+
+export interface TagNetworkResponse {
+  nodes: TagNetworkNode[]
+  edges: TagNetworkEdge[]
+}
+
 export interface GemFinderGame {
   appid: number
   name: string
@@ -202,6 +220,24 @@ export interface StreamgraphResponse {
   events: StreamgraphEvent[]
 }
 
+export interface SankeyNode {
+  name: string
+}
+
+export interface SankeyLink {
+  source: string
+  target: string
+  value: number
+}
+
+export interface SankeyPriceReviewResponse {
+  nodes: SankeyNode[]
+  links: SankeyLink[]
+  genres: string[]
+  price_brackets: string[]
+  review_buckets: string[]
+}
+
 export interface ReleaseCalendarResponse {
   weekday_month: [number, number, number][]
   daily_contributions: [string, number][]
@@ -209,4 +245,5 @@ export interface ReleaseCalendarResponse {
   available_years: number[]
   days: string[]
   months: string[]
+}
 }

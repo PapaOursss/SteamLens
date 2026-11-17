@@ -116,7 +116,7 @@ backend importe, met en cache et sert des agrégats. Aucune donnée personnelle 
 
 ### T-14 · Fiche jeu complète
 - **Type**: idea
-- **Status**: todo
+- **Status**: done
 - **Opened**: 2026-10-23
 - **Effort**: L · **Owner**: Léandre · **Due**: —
 - **Origin**: plan initial du projet
@@ -124,7 +124,7 @@ backend importe, met en cache et sert des agrégats. Aucune donnée personnelle 
 - [x] En-tête : jaquette, genres, studio, date, prix en France, note (`/games/<appid>`)
 - [x] Courbe des joueurs connectés (zoom jour / mois / année)
 - [x] Courbe du prix avec les promos marquées (après T-18)
-- [ ] Radar « ADN du jeu » : note, popularité, prix, durée de vie, buzz Twitch, rareté des
+- [x] Radar « ADN du jeu » : note, popularité, prix, durée de vie, buzz Twitch, rareté des
   succès (chaque axe normalisé de 0 à 100)
 - [x] Mini-carte du prix dans le monde (T-16)
 

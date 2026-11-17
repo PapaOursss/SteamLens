@@ -1,6 +1,9 @@
+import math
 from collections import defaultdict
+from itertools import combinations
 from typing import Any
 
+import networkx as nx
 from django.db.models import Count
 from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework import serializers
@@ -12,42 +15,67 @@ from catalog.models import GameTag, Tag
 
 TOP_TAGS_LIMIT = 150
 MIN_EDGE_WEIGHT = 2
-MAX_EDGES = 600
+EDGES_PER_TAG = 4
+COMMUNITY_SEED = 1
+
+Pair = tuple[int, int]
 
 
-def _compute_tag_communities(
-    nodes: list[dict[str, Any]], edges: list[dict[str, Any]]
+def _co_occurrences(tag_ids: set[int]) -> dict[Pair, int]:
+    """Compte, pour chaque paire de tags, les jeux qui portent les deux."""
+    game_to_tags: dict[int, list[int]] = defaultdict(list)
+    for game_id, tag_id in GameTag.objects.filter(tag_id__in=tag_ids).values_list(
+        "game_id", "tag_id"
+    ):
+        game_to_tags[game_id].append(tag_id)
+
+    counts: dict[Pair, int] = defaultdict(int)
+    for tags in game_to_tags.values():
+        for pair in combinations(sorted(tags), 2):
+            counts[pair] += 1
+    return counts
+
+
+def _association_strengths(
+    co_occurrences: dict[Pair, int], tag_counts: dict[int, int]
+) -> dict[Pair, float]:
+    """Force d'un lien : jeux partagés rapportés à la taille des deux tags (cosinus).
+
+    Sans cette division, les tags présents partout (Action, Singleplayer) captent tous
+    les liens forts et les tags de niche restent isolés.
+    """
+    return {
+        (first, second): count / math.sqrt(tag_counts[first] * tag_counts[second])
+        for (first, second), count in co_occurrences.items()
+        if count >= MIN_EDGE_WEIGHT
+    }
+
+
+def _strongest_pairs(strengths: dict[Pair, float]) -> set[Pair]:
+    """Garde les EDGES_PER_TAG liens les plus forts de chaque tag."""
+    pairs_by_tag: dict[int, list[Pair]] = defaultdict(list)
+    for pair in strengths:
+        pairs_by_tag[pair[0]].append(pair)
+        pairs_by_tag[pair[1]].append(pair)
+    kept: set[Pair] = set()
+    for pairs in pairs_by_tag.values():
+        pairs.sort(key=lambda pair: (-strengths[pair], pair))
+        kept.update(pairs[:EDGES_PER_TAG])
+    return kept
+
+
+def _tag_communities(
+    tag_ids: set[int], strengths: dict[Pair, float], pairs: set[Pair]
 ) -> dict[int, int]:
-    """Détecte les communautés de tags via la propagation de labels (LPA)."""
-    node_ids = [node["id"] for node in nodes]
-    if not node_ids:
-        return {}
-
-    labels: dict[int, int] = {nid: nid for nid in node_ids}
-    adj: dict[int, list[tuple[int, int]]] = defaultdict(list)
-    for edge in edges:
-        u, v, w = edge["source"], edge["target"], edge["weight"]
-        adj[u].append((v, w))
-        adj[v].append((u, w))
-
-    for _ in range(10):
-        changed = False
-        for u in node_ids:
-            if not adj[u]:
-                continue
-            weights: dict[int, int] = defaultdict(int)
-            for v, w in adj[u]:
-                weights[labels[v]] += w
-            best_label = max(weights.keys(), key=lambda l: (weights[l], -l))
-            if best_label != labels[u]:
-                labels[u] = best_label
-                changed = True
-        if not changed:
-            break
-
-    unique_labels = sorted({labels[u] for u in node_ids})
-    label_map = {lbl: idx for idx, lbl in enumerate(unique_labels)}
-    return {u: label_map[labels[u]] for u in node_ids}
+    """Familles de tags par modularité (Louvain), numérotées de la plus grande à la plus petite."""
+    graph = nx.Graph()
+    graph.add_nodes_from(tag_ids)
+    graph.add_weighted_edges_from(
+        (first, second, strengths[(first, second)]) for first, second in pairs
+    )
+    communities = nx.community.louvain_communities(graph, weight="weight", seed=COMMUNITY_SEED)
+    communities.sort(key=lambda members: (-len(members), min(members)))
+    return {tag_id: index for index, members in enumerate(communities) for tag_id in members}
 
 
 def _build_tag_network_data() -> dict[str, Any]:
@@ -56,52 +84,24 @@ def _build_tag_network_data() -> dict[str, Any]:
         .filter(games_count__gt=0)
         .order_by("-games_count", "name")[:TOP_TAGS_LIMIT]
     )
-    if not top_tags:
-        return {"nodes": [], "edges": []}
+    tag_counts = {tag.id: tag.games_count for tag in top_tags}
+    co_occurrences = _co_occurrences(set(tag_counts))
+    strengths = _association_strengths(co_occurrences, tag_counts)
+    pairs = _strongest_pairs(strengths)
+    communities = _tag_communities(set(tag_counts), strengths, pairs)
 
-    tag_ids = {t.id for t in top_tags}
-    tag_counts = {t.id: t.games_count for t in top_tags}
-    tag_names = {t.id: t.name for t in top_tags}
-
-    game_tags_qs = (
-        GameTag.objects.filter(tag_id__in=tag_ids)
-        .values_list("game_id", "tag_id")
-        .order_by("game_id")
+    nodes = [
+        {"id": tag.id, "name": tag.name, "games": tag.games_count, "community": communities[tag.id]}
+        for tag in top_tags
+    ]
+    edges = sorted(
+        (
+            {"source": first, "target": second, "weight": co_occurrences[(first, second)]}
+            for first, second in pairs
+        ),
+        key=lambda edge: (-edge["weight"], edge["source"], edge["target"]),
     )
-
-    game_to_tags: dict[int, list[int]] = defaultdict(list)
-    for game_id, tag_id in game_tags_qs:
-        game_to_tags[game_id].append(tag_id)
-
-    co_occurrences: dict[tuple[int, int], int] = defaultdict(int)
-    for tags in game_to_tags.values():
-        if len(tags) < 2:
-            continue
-        sorted_tags = sorted(tags)
-        for i in range(len(sorted_tags)):
-            t1 = sorted_tags[i]
-            for j in range(i + 1, len(sorted_tags)):
-                t2 = sorted_tags[j]
-                co_occurrences[(t1, t2)] += 1
-
-    sorted_edges = sorted(
-        [
-            {"source": t1, "target": t2, "weight": count}
-            for (t1, t2), count in co_occurrences.items()
-            if count >= MIN_EDGE_WEIGHT
-        ],
-        key=lambda e: e["weight"],
-        reverse=True,
-    )[:MAX_EDGES]
-
-    raw_nodes = [{"id": tid, "name": tag_names[tid], "games": tag_counts[tid]} for tid in tag_ids]
-    raw_nodes.sort(key=lambda n: n["games"], reverse=True)
-
-    community_map = _compute_tag_communities(raw_nodes, sorted_edges)
-    for node in raw_nodes:
-        node["community"] = community_map.get(node["id"], 0)
-
-    return {"nodes": raw_nodes, "edges": sorted_edges}
+    return {"nodes": nodes, "edges": edges}
 
 
 @extend_schema(

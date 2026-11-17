@@ -51,3 +51,25 @@ def test_tag_network_with_cooccurrences(client: Client) -> None:
     # Verify community assignments
     for node in data["nodes"]:
         assert "community" in node
+
+
+def _tag_games(tag_names: list[str], first_appid: int, games_count: int) -> None:
+    tags = [Tag.objects.get_or_create(name=name)[0] for name in tag_names]
+    for offset in range(games_count):
+        game = Game.objects.create(appid=first_appid + offset, name=f"Jeu {first_appid + offset}")
+        GameTag.objects.bulk_create(GameTag(game=game, tag=tag, votes=1) for tag in tags)
+
+
+@pytest.mark.django_db
+def test_tag_network_links_niche_tags_and_splits_families(client: Client) -> None:
+    _tag_games(["Action", "Strategy", "War", "Tactical"], first_appid=2001, games_count=3)
+    _tag_games(["Action", "Cozy", "Farming", "Cute"], first_appid=2101, games_count=3)
+
+    data = client.get("/api/stats/tag-network/").json()
+
+    linked = {edge["source"] for edge in data["edges"]} | {edge["target"] for edge in data["edges"]}
+    assert linked == {node["id"] for node in data["nodes"]}
+    community = {node["name"]: node["community"] for node in data["nodes"]}
+    assert community["Strategy"] == community["War"] == community["Tactical"]
+    assert community["Cozy"] == community["Farming"] == community["Cute"]
+    assert community["Strategy"] != community["Cozy"]

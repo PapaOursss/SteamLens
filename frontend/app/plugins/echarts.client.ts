@@ -9,7 +9,8 @@ import {
   TreemapChart,
   SunburstChart,
   MapChart,
-  HeatmapChart
+  HeatmapChart,
+  ScatterChart
 } from 'echarts/charts'
 import {
   GridComponent,
@@ -28,6 +29,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     SunburstChart,
     MapChart,
     HeatmapChart,
+    ScatterChart,
     GridComponent,
     TooltipComponent,
     LegendComponent,

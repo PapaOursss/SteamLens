@@ -274,14 +274,14 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 
 ### T-30 · Nuage de points « chercheur de pépites »
 - **Type**: idea
-- **Status**: todo
-- **Opened**: 2026-10-23
+- **Status**: done
+- **Opened**: 2026-10-23 · **Closed**: 2026-11-12
 - **Effort**: S · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
-- [ ] x = prix, y = % d'avis positifs, taille = propriétaires, couleur = genre
-- [ ] Zone « pépites » surlignée : très bien noté, pas cher, peu connu
-- [ ] Filtres par genre et par année ; clic = fiche jeu
+- [x] x = prix, y = % d'avis positifs, taille = propriétaires, couleur = genre
+- [x] Zone « pépites » surlignée : très bien noté, pas cher, peu connu
+- [x] Filtres par genre et par année ; clic = fiche jeu
 
 ### T-31 · Réseau des tags qui vont ensemble
 - **Type**: idea

@@ -160,3 +160,28 @@ export interface SunburstResponse {
   name: string
   children: SunburstNode[]
 }
+
+export interface GemFinderGame {
+  appid: number
+  name: string
+  header_image: string
+  price_eur: number
+  positive_percent: number
+  owners: number
+  genre: string
+  year: number | null
+  is_gem: boolean
+}
+
+export interface GemCriteria {
+  max_price: number
+  min_score: number
+  max_owners: number
+}
+
+export interface GemFinderResponse {
+  games: GemFinderGame[]
+  genres: string[]
+  years: number[]
+  gem_criteria: GemCriteria
+}

@@ -100,6 +100,7 @@ export interface RegionalSalesStats {
     jp_favorite: string
     notes: string
   }
+  is_sample: boolean
 }
 
 export interface WrappedStats {

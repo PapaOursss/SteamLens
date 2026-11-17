@@ -20,18 +20,26 @@ def _mock_regional_genre_sales() -> list[dict]:
     ]
 
 
+def _favorite(by_genre: list[dict], region: str) -> str:
+    return max(by_genre, key=lambda row: row[region])["genre"]
+
+
 @extend_schema(
     responses=inline_serializer(
         "RegionalSalesBreakdown",
         {
             "by_genre": serializers.ListField(child=serializers.DictField()),
             "top_regions": serializers.DictField(),
+            "is_sample": serializers.BooleanField(),
         },
     ),
 )
 @api_view(["GET"])
 def regional_sales_stats(request: Request) -> Response:
-    """Répartition des ventes de jeux par genre et par région (Amérique du Nord, Europe, Japon, reste du monde)."""
+    """Ventes par genre en Amérique du Nord, en Europe, au Japon et dans le reste du monde.
+
+    Tant que `import_kaggle_vgsales` n'a pas tourné, des chiffres d'exemple (`is_sample`).
+    """
     qs = (
         RegionalSales.objects.values("genre")
         .annotate(
@@ -42,30 +50,29 @@ def regional_sales_stats(request: Request) -> Response:
         )
         .order_by("-na")
     )
-    if not qs.exists():
+    by_genre = [
+        {
+            "genre": item["genre"],
+            "na": round(item["na"] or 0.0, 1),
+            "eu": round(item["eu"] or 0.0, 1),
+            "jp": round(item["jp"] or 0.0, 1),
+            "other": round(item["other"] or 0.0, 1),
+        }
+        for item in qs
+    ]
+    is_sample = not by_genre
+    if is_sample:
         by_genre = _mock_regional_genre_sales()
-    else:
-        by_genre = [
-            {
-                "genre": item["genre"],
-                "na": round(item["na"] or 0.0, 1),
-                "eu": round(item["eu"] or 0.0, 1),
-                "jp": round(item["jp"] or 0.0, 1),
-                "other": round(item["other"] or 0.0, 1),
-            }
-            for item in qs
-        ]
 
+    favorites = {region: _favorite(by_genre, region) for region in ("na", "eu", "jp")}
     top_regions = {
-        "na_favorite": "Action",
-        "eu_favorite": "Action",
-        "jp_favorite": "Role-Playing",
-        "notes": "Les joueurs japonais plébiscitent massivement le RPG par rapport au reste du monde.",
+        "na_favorite": favorites["na"],
+        "eu_favorite": favorites["eu"],
+        "jp_favorite": favorites["jp"],
+        "notes": (
+            f"Genre en tête : {favorites['na']} en Amérique du Nord, {favorites['eu']} en Europe, "
+            f"{favorites['jp']} au Japon."
+        ),
     }
 
-    return Response(
-        {
-            "by_genre": by_genre,
-            "top_regions": top_regions,
-        }
-    )
+    return Response({"by_genre": by_genre, "top_regions": top_regions, "is_sample": is_sample})

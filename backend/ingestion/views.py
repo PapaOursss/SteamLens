@@ -24,6 +24,14 @@ KNOWN_SOURCES = [
         "limits": "Périodicité de mise à jour dépendante des dépôts Kaggle.",
     },
     {
+        "key": "kaggle_vgsales",
+        "name": "Kaggle — Video Game Sales (gregorut)",
+        "logo": "kaggle",
+        "role": "Ventes par genre en Amérique du Nord, en Europe, au Japon et ailleurs.",
+        "license": "Licence non précisée sur Kaggle (données VGChartz)",
+        "limits": "Toutes plateformes, consoles comprises ; relevé arrêté en 2016.",
+    },
+    {
         "key": "steamspy",
         "name": "SteamSpy API",
         "logo": "steamspy",

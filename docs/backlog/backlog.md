@@ -423,17 +423,6 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 - [x] Page en cartes défilantes façon Spotify Wrapped : jeu de l'année, genre qui monte,
   plus grosse promo, plus gros flop, pays le plus cher
 
-### T-44 · Ventes par région (Kaggle vgsales)
-- **Type**: idea
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: Samuel · **Due**: —
-- **Origin**: kaggle.com/datasets/gregorut/videogamesales
-
-Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
-- [x] Genres préférés Amérique du Nord / Europe / Japon (barres groupées + mini-carte)
-- [x] Comparaison avec ce que donne notre carte n°2 (T-23)
-
 ### T-46 · Thème Steam et mode sombre
 - **Type**: improvement
 - **Status**: todo
@@ -462,6 +451,7 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 One line per closed ticket, most recent first:
 `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
 
+- **2026-11-17** · T-44 · Ventes par région (Kaggle vgsales) — `manage.py import_kaggle_vgsales` (`--file` ou téléchargement par l'API Kaggle) : une ligne par jeu et plateforme dans `RegionalSales`, remplacées à chaque import ; `/api/stats/regional-sales/` en tire les ventes par genre des quatre marchés, le genre en tête de chacun et `is_sample` tant que rien n'est importé ; page `/regional-sales` avec carte des quatre marchés et total mondial ; à lancer une fois le jeton Kaggle dans `.env` (feat/T-44-import-vgsales) · opened 2026-10-23
 - **2026-11-05** · T-37 · Carte n°6 : pays déclarés des profils publics — `manage.py import_profile_countries` (top 50, chaque semaine, clé `STEAM_API_KEY`) : auteurs des avis récents (T-22) gardés en mémoire seulement, `GetPlayerSummaries` par lots de 100 sans cache disque, comptes par pays dans `ProfileCountryCount` et taille d'échantillon / profils sans pays dans `ProfileSample` ; carte `/api/map/profile-countries/`, `/api/stats/profile-countries/` (échantillon, top pays, pays dominant par genre), page `/profile-map` (feat/taches-pavel-t18-t37) · opened 2026-10-23
 - **2026-11-05** · T-35 · Succès : les jeux que personne ne finit — `manage.py import_achievements` (top 300, chaque semaine ; noms lisibles avec `STEAM_API_KEY`) dans `AchievementStat` ; courbe d'abandon et plus gros décrochage sur `/api/stats/achievements/<appid>/`, classement des plus faibles taux de fin (succès de fin repéré par mots-clés) sur `/api/stats/least-finished/`, page `/achievements` (feat/taches-pavel-t18-t37) · opened 2026-10-23
 - **2026-11-05** · T-27 · Enquête matériel et logiciels de Steam — `manage.py import_hardware_survey` (mensuel) : page publique lue en HTML (langues, OS, GPU, RAM, VR) dans `HardwareShare` ; courbes par catégorie et mises en avant (chinois simplifié, Linux, Steam Deck) sur `/api/stats/hardware-survey/`, page `/hardware` ; le recalage des poids de la carte n°2 reste à faire dans T-23 (feat/taches-pavel-t18-t37) · opened 2026-10-23

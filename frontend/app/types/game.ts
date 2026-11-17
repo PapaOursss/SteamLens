@@ -29,3 +29,12 @@ export interface GameDetail {
   developers: string[]
   publishers: string[]
 }
+
+export type GameDnaKey = 'rating' | 'popularity' | 'price' | 'lifespan' | 'twitch' | 'achievement_rarity'
+
+/** Un axe de l'« ADN du jeu » : rang de 0 à 100 parmi les jeux mesurés, null sans donnée. */
+export interface GameDnaAxis {
+  key: GameDnaKey
+  score: number | null
+  raw: number | null
+}

@@ -26,6 +26,8 @@
 
       <GamePlayersHistory :appid="game.appid" :name="game.name" heading="Joueurs connectés" has-zoom />
 
+      <GameDna :appid="game.appid" :name="game.name" />
+
       <GamePriceHistory v-if="!game.is_free" :appid="game.appid" :name="game.name" />
 
       <DataBlock

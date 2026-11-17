@@ -20,3 +20,10 @@ export interface CountryValue {
   iso3: string
   value: number
 }
+
+export interface RadarAxis {
+  label: string
+  /** De 0 à 100 ; null sans donnée, tracé au centre. */
+  score: number | null
+  detail: string
+}

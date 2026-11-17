@@ -13,7 +13,8 @@ import {
   GraphChart,
   ScatterChart,
   ThemeRiverChart,
-  SankeyChart
+  SankeyChart,
+  RadarChart
 } from 'echarts/charts'
 import {
   GridComponent,
@@ -21,7 +22,8 @@ import {
   LegendComponent,
   VisualMapComponent,
   DataZoomComponent,
-  CalendarComponent
+  CalendarComponent,
+  RadarComponent
 } from 'echarts/components'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -37,12 +39,14 @@ export default defineNuxtPlugin((nuxtApp) => {
     ScatterChart,
     ThemeRiverChart,
     SankeyChart,
+    RadarChart,
     GridComponent,
     TooltipComponent,
     LegendComponent,
     VisualMapComponent,
     DataZoomComponent,
-    CalendarComponent
+    CalendarComponent,
+    RadarComponent
   ])
 
   registerLocale('FR', frenchLocale)

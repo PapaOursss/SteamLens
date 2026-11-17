@@ -21,12 +21,13 @@ const trackedGames = computed(() => {
   for (const m of props.months) {
     const list = props.timeline[m] || []
     list.slice(0, 5).forEach((item) => {
-      if (!counts[item.name]) counts[item.name] = { appid: item.appid, count: 0 }
-      counts[item.name].count++
+      const tracked = counts[item.name] ?? { appid: item.appid, count: 0 }
+      tracked.count++
+      counts[item.name] = tracked
     })
   }
   return Object.keys(counts)
-    .sort((a, b) => counts[b].count - counts[a].count)
+    .sort((a, b) => (counts[b]?.count ?? 0) - (counts[a]?.count ?? 0))
     .slice(0, MAX_GAMES)
 })
 

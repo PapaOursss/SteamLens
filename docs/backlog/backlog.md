@@ -297,14 +297,14 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 
 ### T-32 · Sankey : genre → tranche de prix → accueil
 - **Type**: idea
-- **Status**: todo
+- **Status**: done
 - **Opened**: 2026-10-23
 - **Effort**: S · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
-- [ ] Tranches : gratuit, < 5 €, 5-15 €, 15-30 €, > 30 € ; accueil : négatif, mitigé, positif,
+- [x] Tranches : gratuit, < 5 €, 5-15 €, 15-30 €, > 30 € ; accueil : négatif, mitigé, positif,
   très positif
-- [ ] Répond à « les jeux chers sont-ils mieux notés ? »
+- [x] Répond à « les jeux chers sont-ils mieux notés ? »
 
 ### T-33 · Calendrier des sorties
 - **Type**: idea

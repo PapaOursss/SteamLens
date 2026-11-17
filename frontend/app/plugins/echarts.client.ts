@@ -11,7 +11,8 @@ import {
   MapChart,
   HeatmapChart,
   ScatterChart,
-  ThemeRiverChart
+  ThemeRiverChart,
+  SankeyChart
 } from 'echarts/charts'
 import {
   GridComponent,
@@ -32,6 +33,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     HeatmapChart,
     ScatterChart,
     ThemeRiverChart,
+    SankeyChart,
     GridComponent,
     TooltipComponent,
     LegendComponent,

@@ -9,12 +9,12 @@
       note="Tranches : gratuit, < 5 €, 5-15 €, 15-30 €, > 30 €. Accueil basé sur le pourcentage d'avis positifs."
       :is-loading="isLoading"
       :has-error="hasError"
-      :is-empty="!nodes.length"
+      :is-empty="!data?.nodes.length"
       empty-message="Pas de flux disponibles."
       :height="600"
       @retry="refresh()"
     >
-      <SankeyPriceChart :nodes="nodes" :links="links" :height="540" />
+      <SankeyPriceChart :nodes="data!.nodes" :links="data!.links" :height="540" />
     </DataBlock>
 
     <p class="gutter max-w-prose text-soft">
@@ -24,7 +24,9 @@
 </template>
 
 <script setup lang="ts">
+import type { SankeyPriceReviewResponse } from '~/types'
+
 useHead({ title: 'Genre, prix et accueil' })
 
-const { nodes, links, isLoading, hasError, refresh } = useSankeyPricing()
+const { data, isLoading, hasError, refresh } = useApiResource<SankeyPriceReviewResponse>('/stats/sankey-pricing/')
 </script>

@@ -122,7 +122,7 @@ backend importe, met en cache et sert des agrégats. Aucune donnée personnelle 
 - **Origin**: plan initial du projet
 
 - [x] En-tête : jaquette, genres, studio, date, prix en France, note (`/games/<appid>`)
-- [ ] Courbe des joueurs connectés (zoom jour / mois / année) — courbe par mois posée, zoom à faire
+- [x] Courbe des joueurs connectés (zoom jour / mois / année)
 - [x] Courbe du prix avec les promos marquées (après T-18)
 - [ ] Radar « ADN du jeu » : note, popularité, prix, durée de vie, buzz Twitch, rareté des
   succès (chaque axe normalisé de 0 à 100)

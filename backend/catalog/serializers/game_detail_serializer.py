@@ -2,6 +2,9 @@ from rest_framework import serializers
 
 from catalog.models import Game
 from catalog.serializers.game_tag_serializer import GameTagSerializer
+from ingestion.writing.game_writer import ALL_LANGUAGES
+
+PERCENT = 100
 
 
 class GameDetailSerializer(serializers.ModelSerializer):
@@ -14,6 +17,7 @@ class GameDetailSerializer(serializers.ModelSerializer):
     platforms = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
     developers = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
     publishers = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
+    positive_share = serializers.SerializerMethodField()
 
     class Meta:
         model = Game
@@ -23,6 +27,9 @@ class GameDetailSerializer(serializers.ModelSerializer):
             "release_date",
             "is_free",
             "header_image",
+            "short_description",
+            "metacritic_score",
+            "positive_share",
             "genres",
             "tags",
             "themes",
@@ -31,3 +38,10 @@ class GameDetailSerializer(serializers.ModelSerializer):
             "developers",
             "publishers",
         )
+
+    def get_positive_share(self, game: Game) -> int | None:
+        """Part d'avis positifs, toutes langues, au dernier relevé ; None sans avis."""
+        latest = game.reviews.filter(language=ALL_LANGUAGES).order_by("-date").first()
+        if latest is None or not latest.total:
+            return None
+        return round(latest.positive * PERCENT / latest.total)

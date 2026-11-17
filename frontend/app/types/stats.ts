@@ -201,3 +201,21 @@ export interface StreamgraphResponse {
   series: number[][]
   events: StreamgraphEvent[]
 }
+
+export interface SankeyNode {
+  name: string
+}
+
+export interface SankeyLink {
+  source: string
+  target: string
+  value: number
+}
+
+export interface SankeyPriceReviewResponse {
+  nodes: SankeyNode[]
+  links: SankeyLink[]
+  genres: string[]
+  price_brackets: string[]
+  review_buckets: string[]
+}

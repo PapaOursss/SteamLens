@@ -1,8 +1,10 @@
+import pytest
 from django.test import Client
 
 from catalog.models import Game, GameTag, Tag
 
 
+@pytest.mark.django_db
 def test_tag_network_empty(client: Client) -> None:
     response = client.get("/api/stats/tag-network/")
     assert response.status_code == 200
@@ -13,6 +15,7 @@ def test_tag_network_empty(client: Client) -> None:
     assert data["edges"] == []
 
 
+@pytest.mark.django_db
 def test_tag_network_with_cooccurrences(client: Client) -> None:
     g1 = Game.objects.create(appid=1001, name="Game One")
     g2 = Game.objects.create(appid=1002, name="Game Two")

@@ -1,9 +1,12 @@
+import pytest
 from django.test import Client
 
 from catalog.models import Game, Genre, ReviewSummary
+from geography.models import Country
 from pricing.models import PricePoint
 
 
+@pytest.mark.django_db
 def test_sankey_price_review_empty_fallback(client: Client) -> None:
     response = client.get("/api/stats/sankey-pricing/")
     assert response.status_code == 200
@@ -16,12 +19,14 @@ def test_sankey_price_review_empty_fallback(client: Client) -> None:
     assert "review_buckets" in data
 
 
+@pytest.mark.django_db
 def test_sankey_price_review_with_games(client: Client) -> None:
     genre_rpg = Genre.objects.create(name="RPG")
     g1 = Game.objects.create(appid=2001, name="Cheap Good RPG", is_free=False)
     g1.genres.add(genre_rpg)
+    france = Country.objects.create(iso2="FR", iso3="FRA", name_fr="France")
     PricePoint.objects.create(
-        game=g1, country="FR", currency="EUR", price="4.99", price_eur="4.99", date="2026-01-01"
+        game=g1, country=france, currency="EUR", price="4.99", price_eur="4.99", date="2026-01-01"
     )
     ReviewSummary.objects.create(
         game=g1, language="all", positive=90, negative=10, date="2026-01-01"

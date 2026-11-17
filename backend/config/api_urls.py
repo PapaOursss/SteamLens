@@ -10,6 +10,7 @@ from catalog.views.minigame import game_duel
 from catalog.views.playtime import playtime_stats
 from catalog.views.proton import proton_stats
 from catalog.views.review_sentiment import review_sentiment
+from catalog.views.streamgraph import genre_streamgraph
 from catalog.views.sunburst import sunburst_igdb
 from catalog.views.treemap import genre_tags_treemap
 from catalog.views.wrapped import steam_wrapped
@@ -41,6 +42,7 @@ urlpatterns = [
     path("stats/genres/", genre_stats, name="stats-genres"),
     path("stats/tags/", tag_stats, name="stats-tags"),
     path("stats/treemap/", genre_tags_treemap, name="stats-treemap"),
+    path("stats/streamgraph/", genre_streamgraph, name="stats-streamgraph"),
     path("stats/sunburst-igdb/", sunburst_igdb, name="stats-sunburst-igdb"),
     path("stats/review-sentiment/", review_sentiment, name="stats-review-sentiment"),
     path("stats/hardware-survey/", hardware_survey, name="stats-hardware-survey"),

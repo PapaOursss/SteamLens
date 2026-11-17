@@ -21,6 +21,39 @@
     </DataBlock>
 
     <DataBlock
+      title="Évolution des genres par année de sortie"
+      note="Nombre annuel de sorties par genre (ThemeRiver) et moments clés de l'écosystème Steam."
+      :is-loading="streamgraphLoading"
+      :has-error="streamgraphError"
+      :is-empty="!streamgraph?.years.length"
+      empty-message="Pas encore de dates de sortie disponibles."
+      :height="520"
+      @retry="refreshStreamgraph()"
+    >
+      <GenreStreamgraph
+        :years="streamgraph!.years"
+        :genres="streamgraph!.genres"
+        :series="streamgraph!.series"
+        :events="streamgraph!.events"
+        label="Évolution des genres par année de sortie sur Steam"
+      />
+      <div v-if="streamgraph?.events?.length" class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div
+          v-for="event in streamgraph.events"
+          :key="event.year"
+          class="rounded-lg border border-line/40 bg-deep/50 p-3 text-xs"
+        >
+          <div class="flex items-center gap-1.5 font-semibold text-hot">
+            <span>{{ event.year }}</span>
+            <span>·</span>
+            <span>{{ event.title }}</span>
+          </div>
+          <p class="mt-1 text-soft">{{ event.description }}</p>
+        </div>
+      </div>
+    </DataBlock>
+
+    <DataBlock
       title="Genres, thèmes et modes selon IGDB"
       note="Du centre vers le bord : genre, thème, mode de jeu."
       :is-loading="sunburstLoading"
@@ -37,7 +70,7 @@
 
 <script setup lang="ts">
 import type { GenreMetric } from '~/components/charts/GenreTreemap.vue'
-import type { ChoiceOption, SunburstResponse, TreemapResponse } from '~/types'
+import type { ChoiceOption, StreamgraphResponse, SunburstResponse, TreemapResponse } from '~/types'
 
 const METRICS: ChoiceOption<GenreMetric>[] = [
   { value: 'games', label: 'Nombre de jeux' },
@@ -54,6 +87,13 @@ const {
   hasError: treemapError,
   refresh: refreshTreemap
 } = useApiResource<TreemapResponse>('/stats/treemap/')
+
+const {
+  data: streamgraph,
+  isLoading: streamgraphLoading,
+  hasError: streamgraphError,
+  refresh: refreshStreamgraph
+} = useApiResource<StreamgraphResponse>('/stats/streamgraph/')
 
 const {
   data: sunburst,

@@ -185,3 +185,16 @@ export interface GemFinderResponse {
   years: number[]
   gem_criteria: GemCriteria
 }
+
+export interface StreamgraphEvent {
+  year: number
+  title: string
+  description: string
+}
+
+export interface StreamgraphResponse {
+  years: number[]
+  genres: string[]
+  series: number[][]
+  events: StreamgraphEvent[]
+}

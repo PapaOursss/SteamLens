@@ -263,13 +263,13 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 
 ### T-29 · Streamgraph : l'évolution des genres par année de sortie
 - **Type**: idea
-- **Status**: todo
-- **Opened**: 2026-10-23
+- **Status**: done
+- **Opened**: 2026-10-23 · **Closed**: 2026-11-12
 - **Effort**: S · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
-- [ ] Nombre de sorties par genre et par année (ThemeRiver ECharts)
-- [ ] Annoter les moments clés : Steam Greenlight 2012, Steam Direct 2017, explosion des
+- [x] Nombre de sorties par genre et par année (ThemeRiver ECharts)
+- [x] Annoter les moments clés : Steam Greenlight 2012, Steam Direct 2017, explosion des
   jeux indés, mode des roguelikes et des survival
 
 ### T-30 · Nuage de points « chercheur de pépites »

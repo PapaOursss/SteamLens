@@ -15,7 +15,9 @@ const COMMUNITY_COLORS = [
   '#9CA0EC',
   '#FF7F50',
   '#20B2AA',
-  '#DDA0DD'
+  '#DDA0DD',
+  '#F4F3FF',
+  '#B8860B'
 ] as const
 
 const props = withDefaults(
@@ -97,9 +99,9 @@ const option = computed(() => {
           position: 'right'
         },
         force: {
-          repulsion: 140,
-          gravity: 0.12,
-          edgeLength: [40, 160],
+          repulsion: 90,
+          gravity: 0.3,
+          edgeLength: [30, 110],
           friction: 0.6
         },
         emphasis: {

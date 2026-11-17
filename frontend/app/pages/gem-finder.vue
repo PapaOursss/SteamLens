@@ -49,7 +49,13 @@
     <div v-if="selectedGame" class="gutter mt-8">
       <h3 class="mb-3 text-lg font-bold">Jeu sélectionné</h3>
       <div class="flex flex-wrap items-center gap-6 rounded-lg border border-line bg-deep/60 p-4">
-        <GameCover :appid="selectedGame.appid" :name="selectedGame.name" :header-image="selectedGame.header_image" />
+        <GameCover
+          :sources="wideCoverSources(selectedGame.appid, selectedGame.header_image)"
+          :name="selectedGame.name"
+          :width="230"
+          :height="107"
+          class="aspect-[460/215] w-[230px] shrink-0"
+        />
         <div class="space-y-1">
           <NuxtLink :to="gameLink(selectedGame.appid)" class="text-xl font-bold text-text hover:text-hot link">
             {{ selectedGame.name }}

@@ -308,13 +308,13 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 
 ### T-33 · Calendrier des sorties
 - **Type**: idea
-- **Status**: todo
+- **Status**: done
 - **Opened**: 2026-10-23
 - **Effort**: S · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
-- [ ] Heatmap jour de la semaine × mois du nombre de sorties (tout le monde sort le jeudi ?)
-- [ ] Calendrier annuel façon contributions GitHub, une case par jour
+- [x] Heatmap jour de la semaine × mois du nombre de sorties (tout le monde sort le jeudi ?)
+- [x] Calendrier annuel façon contributions GitHub, une case par jour
 
 ### T-34 · Hype contre réalité : Twitch face à Steam
 - **Type**: idea

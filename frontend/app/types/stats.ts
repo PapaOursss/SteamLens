@@ -238,3 +238,13 @@ export interface SankeyPriceReviewResponse {
   price_brackets: string[]
   review_buckets: string[]
 }
+
+export interface ReleaseCalendarResponse {
+  weekday_month: [number, number, number][]
+  daily_contributions: [string, number][]
+  selected_year: number
+  available_years: number[]
+  days: string[]
+  months: string[]
+}
+}

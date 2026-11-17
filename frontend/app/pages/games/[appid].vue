@@ -24,7 +24,7 @@
 
       <GameFacts :game="game" :france-price="francePrice" />
 
-      <GamePlayersHistory :appid="game.appid" :name="game.name" heading="Joueurs connectés" />
+      <GamePlayersHistory :appid="game.appid" :name="game.name" heading="Joueurs connectés" has-zoom />
 
       <GamePriceHistory v-if="!game.is_free" :appid="game.appid" :name="game.name" />
 

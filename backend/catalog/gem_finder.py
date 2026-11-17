@@ -1,7 +1,6 @@
-from decimal import Decimal
 from typing import Any
 
-from django.db.models import F, OuterRef, Subquery
+from django.db.models import OuterRef, Subquery
 from django.db.models.functions import ExtractYear
 
 from catalog.models import Game
@@ -13,7 +12,9 @@ GEM_MIN_SCORE = 85
 GEM_MAX_OWNERS = 500_000
 
 
-def _build_game_item(game: Game, price: float, score: int, owners: int, year: int | None) -> dict[str, Any]:
+def _build_game_item(
+    game: Game, price: float, score: int, owners: int, year: int | None
+) -> dict[str, Any]:
     is_gem = (price <= GEM_MAX_PRICE) and (score >= GEM_MIN_SCORE) and (owners <= GEM_MAX_OWNERS)
     genre_name = game.genres.first().name if game.genres.exists() else "Autre"
     return {
@@ -52,10 +53,16 @@ def build_gem_finder_data() -> dict[str, Any]:
     years_set: set[int] = set()
 
     for game in games_qs:
-        price_val = float(game.latest_price) if game.latest_price is not None else (0.0 if game.is_free else 19.99)
+        price_val = (
+            float(game.latest_price)
+            if game.latest_price is not None
+            else (0.0 if game.is_free else 19.99)
+        )
         review = game.reviews.first()
         total_reviews = review.total if review else 0
-        score = int((review.positive / total_reviews) * 100) if (review and total_reviews > 0) else 75
+        score = (
+            int((review.positive / total_reviews) * 100) if (review and total_reviews > 0) else 75
+        )
         owners = game.owners_mid or 50_000
 
         item = _build_game_item(game, price_val, score, owners, game.year)

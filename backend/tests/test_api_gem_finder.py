@@ -1,11 +1,9 @@
 import datetime
-from decimal import Decimal
 
 import pytest
 from django.test import Client
 
-from catalog.models import Game, Genre, ReviewSummary
-from pricing.models import PricePoint
+from catalog.models import Game, ReviewSummary
 
 
 @pytest.mark.django_db

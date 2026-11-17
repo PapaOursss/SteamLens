@@ -44,7 +44,12 @@ def _mock_timeline() -> dict:
 
 @extend_schema(
     parameters=[
-        OpenApiParameter(name="top", type=int, required=False, description="Nombre de jeux par mois (défaut : 15)"),
+        OpenApiParameter(
+            name="top",
+            type=int,
+            required=False,
+            description="Nombre de jeux par mois (défaut : 15)",
+        ),
     ],
     responses=OpenApiTypes.OBJECT,
 )
@@ -52,10 +57,7 @@ def _mock_timeline() -> dict:
 def monthly_player_race(request: Request) -> Response:
     """Historique mensuel des jeux les plus joués pour bar chart race et bump chart."""
     top_limit = int(request.query_params.get("top", TOP_N_DEFAULT))
-    snapshots = (
-        PlayerCountSnapshot.objects.select_related("game")
-        .order_by("taken_at")
-    )
+    snapshots = PlayerCountSnapshot.objects.select_related("game").order_by("taken_at")
 
     if not snapshots.exists():
         return Response(_mock_timeline())
@@ -81,7 +83,9 @@ def monthly_player_race(request: Request) -> Response:
         ranked = sorted(by_month[m].values(), key=lambda x: x["players"], reverse=True)[:top_limit]
         timeline[m] = ranked
 
-    return Response({
-        "months": sorted_months,
-        "timeline": timeline,
-    })
+    return Response(
+        {
+            "months": sorted_months,
+            "timeline": timeline,
+        }
+    )

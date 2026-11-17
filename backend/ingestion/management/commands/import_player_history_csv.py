@@ -30,7 +30,9 @@ class Command(BaseCommand):
             records = parse_player_history_csv(file_path, limit)
             # Garantir l'existence des jeux
             unique_games = {r.appid: r.name for r in records}
-            existing_appids = set(Game.objects.filter(appid__in=unique_games.keys()).values_list("appid", flat=True))
+            existing_appids = set(
+                Game.objects.filter(appid__in=unique_games.keys()).values_list("appid", flat=True)
+            )
             missing_games = [
                 Game(appid=aid, name=name)
                 for aid, name in unique_games.items()

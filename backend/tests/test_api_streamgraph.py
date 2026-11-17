@@ -17,9 +17,10 @@ def test_genre_streamgraph_endpoint_empty(client: Client) -> None:
     assert len(data["events"]) == 3
 
 
-def test_genre_streamgraph_endpoint_with_data(client: Client, catalog_sample: dict[str, Game]) -> None:
+def test_genre_streamgraph_endpoint_with_data(
+    client: Client, catalog_sample: dict[str, Game]
+) -> None:
     action = Genre.objects.get(name="Action")
-    simulation = Genre.objects.get(name="Simulation")
 
     # Counter-Strike 2 release in 2012
     cs = catalog_sample["counter_strike"]
@@ -37,7 +38,9 @@ def test_genre_streamgraph_endpoint_with_data(client: Client, catalog_sample: di
     stardew.save()
 
     # Create another game in 2016 with Action
-    g = Game.objects.create(appid=99999, name="Action Game 2016", release_date=datetime.date(2016, 5, 1))
+    g = Game.objects.create(
+        appid=99999, name="Action Game 2016", release_date=datetime.date(2016, 5, 1)
+    )
     g.genres.add(action)
 
     response = client.get("/api/stats/streamgraph/")

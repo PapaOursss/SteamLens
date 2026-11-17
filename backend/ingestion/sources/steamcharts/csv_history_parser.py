@@ -12,7 +12,9 @@ class MonthlyPlayerRecord(NamedTuple):
     peak_players: int
 
 
-def parse_player_history_csv(file_path: Path, limit: int | None = None) -> list[MonthlyPlayerRecord]:
+def parse_player_history_csv(
+    file_path: Path, limit: int | None = None
+) -> list[MonthlyPlayerRecord]:
     """Lit un fichier CSV d'historique mensuel Kaggle / SteamCharts."""
     records: list[MonthlyPlayerRecord] = []
     with file_path.open(encoding="utf-8", errors="replace") as f:

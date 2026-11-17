@@ -247,4 +247,3 @@ export interface ReleaseCalendarResponse {
   days: string[]
   months: string[]
 }
-}

@@ -10,6 +10,7 @@ from catalog.views.playtime import playtime_stats
 from catalog.views.proton import proton_stats
 from catalog.views.review_sentiment import review_sentiment
 from catalog.views.sunburst import sunburst_igdb
+from catalog.views.tag_network import tag_network
 from catalog.views.treemap import genre_tags_treemap
 from catalog.views.wrapped import steam_wrapped
 from config.health import health
@@ -38,6 +39,7 @@ urlpatterns = [
     path("stats/dashboard/", dashboard_stats, name="stats-dashboard"),
     path("stats/genres/", genre_stats, name="stats-genres"),
     path("stats/tags/", tag_stats, name="stats-tags"),
+    path("stats/tag-network/", tag_network, name="stats-tag-network"),
     path("stats/treemap/", genre_tags_treemap, name="stats-treemap"),
     path("stats/sunburst-igdb/", sunburst_igdb, name="stats-sunburst-igdb"),
     path("stats/review-sentiment/", review_sentiment, name="stats-review-sentiment"),

@@ -139,7 +139,9 @@ def build_sankey_data() -> dict[str, Any]:
 
         review = game.reviews.first()
         total_rev = review.total if review else 0
-        positive_pct = int((review.positive / total_rev) * 100) if (review and total_rev > 0) else 75
+        positive_pct = (
+            int((review.positive / total_rev) * 100) if (review and total_rev > 0) else 75
+        )
         review_bucket = _get_review_bucket(positive_pct)
 
         for genre in game.genres.all()[:2]:

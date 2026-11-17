@@ -94,10 +94,7 @@ def _build_tag_network_data() -> dict[str, Any]:
         reverse=True,
     )[:MAX_EDGES]
 
-    raw_nodes = [
-        {"id": tid, "name": tag_names[tid], "games": tag_counts[tid]}
-        for tid in tag_ids
-    ]
+    raw_nodes = [{"id": tid, "name": tag_names[tid], "games": tag_counts[tid]} for tid in tag_ids]
     raw_nodes.sort(key=lambda n: n["games"], reverse=True)
 
     community_map = _compute_tag_communities(raw_nodes, sorted_edges)

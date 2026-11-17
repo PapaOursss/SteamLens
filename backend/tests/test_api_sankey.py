@@ -20,8 +20,12 @@ def test_sankey_price_review_with_games(client: Client) -> None:
     genre_rpg = Genre.objects.create(name="RPG")
     g1 = Game.objects.create(appid=2001, name="Cheap Good RPG", is_free=False)
     g1.genres.add(genre_rpg)
-    PricePoint.objects.create(game=g1, country="FR", currency="EUR", price="4.99", price_eur="4.99", date="2026-01-01")
-    ReviewSummary.objects.create(game=g1, language="all", positive=90, negative=10, date="2026-01-01")
+    PricePoint.objects.create(
+        game=g1, country="FR", currency="EUR", price="4.99", price_eur="4.99", date="2026-01-01"
+    )
+    ReviewSummary.objects.create(
+        game=g1, language="all", positive=90, negative=10, date="2026-01-01"
+    )
 
     response = client.get("/api/stats/sankey-pricing/")
     assert response.status_code == 200
@@ -34,10 +38,14 @@ def test_sankey_price_review_with_games(client: Client) -> None:
 
     # Check links
     links = data["links"]
-    link_genre_price = next((l for l in links if l["source"] == "RPG" and l["target"] == "< 5 €"), None)
+    link_genre_price = next(
+        (l for l in links if l["source"] == "RPG" and l["target"] == "< 5 €"), None
+    )
     assert link_genre_price is not None
     assert link_genre_price["value"] >= 1
 
-    link_price_review = next((l for l in links if l["source"] == "< 5 €" and l["target"] == "Très positif"), None)
+    link_price_review = next(
+        (l for l in links if l["source"] == "< 5 €" and l["target"] == "Très positif"), None
+    )
     assert link_price_review is not None
     assert link_price_review["value"] >= 1

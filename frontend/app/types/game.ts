@@ -18,6 +18,9 @@ export interface GameDetail {
   release_date: string | null
   is_free: boolean
   header_image: string
+  short_description: string
+  metacritic_score: number | null
+  positive_share: number | null
   genres: string[]
   tags: GameTag[]
   themes: string[]

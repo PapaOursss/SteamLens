@@ -1,8 +1,8 @@
 const STEAM_CDN = 'https://cdn.akamai.steamstatic.com/steam/apps'
 
-/** Là où mène un clic sur un jeu. La fiche jeu (T-14) n'existe pas encore : à changer ici seul. */
+/** Là où mène un clic sur un jeu : sa fiche. */
 export function gameLink(appid: number): string {
-  return `/pricing?appid=${appid}`
+  return `/games/${appid}`
 }
 
 /** Image large : celle de l'API, sinon celle du CDN Steam déduite de l'appid. */

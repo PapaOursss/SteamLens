@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import type { PlayerCountSnapshotItem, TimePoint } from '~/types'
 
-const props = defineProps<{ appid: number; name: string }>()
+const props = defineProps<{ appid: number; name: string; heading?: string }>()
 
 const { data, isLoading, hasError, refresh } = useApiResource<PlayerCountSnapshotItem[]>(
   () => `/games/${props.appid}/players/`
@@ -50,6 +50,6 @@ const points = computed(() => monthlyAverages(data.value ?? []))
 const title = computed(() => {
   const start = points.value[0]?.date
   const since = start ? ` depuis ${new Date(start).getFullYear()}` : ''
-  return `${props.name}${since}`
+  return `${props.heading ?? props.name}${since}`
 })
 </script>

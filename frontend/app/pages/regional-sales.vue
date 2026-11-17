@@ -1,16 +1,24 @@
 <template>
   <div>
     <PageIntro title="Ce qui se vend, et où" is-lab>
-      Les ventes par genre dans trois marchés, en millions d'unités, toutes plateformes confondues.
+      Les ventes par genre dans quatre marchés, en millions d'unités, toutes plateformes confondues.
     </PageIntro>
 
     <SampleNotice class="mb-2">
       L'import des ventes (Kaggle vgsales) n'existe pas encore : ces chiffres illustrent la page, ce ne sont pas des mesures.
     </SampleNotice>
 
-    <section class="gutter mb-10">
-      <RegionalSalesMap />
-    </section>
+    <DataBlock
+      title="Les quatre marchés"
+      note="Choisissez un marché : son poids dans les ventes mondiales et ses genres favoris."
+      :is-loading="isLoading"
+      :has-error="hasError"
+      :is-empty="!data?.by_genre.length"
+      :height="520"
+      @retry="refresh()"
+    >
+      <RegionalSalesMap :sales="data!.by_genre" />
+    </DataBlock>
 
     <DataBlock
       title="Ventes par genre"
@@ -32,14 +40,18 @@
                 <th scope="col">Amérique du Nord</th>
                 <th scope="col">Europe</th>
                 <th scope="col">Japon</th>
+                <th scope="col">Reste du monde</th>
+                <th scope="col">Total mondial</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="row in data!.by_genre" :key="row.genre">
                 <td>{{ row.genre }}</td>
-                <td class="figure">{{ row.na }} M</td>
-                <td class="figure">{{ row.eu }} M</td>
-                <td class="figure">{{ row.jp }} M</td>
+                <td class="figure">{{ formatNumber(row.na) }} M</td>
+                <td class="figure">{{ formatNumber(row.eu) }} M</td>
+                <td class="figure">{{ formatNumber(row.jp) }} M</td>
+                <td class="figure">{{ formatNumber(row.other) }} M</td>
+                <td class="figure font-semibold">{{ formatNumber(Math.round(worldTotal(row) * 10) / 10) }} M</td>
               </tr>
             </tbody>
           </table>

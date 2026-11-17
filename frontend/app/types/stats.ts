@@ -82,11 +82,14 @@ export interface HypeStats {
   played_in_silence: HypeGame[]
 }
 
+export type SalesRegionKey = 'na' | 'eu' | 'jp' | 'other'
+
 export interface RegionalGenreSales {
   genre: string
   na: number
   eu: number
   jp: number
+  other: number
 }
 
 export interface RegionalSalesStats {

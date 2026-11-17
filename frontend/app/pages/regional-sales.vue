@@ -8,6 +8,10 @@
       L'import des ventes (Kaggle vgsales) n'existe pas encore : ces chiffres illustrent la page, ce ne sont pas des mesures.
     </SampleNotice>
 
+    <section class="gutter mb-10">
+      <RegionalSalesMap />
+    </section>
+
     <DataBlock
       title="Ventes par genre"
       :note="data?.top_regions.notes"

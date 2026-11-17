@@ -10,6 +10,7 @@ import {
   SunburstChart,
   MapChart,
   HeatmapChart,
+  GraphChart,
   ScatterChart,
   ThemeRiverChart,
   SankeyChart
@@ -31,6 +32,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     SunburstChart,
     MapChart,
     HeatmapChart,
+    GraphChart,
     ScatterChart,
     ThemeRiverChart,
     SankeyChart,

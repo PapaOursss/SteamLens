@@ -63,7 +63,7 @@ function tooltipFormatter(param: TooltipParam): string {
     `Prix : ${price}<br>` +
     `Avis positifs : <strong>${g.positive_percent} %</strong><br>` +
     `Genre : ${escapeHtml(g.genre)}<br>` +
-    `Propriétaires : ~${formatCompactNumber(g.owners)}`
+    `Propriétaires : ~${formatCompact(g.owners)}`
 }
 
 const option = computed(() => {

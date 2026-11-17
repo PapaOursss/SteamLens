@@ -26,7 +26,7 @@ const option = computed(() => ({
     ...axisStyle(),
     axisLabel: {
       color: COLORS.soft,
-      formatter: (val: number) => formatCompactNumber(val)
+      formatter: (val: number) => formatCompact(val)
     }
   },
   yAxis: {
@@ -48,7 +48,7 @@ const option = computed(() => ({
         show: true,
         position: 'right',
         valueAnimation: true,
-        formatter: (params: { value: number }) => formatCompactNumber(params.value),
+        formatter: (params: { value: number }) => formatCompact(params.value),
         color: COLORS.text
       },
       itemStyle: {

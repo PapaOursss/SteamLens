@@ -60,7 +60,7 @@
           <p class="text-sm text-soft">
             Prix : {{ selectedGame.price_eur > 0 ? `${selectedGame.price_eur} €` : 'Gratuit' }} ·
             Avis positifs : <strong class="text-hot">{{ selectedGame.positive_percent }} %</strong> ·
-            Possesseurs estimés : ~{{ formatCompactNumber(selectedGame.owners) }}
+            Possesseurs estimés : ~{{ formatCompact(selectedGame.owners) }}
           </p>
         </div>
       </div>

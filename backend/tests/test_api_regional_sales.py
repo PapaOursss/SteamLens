@@ -15,6 +15,7 @@ def test_regional_sales_stats_fallback():
     assert "by_genre" in data
     assert "top_regions" in data
     assert len(data["by_genre"]) >= 1
+    assert all("other" in row for row in data["by_genre"])
 
 
 @pytest.mark.django_db
@@ -35,3 +36,4 @@ def test_regional_sales_stats_with_data():
     assert len(data["by_genre"]) == 1
     assert data["by_genre"][0]["genre"] == "Role-Playing"
     assert data["by_genre"][0]["jp"] == 10.2
+    assert data["by_genre"][0]["other"] == 1.0

@@ -26,6 +26,12 @@ node_modules/
 .nuxt/
 dist/
 
+# Logs et couverture des tests
+*.log
+*.local
+.coverage
+htmlcov/
+
 # OS / IDE
 .DS_Store
 Thumbs.db

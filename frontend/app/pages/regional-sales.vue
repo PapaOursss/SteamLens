@@ -4,8 +4,8 @@
       Les ventes par genre dans quatre marchés, en millions d'unités, toutes plateformes confondues.
     </PageIntro>
 
-    <SampleNotice class="mb-2">
-      L'import des ventes (Kaggle vgsales) n'existe pas encore : ces chiffres illustrent la page, ce ne sont pas des mesures.
+    <SampleNotice v-if="data?.is_sample" class="mb-2">
+      Les ventes Kaggle vgsales ne sont pas encore importées : ces chiffres illustrent la page, ce ne sont pas des mesures.
     </SampleNotice>
 
     <DataBlock

@@ -160,3 +160,21 @@ export interface SunburstResponse {
   name: string
   children: SunburstNode[]
 }
+
+export interface TagNetworkNode {
+  id: number
+  name: string
+  games: number
+  community: number
+}
+
+export interface TagNetworkEdge {
+  source: number
+  target: number
+  weight: number
+}
+
+export interface TagNetworkResponse {
+  nodes: TagNetworkNode[]
+  edges: TagNetworkEdge[]
+}

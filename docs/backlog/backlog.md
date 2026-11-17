@@ -285,15 +285,15 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 
 ### T-31 · Réseau des tags qui vont ensemble
 - **Type**: idea
-- **Status**: todo
+- **Status**: done
 - **Opened**: 2026-10-23
 - **Effort**: M · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
-- [ ] Graphe de forces : nœud = tag (taille = nb de jeux), lien = co-occurrence (épaisseur)
-- [ ] Communautés détectées (`networkx`, Louvain) colorées : on voit apparaître des
+- [x] Graphe de forces : nœud = tag (taille = nb de jeux), lien = co-occurrence (épaisseur)
+- [x] Communautés détectées (`networkx`, Louvain) colorées : on voit apparaître des
   « familles » (cozy / farming / pixel art, souls-like / difficile / sombre…)
-- [ ] Limiter aux 150 tags principaux pour rester lisible
+- [x] Limiter aux 150 tags principaux pour rester lisible
 
 ### T-32 · Sankey : genre → tranche de prix → accueil
 - **Type**: idea

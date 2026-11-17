@@ -9,12 +9,12 @@
       note="Graphe de forces limité aux 150 tags les plus fréquents."
       :is-loading="isLoading"
       :has-error="hasError"
-      :is-empty="!nodes.length"
+      :is-empty="!data?.nodes.length"
       empty-message="Pas encore de données de tags disponibles."
       :height="660"
       @retry="refresh()"
     >
-      <TagNetworkChart :nodes="nodes" :edges="edges" :height="620" />
+      <TagNetworkChart :nodes="data!.nodes" :edges="data!.edges" :height="620" />
     </DataBlock>
 
     <p class="gutter max-w-prose text-soft">
@@ -24,7 +24,9 @@
 </template>
 
 <script setup lang="ts">
+import type { TagNetworkResponse } from '~/types'
+
 useHead({ title: 'Réseau des tags' })
 
-const { nodes, edges, isLoading, hasError, refresh } = useTagNetwork()
+const { data, isLoading, hasError, refresh } = useApiResource<TagNetworkResponse>('/stats/tag-network/')
 </script>

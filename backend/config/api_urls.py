@@ -20,6 +20,7 @@ from geography.views_trends import trends_map_stats
 from ingestion.views import sources_overview
 from players.views import top_played
 from players.views_hardware import hardware_survey
+from players.views_history import monthly_player_race
 from players.views_hype import hype_stats
 from pricing.views import price_history, sales_calendar
 
@@ -45,6 +46,7 @@ urlpatterns = [
     path("stats/price-history/<int:appid>/", price_history, name="stats-price-history"),
     path("stats/sales-calendar/", sales_calendar, name="stats-sales-calendar"),
     path("stats/top-played/", top_played, name="stats-top-played"),
+    path("stats/monthly-player-race/", monthly_player_race, name="stats-monthly-player-race"),
     path("stats/reviews/<int:appid>/", game_reviews, name="stats-game-reviews"),
     path("stats/achievements/<int:appid>/", game_achievements, name="stats-game-achievements"),
     path("stats/least-finished/", least_finished_games, name="stats-least-finished"),

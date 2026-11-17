@@ -252,14 +252,14 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 
 ### T-28 · Bar chart race des jeux les plus joués
 - **Type**: idea
-- **Status**: todo
-- **Opened**: 2026-10-23
+- **Status**: done
+- **Opened**: 2026-10-23 · **Closed**: 2026-11-05
 - **Effort**: M · **Owner**: Sterenn · **Due**: —
 - **Origin**: dataset Kaggle d'historique SteamCharts (à choisir) + T-09
 
-- [ ] Importer un historique mensuel de joueurs (pic et moyenne) depuis ~2012
-- [ ] Course de barres animée ECharts (top 15 par mois), bouton lecture / pause
-- [ ] Bump chart en alternative : rang de chaque jeu au fil des mois
+- [x] Importer un historique mensuel de joueurs (pic et moyenne) depuis ~2012
+- [x] Course de barres animée ECharts (top 15 par mois), bouton lecture / pause
+- [x] Bump chart en alternative : rang de chaque jeu au fil des mois
 
 ### T-29 · Streamgraph : l'évolution des genres par année de sortie
 - **Type**: idea

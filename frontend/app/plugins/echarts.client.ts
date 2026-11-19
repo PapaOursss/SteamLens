@@ -9,14 +9,21 @@ import {
   TreemapChart,
   SunburstChart,
   MapChart,
-  HeatmapChart
+  HeatmapChart,
+  GraphChart,
+  ScatterChart,
+  ThemeRiverChart,
+  SankeyChart,
+  RadarChart
 } from 'echarts/charts'
 import {
   GridComponent,
   TooltipComponent,
   LegendComponent,
   VisualMapComponent,
-  DataZoomComponent
+  DataZoomComponent,
+  CalendarComponent,
+  RadarComponent
 } from 'echarts/components'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -28,11 +35,18 @@ export default defineNuxtPlugin((nuxtApp) => {
     SunburstChart,
     MapChart,
     HeatmapChart,
+    GraphChart,
+    ScatterChart,
+    ThemeRiverChart,
+    SankeyChart,
+    RadarChart,
     GridComponent,
     TooltipComponent,
     LegendComponent,
     VisualMapComponent,
-    DataZoomComponent
+    DataZoomComponent,
+    CalendarComponent,
+    RadarComponent
   ])
 
   registerLocale('FR', frenchLocale)

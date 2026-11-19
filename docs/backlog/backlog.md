@@ -116,17 +116,17 @@ backend importe, met en cache et sert des agrégats. Aucune donnée personnelle 
 
 ### T-14 · Fiche jeu complète
 - **Type**: idea
-- **Status**: todo
+- **Status**: done
 - **Opened**: 2026-10-23
 - **Effort**: L · **Owner**: Léandre · **Due**: —
 - **Origin**: plan initial du projet
 
-- [ ] En-tête : jaquette, genres, studio, date, prix en France, note
-- [ ] Courbe des joueurs connectés (zoom jour / mois / année)
-- [ ] Courbe du prix avec les promos marquées (après T-18)
-- [ ] Radar « ADN du jeu » : note, popularité, prix, durée de vie, buzz Twitch, rareté des
+- [x] En-tête : jaquette, genres, studio, date, prix en France, note (`/games/<appid>`)
+- [x] Courbe des joueurs connectés (zoom jour / mois / année)
+- [x] Courbe du prix avec les promos marquées (après T-18)
+- [x] Radar « ADN du jeu » : note, popularité, prix, durée de vie, buzz Twitch, rareté des
   succès (chaque axe normalisé de 0 à 100)
-- [ ] Mini-carte du prix dans le monde (T-16)
+- [x] Mini-carte du prix dans le monde (T-16)
 
 ### T-15 · Treemap et sunburst des genres et tags
 - **Type**: idea
@@ -252,69 +252,69 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 
 ### T-28 · Bar chart race des jeux les plus joués
 - **Type**: idea
-- **Status**: todo
-- **Opened**: 2026-10-23
+- **Status**: done
+- **Opened**: 2026-10-23 · **Closed**: 2026-11-05
 - **Effort**: M · **Owner**: Sterenn · **Due**: —
 - **Origin**: dataset Kaggle d'historique SteamCharts (à choisir) + T-09
 
-- [ ] Importer un historique mensuel de joueurs (pic et moyenne) depuis ~2012
-- [ ] Course de barres animée ECharts (top 15 par mois), bouton lecture / pause
-- [ ] Bump chart en alternative : rang de chaque jeu au fil des mois
+- [x] Importer un historique mensuel de joueurs (pic et moyenne) depuis ~2012
+- [x] Course de barres animée ECharts (top 15 par mois), bouton lecture / pause
+- [x] Bump chart en alternative : rang de chaque jeu au fil des mois
 
 ### T-29 · Streamgraph : l'évolution des genres par année de sortie
 - **Type**: idea
-- **Status**: todo
-- **Opened**: 2026-10-23
+- **Status**: done
+- **Opened**: 2026-10-23 · **Closed**: 2026-11-12
 - **Effort**: S · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
-- [ ] Nombre de sorties par genre et par année (ThemeRiver ECharts)
-- [ ] Annoter les moments clés : Steam Greenlight 2012, Steam Direct 2017, explosion des
+- [x] Nombre de sorties par genre et par année (ThemeRiver ECharts)
+- [x] Annoter les moments clés : Steam Greenlight 2012, Steam Direct 2017, explosion des
   jeux indés, mode des roguelikes et des survival
 
 ### T-30 · Nuage de points « chercheur de pépites »
 - **Type**: idea
-- **Status**: todo
-- **Opened**: 2026-10-23
+- **Status**: done
+- **Opened**: 2026-10-23 · **Closed**: 2026-11-12
 - **Effort**: S · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
-- [ ] x = prix, y = % d'avis positifs, taille = propriétaires, couleur = genre
-- [ ] Zone « pépites » surlignée : très bien noté, pas cher, peu connu
-- [ ] Filtres par genre et par année ; clic = fiche jeu
+- [x] x = prix, y = % d'avis positifs, taille = propriétaires, couleur = genre
+- [x] Zone « pépites » surlignée : très bien noté, pas cher, peu connu
+- [x] Filtres par genre et par année ; clic = fiche jeu
 
 ### T-31 · Réseau des tags qui vont ensemble
 - **Type**: idea
-- **Status**: todo
+- **Status**: done
 - **Opened**: 2026-10-23
 - **Effort**: M · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
-- [ ] Graphe de forces : nœud = tag (taille = nb de jeux), lien = co-occurrence (épaisseur)
-- [ ] Communautés détectées (`networkx`, Louvain) colorées : on voit apparaître des
+- [x] Graphe de forces : nœud = tag (taille = nb de jeux), lien = co-occurrence (épaisseur)
+- [x] Communautés détectées (`networkx`, Louvain) colorées : on voit apparaître des
   « familles » (cozy / farming / pixel art, souls-like / difficile / sombre…)
-- [ ] Limiter aux 150 tags principaux pour rester lisible
+- [x] Limiter aux 150 tags principaux pour rester lisible
 
 ### T-32 · Sankey : genre → tranche de prix → accueil
 - **Type**: idea
-- **Status**: todo
+- **Status**: done
 - **Opened**: 2026-10-23
 - **Effort**: S · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
-- [ ] Tranches : gratuit, < 5 €, 5-15 €, 15-30 €, > 30 € ; accueil : négatif, mitigé, positif,
+- [x] Tranches : gratuit, < 5 €, 5-15 €, 15-30 €, > 30 € ; accueil : négatif, mitigé, positif,
   très positif
-- [ ] Répond à « les jeux chers sont-ils mieux notés ? »
+- [x] Répond à « les jeux chers sont-ils mieux notés ? »
 
 ### T-33 · Calendrier des sorties
 - **Type**: idea
-- **Status**: todo
+- **Status**: done
 - **Opened**: 2026-10-23
 - **Effort**: S · **Owner**: Sterenn · **Due**: —
 - **Origin**: plan initial du projet
 
-- [ ] Heatmap jour de la semaine × mois du nombre de sorties (tout le monde sort le jeudi ?)
-- [ ] Calendrier annuel façon contributions GitHub, une case par jour
+- [x] Heatmap jour de la semaine × mois du nombre de sorties (tout le monde sort le jeudi ?)
+- [x] Calendrier annuel façon contributions GitHub, une case par jour
 
 ### T-34 · Hype contre réalité : Twitch face à Steam
 - **Type**: idea
@@ -423,17 +423,6 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 - [x] Page en cartes défilantes façon Spotify Wrapped : jeu de l'année, genre qui monte,
   plus grosse promo, plus gros flop, pays le plus cher
 
-### T-44 · Ventes par région (Kaggle vgsales)
-- **Type**: idea
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: S · **Owner**: Samuel · **Due**: —
-- **Origin**: kaggle.com/datasets/gregorut/videogamesales
-
-Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
-- [x] Genres préférés Amérique du Nord / Europe / Japon (barres groupées + mini-carte)
-- [x] Comparaison avec ce que donne notre carte n°2 (T-23)
-
 ### T-46 · Thème Steam et mode sombre
 - **Type**: improvement
 - **Status**: todo
@@ -462,6 +451,7 @@ Pas spécifique à Steam ni au PC, mais la seule source de ventes par région.
 One line per closed ticket, most recent first:
 `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
 
+- **2026-11-17** · T-44 · Ventes par région (Kaggle vgsales) — `manage.py import_kaggle_vgsales` (`--file` ou téléchargement par l'API Kaggle) : une ligne par jeu et plateforme dans `RegionalSales`, remplacées à chaque import ; `/api/stats/regional-sales/` en tire les ventes par genre des quatre marchés, le genre en tête de chacun et `is_sample` tant que rien n'est importé ; page `/regional-sales` avec carte des quatre marchés et total mondial ; à lancer une fois le jeton Kaggle dans `.env` (feat/T-44-import-vgsales) · opened 2026-10-23
 - **2026-11-05** · T-37 · Carte n°6 : pays déclarés des profils publics — `manage.py import_profile_countries` (top 50, chaque semaine, clé `STEAM_API_KEY`) : auteurs des avis récents (T-22) gardés en mémoire seulement, `GetPlayerSummaries` par lots de 100 sans cache disque, comptes par pays dans `ProfileCountryCount` et taille d'échantillon / profils sans pays dans `ProfileSample` ; carte `/api/map/profile-countries/`, `/api/stats/profile-countries/` (échantillon, top pays, pays dominant par genre), page `/profile-map` (feat/taches-pavel-t18-t37) · opened 2026-10-23
 - **2026-11-05** · T-35 · Succès : les jeux que personne ne finit — `manage.py import_achievements` (top 300, chaque semaine ; noms lisibles avec `STEAM_API_KEY`) dans `AchievementStat` ; courbe d'abandon et plus gros décrochage sur `/api/stats/achievements/<appid>/`, classement des plus faibles taux de fin (succès de fin repéré par mots-clés) sur `/api/stats/least-finished/`, page `/achievements` (feat/taches-pavel-t18-t37) · opened 2026-10-23
 - **2026-11-05** · T-27 · Enquête matériel et logiciels de Steam — `manage.py import_hardware_survey` (mensuel) : page publique lue en HTML (langues, OS, GPU, RAM, VR) dans `HardwareShare` ; courbes par catégorie et mises en avant (chinois simplifié, Linux, Steam Deck) sur `/api/stats/hardware-survey/`, page `/hardware` ; le recalage des poids de la carte n°2 reste à faire dans T-23 (feat/taches-pavel-t18-t37) · opened 2026-10-23

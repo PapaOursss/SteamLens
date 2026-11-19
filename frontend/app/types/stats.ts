@@ -82,11 +82,14 @@ export interface HypeStats {
   played_in_silence: HypeGame[]
 }
 
+export type SalesRegionKey = 'na' | 'eu' | 'jp' | 'other'
+
 export interface RegionalGenreSales {
   genre: string
   na: number
   eu: number
   jp: number
+  other: number
 }
 
 export interface RegionalSalesStats {
@@ -97,6 +100,7 @@ export interface RegionalSalesStats {
     jp_favorite: string
     notes: string
   }
+  is_sample: boolean
 }
 
 export interface WrappedStats {
@@ -159,4 +163,87 @@ export interface SunburstNode {
 export interface SunburstResponse {
   name: string
   children: SunburstNode[]
+}
+
+export interface TagNetworkNode {
+  id: number
+  name: string
+  games: number
+  community: number
+}
+
+export interface TagNetworkEdge {
+  source: number
+  target: number
+  weight: number
+}
+
+export interface TagNetworkResponse {
+  nodes: TagNetworkNode[]
+  edges: TagNetworkEdge[]
+}
+
+export interface GemFinderGame {
+  appid: number
+  name: string
+  header_image: string
+  price_eur: number
+  positive_percent: number
+  owners: number
+  genre: string
+  year: number | null
+  is_gem: boolean
+}
+
+export interface GemCriteria {
+  max_price: number
+  min_score: number
+  max_owners: number
+}
+
+export interface GemFinderResponse {
+  games: GemFinderGame[]
+  genres: string[]
+  years: number[]
+  gem_criteria: GemCriteria
+}
+
+export interface StreamgraphEvent {
+  year: number
+  title: string
+  description: string
+}
+
+export interface StreamgraphResponse {
+  years: number[]
+  genres: string[]
+  series: number[][]
+  events: StreamgraphEvent[]
+}
+
+export interface SankeyNode {
+  name: string
+}
+
+export interface SankeyLink {
+  source: string
+  target: string
+  value: number
+}
+
+export interface SankeyPriceReviewResponse {
+  nodes: SankeyNode[]
+  links: SankeyLink[]
+  genres: string[]
+  price_brackets: string[]
+  review_buckets: string[]
+}
+
+export interface ReleaseCalendarResponse {
+  weekday_month: [number, number, number][]
+  daily_contributions: [string, number][]
+  selected_year: number
+  available_years: number[]
+  days: string[]
+  months: string[]
 }

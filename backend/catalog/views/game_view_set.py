@@ -1,13 +1,14 @@
 from django.db.models import QuerySet
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework import viewsets
+from drf_spectacular.utils import OpenApiParameter, extend_schema, inline_serializer
+from rest_framework import serializers, viewsets
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import BaseSerializer
 
 from catalog.filters import GameFilter
+from catalog.game_dna import game_dna
 from catalog.models import Game
 from catalog.serializers import GameDetailSerializer, GameListSerializer
 from players.serializers import PlayerCountSerializer
@@ -52,3 +53,19 @@ class GameViewSet(viewsets.ReadOnlyModelViewSet):
         if country:
             prices = prices.filter(country_id=country.upper())
         return Response(PricePointSerializer(prices, many=True).data)
+
+    @extend_schema(
+        responses=inline_serializer(
+            "GameDnaAxis",
+            {
+                "key": serializers.CharField(),
+                "score": serializers.IntegerField(allow_null=True),
+                "raw": serializers.FloatField(allow_null=True),
+            },
+            many=True,
+        )
+    )
+    @action(detail=True, pagination_class=None, filterset_class=None)
+    def dna(self, request: Request, appid: str) -> Response:
+        """« ADN du jeu » : chaque axe rangé de 0 à 100 parmi les jeux mesurés, None sans donnée."""
+        return Response(game_dna(self.get_object()))

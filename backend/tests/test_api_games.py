@@ -1,6 +1,8 @@
+from datetime import date
+
 from django.test import Client
 
-from catalog.models import Game
+from catalog.models import Game, ReviewSummary
 from tests.conftest import COUNTER_STRIKE_APPID, STARDEW_APPID
 
 
@@ -53,3 +55,30 @@ def test_prices_can_be_narrowed_to_one_country(
 
     assert len(every_country) == 2
     assert [(price["country"], price["price"]) for price in france_only] == [("FR", "13.99")]
+
+
+def test_game_detail_gives_the_latest_positive_share(
+    client: Client, catalog_sample: dict[str, Game]
+) -> None:
+    game = catalog_sample["counter_strike"]
+    ReviewSummary.objects.create(
+        game=game, language="all", positive=50, negative=50, date=date(2026, 1, 1)
+    )
+    ReviewSummary.objects.create(
+        game=game, language="all", positive=87, negative=13, date=date(2026, 2, 1)
+    )
+    ReviewSummary.objects.create(
+        game=game, language="french", positive=1, negative=9, date=date(2026, 3, 1)
+    )
+
+    body = client.get(f"/api/games/{COUNTER_STRIKE_APPID}/").json()
+
+    assert body["positive_share"] == 87
+
+
+def test_game_detail_without_reviews_has_no_share(
+    client: Client, catalog_sample: dict[str, Game]
+) -> None:
+    body = client.get(f"/api/games/{COUNTER_STRIKE_APPID}/").json()
+
+    assert body["positive_share"] is None

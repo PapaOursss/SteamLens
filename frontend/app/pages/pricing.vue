@@ -32,6 +32,26 @@
       </div>
     </DataBlock>
 
+    <DataBlock
+      v-if="game && !game.is_free"
+      title="Steam est-il le moins cher ?"
+      note="Comparatif des prix du jeu sur les boutiques PC partenaires (CheapShark, prix en USD)."
+      :is-loading="dealsLoading"
+      :has-error="dealsError"
+      :is-empty="!dealsData || !dealsData.deals.length"
+      empty-message="Aucune offre partenaire trouvée pour ce jeu."
+      @retry="refreshDeals()"
+    >
+      <template #actions>
+        <NuxtLink to="/deals" class="link">Toutes les bonnes affaires</NuxtLink>
+      </template>
+      <StoreDealsBarChart
+        v-if="dealsData && dealsData.deals.length"
+        :comparison="dealsData"
+        :label="`Comparatif des magasins pour ${game.name}`"
+      />
+    </DataBlock>
+
     <DataBlock v-if="history.length >= MINIMUM_HISTORY" title="Le prix en France, relevé après relevé">
       <TimeLineChart
         :points="history"
@@ -48,6 +68,7 @@
 
 <script setup lang="ts">
 import type { GameDetail } from '~/types'
+import type { StoreComparison } from '~/components/charts/StoreDealsBarChart.vue'
 
 const MINIMUM_HISTORY = 2
 const HISTORY_COUNTRY = 'FR'
@@ -56,6 +77,12 @@ const { appid, selectGame } = useGameFromRoute()
 
 const { data: game } = useApiResource<GameDetail>(() => `/games/${appid.value}/`)
 const { prices, points, isLoading, hasError, refresh } = useGamePriceMap(appid)
+const {
+  data: dealsData,
+  isLoading: dealsLoading,
+  hasError: dealsError,
+  refresh: refreshDeals
+} = useApiResource<StoreComparison>(() => (appid.value ? `/stats/deals/${appid.value}/` : ''))
 
 useHead({ title: () => (game.value ? `Prix de ${game.value.name}` : 'Prix') })
 

@@ -168,14 +168,14 @@ Première carte, la plus simple : les données viennent de T-10.
 
 ### T-19 · CheapShark : promos du moment, tous magasins
 - **Type**: task
-- **Status**: todo
+- **Status**: done
 - **Opened**: 2026-10-23
 - **Effort**: S · **Owner**: Léandre · **Due**: —
 - **Origin**: cheapshark.com/api (sans clé)
 
-- [ ] `deals?steamAppID=` : prix sur Steam, GOG, Humble, Fanatical…
-- [ ] Graphique « Steam est-il le moins cher ? » : barres par magasin pour un jeu
-- [ ] Page « bonnes affaires » : les plus grosses remises du jour sur les jeux bien notés
+- [x] `deals?steamAppID=` : prix sur Steam, GOG, Humble, Fanatical…
+- [x] Graphique « Steam est-il le moins cher ? » : barres par magasin pour un jeu
+- [x] Page « bonnes affaires » : les plus grosses remises du jour sur les jeux bien notés
 
 ### T-20 · RAWG : notes, Metacritic et tags complémentaires
 - **Type**: task

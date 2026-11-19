@@ -1,0 +1,34 @@
+from typing import Any
+
+from ingestion.http import ApiClient
+
+CHEAPSHARK_BASE_URL = "https://www.cheapshark.com/api/1.0"
+
+
+class CheapsharkClient:
+    """Client HTTP pour l'API CheapShark (sans clé requise)."""
+
+    def __init__(self, api_client: ApiClient | None = None) -> None:
+        self.api = api_client or ApiClient("cheapshark")
+
+    def fetch_stores(self) -> list[dict[str, Any]]:
+        """Liste tous les magasins partenaires suivis par CheapShark."""
+        data = self.api.get_json(f"{CHEAPSHARK_BASE_URL}/stores")
+        return data if isinstance(data, list) else []
+
+    def fetch_deals_for_game(self, appid: int) -> list[dict[str, Any]]:
+        """Offres en cours pour un jeu Steam spécifique, tous magasins confondus."""
+        data = self.api.get_json(f"{CHEAPSHARK_BASE_URL}/deals", params={"steamAppID": str(appid)})
+        return data if isinstance(data, list) else []
+
+    def fetch_top_deals(self, page_size: int = 30) -> list[dict[str, Any]]:
+        """Plus grosses remises du moment sur des jeux bien notés (tri par Deal Rating)."""
+        data = self.api.get_json(
+            f"{CHEAPSHARK_BASE_URL}/deals",
+            params={
+                "sortBy": "Deal Rating",
+                "pageSize": str(page_size),
+                "steamRating": "70",
+            },
+        )
+        return data if isinstance(data, list) else []

@@ -25,6 +25,8 @@ MIN_INTERVAL_SECONDS: dict[str, float] = {
     "rawg": 0.5,
     # Google Trends : espacer pour éviter d'être bloqué (429).
     "google_trends": 2.0,
+    # CheapShark : API gratuite sans clé, polie à 1 req/sec.
+    "cheapshark": 1.0,
 }
 
 DEFAULT_MIN_INTERVAL_SECONDS = 1.0

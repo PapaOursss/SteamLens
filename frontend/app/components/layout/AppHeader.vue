@@ -35,7 +35,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Jeux', to: '/games' },
   { label: 'Genres', to: '/genres' },
   { label: 'Monde', to: '/world' },
-  { label: 'Prix', to: '/pricing' },
+  { label: 'Prix', to: '/pricing', sections: ['/deals'] },
   { label: 'Tendances', to: '/hype' },
   {
     label: 'Labo',

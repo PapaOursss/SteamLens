@@ -4,6 +4,7 @@
       <span class="shrink-0 text-soft">{{ label }}</span>
       <input
         :id="fieldId"
+        ref="inputElement"
         v-model="query"
         type="search"
         role="combobox"
@@ -64,7 +65,14 @@ const emit = defineEmits<{ select: [game: GameOption] }>()
 const query = ref('')
 const hasFocus = ref(false)
 const activeIndex = ref(-1)
+const inputElement = useTemplateRef<HTMLInputElement>('inputElement')
 const { options, isLoading, hasError } = useGameSearch(query)
+
+function focusInput() {
+  inputElement.value?.focus()
+}
+
+defineExpose({ focus: focusInput })
 
 const canSearch = computed(() => query.value.trim().length >= MINIMUM_QUERY_LENGTH)
 const isOpen = computed(() => hasFocus.value && canSearch.value)

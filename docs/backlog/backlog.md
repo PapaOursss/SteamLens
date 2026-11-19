@@ -156,13 +156,13 @@ Première carte, la plus simple : les données viennent de T-10.
 
 ### T-17 · Recherche de jeu avec autocomplétion
 - **Type**: idea
-- **Status**: todo
+- **Status**: done
 - **Opened**: 2026-10-23
 - **Effort**: S · **Owner**: Léandre · **Due**: —
 - **Origin**: plan initial du projet
 
-- [ ] Barre de recherche globale (raccourci `/`), suggestions avec jaquette dès 2 lettres
-- [ ] Côté backend : `icontains` d'abord, recherche floue plus tard si besoin
+- [x] Barre de recherche globale (raccourci `/`), suggestions avec jaquette dès 2 lettres
+- [x] Côté backend : `icontains` d'abord, recherche floue plus tard si besoin
 
 ## 🟡 Normal
 

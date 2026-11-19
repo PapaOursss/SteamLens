@@ -24,6 +24,7 @@ class Game(models.Model):
     categories = models.JSONField(default=list, blank=True)
     minimum_requirements = models.TextField(blank=True)
     metacritic_score = models.PositiveSmallIntegerField(null=True, blank=True)
+    rawg_rating = models.FloatField(null=True, blank=True)
     store_fetched_at = models.DateTimeField(null=True, blank=True)
     # Date des données qui ont rempli la fiche : une source plus ancienne ne l'écrase pas.
     data_date = models.DateField(null=True, blank=True)

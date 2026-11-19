@@ -29,6 +29,7 @@ class GameDetailSerializer(serializers.ModelSerializer):
             "header_image",
             "short_description",
             "metacritic_score",
+            "rawg_rating",
             "positive_share",
             "genres",
             "tags",

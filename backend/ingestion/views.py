@@ -80,6 +80,14 @@ KNOWN_SOURCES = [
         "limits": "Nécessite une authentification OAuth Twitch.",
     },
     {
+        "key": "rawg",
+        "name": "RAWG Video Games Database",
+        "logo": "rawg",
+        "role": "Notes des joueurs, Metacritic, tags complémentaires et captures.",
+        "license": "RAWG API Terms of Service",
+        "limits": "Clé API gratuite (20 000 requêtes / mois).",
+    },
+    {
         "key": "twitch",
         "name": "Twitch Helix API",
         "logo": "twitch",

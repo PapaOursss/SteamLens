@@ -6,7 +6,8 @@ from ingestion.sources.json_fetcher import JsonFetcher, live_fetcher
 from ingestion.sources.steam_reviews.recent_review import RecentReview
 from ingestion.sources.steam_reviews.review_counts import ReviewCounts
 
-API_URL = "https://store.steampowered.com/appreviews/{appid}"
+# `appreviews` redirige vers l'accueil du Store ; `ajaxappreviews` rend le même JSON.
+API_URL = "https://store.steampowered.com/ajaxappreviews/{appid}"
 FIRST_CURSOR = "*"
 REVIEWS_PER_PAGE = 100
 DEFAULT_MAX_PAGES = 5
@@ -14,9 +15,9 @@ SUCCESS = 1
 
 
 class SteamReviewsClient:
-    """Lit `appreviews` du Store (sans clé) : totaux par langue et avis récents paginés.
+    """Lit `ajaxappreviews` du Store (sans clé) : totaux par langue et avis récents paginés.
 
-    Jamais de cache disque : les réponses contiennent le SteamID des auteurs, qu'on ne doit
+    Jamais de cache disque : les réponses contiennent le SteamID et le pseudo des auteurs, qu'on ne doit
     pas écrire, même temporairement (T-22, T-37).
     """
 

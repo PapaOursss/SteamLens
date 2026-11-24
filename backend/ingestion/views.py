@@ -57,7 +57,7 @@ KNOWN_SOURCES = [
     },
     {
         "key": "steam_reviews",
-        "name": "Steam Store — avis (appreviews)",
+        "name": "Steam Store — avis (ajaxappreviews)",
         "logo": "steam",
         "role": "Avis positifs et négatifs par langue, ratio par semaine, review bombings.",
         "license": "Valve Steam Store Terms",

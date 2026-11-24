@@ -40,7 +40,9 @@ def _fallback_calendar_stats() -> dict[str, Any]:
 
     for day_idx in range(7):
         for month_idx in range(12):
-            multiplier = 1.0 + (0.3 if month_idx in (9, 10, 11) else (-0.2 if month_idx in (6, 7) else 0.0))
+            multiplier = 1.0 + (
+                0.3 if month_idx in (9, 10, 11) else (-0.2 if month_idx in (6, 7) else 0.0)
+            )
             count = int(base_counts[day_idx] * multiplier)
             weekday_month.append([day_idx, month_idx, count])
 
@@ -62,6 +64,7 @@ def _fallback_calendar_stats() -> dict[str, Any]:
         curr += datetime.timedelta(days=1)
 
     return {
+        "is_sample": True,
         "weekday_month": weekday_month,
         "daily_contributions": daily_contributions,
         "selected_year": year,
@@ -91,14 +94,18 @@ def build_release_calendar_stats(year: int | None = None) -> dict[str, Any]:
 
     for row in annotated:
         w = row["weekday"] - 1  # 0=Lundi..6=Dimanche
-        m = row["month"] - 1    # 0=Jan..11=Dec
+        m = row["month"] - 1  # 0=Jan..11=Dec
         y = row["rel_year"]
         weekday_month_counts[(w, m)] += 1
         if y:
             years_found.add(y)
 
     available_years = sorted(years_found, reverse=True)
-    target_year = year if (year and year in available_years) else (available_years[0] if available_years else 2026)
+    target_year = (
+        year
+        if (year and year in available_years)
+        else (available_years[0] if available_years else 2026)
+    )
 
     # Récupérer les dates pour l'année ciblée
     for game in qs.filter(release_date__year=target_year):
@@ -112,11 +119,11 @@ def build_release_calendar_stats(year: int | None = None) -> dict[str, Any]:
     ]
 
     daily_list = [
-        [d_str, count]
-        for d_str, count in sorted(daily_counts_by_year[target_year].items())
+        [d_str, count] for d_str, count in sorted(daily_counts_by_year[target_year].items())
     ]
 
     return {
+        "is_sample": False,
         "weekday_month": weekday_month_list,
         "daily_contributions": daily_list,
         "selected_year": target_year,

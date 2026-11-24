@@ -7,6 +7,7 @@ export interface RaceGameEntry {
 }
 
 export interface MonthlyRaceResponse {
+  is_sample: boolean
   months: string[]
   timeline: Record<string, RaceGameEntry[]>
 }

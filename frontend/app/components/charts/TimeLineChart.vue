@@ -11,6 +11,7 @@ interface AxisTooltipParam {
 
 const AREA_OPACITY = 0.1
 const LINE_WIDTH = 2
+const DAY_MS = 86_400_000
 const GRID = { left: 56, right: 16, top: 16, bottom: 32 }
 
 const props = defineProps<{
@@ -30,7 +31,7 @@ const option = computed(() => ({
   ...chartBase(),
   grid: GRID,
   tooltip: { ...chartBase().tooltip, trigger: 'axis', formatter: tooltipText },
-  xAxis: { type: 'time', ...axisStyle(), splitLine: { show: false } },
+  xAxis: { type: 'time', minInterval: DAY_MS, ...axisStyle(), splitLine: { show: false } },
   yAxis: {
     type: 'value',
     ...axisStyle(),

@@ -1,5 +1,7 @@
 import random
+from itertools import islice
 
+from django.db.models import F
 from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework import serializers
 from rest_framework.decorators import api_view
@@ -10,6 +12,9 @@ from catalog.models import Game
 from players.models import PlayerCountSnapshot
 from pricing.models import PricePoint
 
+FRANCE_ISO2 = "FR"
+POOL_SIZE = 200
+
 
 def _get_player_count(game: Game) -> int:
     snap = PlayerCountSnapshot.objects.filter(game=game).order_by("-taken_at").first()
@@ -17,17 +22,34 @@ def _get_player_count(game: Game) -> int:
 
 
 def _get_price_eur(game: Game) -> float:
-    price_pt = PricePoint.objects.filter(game=game).order_by("-date").first()
-    if price_pt and price_pt.price_eur is not None:
-        return float(price_pt.price_eur)
-    return 0.0 if game.is_free else 19.99
+    price_pt = (
+        PricePoint.objects.filter(game=game, country=FRANCE_ISO2, price_eur__isnull=False)
+        .order_by("-date")
+        .first()
+    )
+    return float(price_pt.price_eur) if price_pt else 0.0
 
 
 def _get_review_score(game: Game) -> int:
-    review = game.reviews.first()
+    review = game.reviews.filter(language="all").order_by("-date").first()
     if review and review.total > 0:
         return int((review.positive / review.total) * 100)
-    return 75
+    return 0
+
+
+def _has_value(game: Game, metric: str) -> bool:
+    """Un jeu sans relevé ne se joue pas ; un prix de 0 n'est vrai que pour un jeu gratuit."""
+    if metric == "players":
+        return _get_player_count(game) > 0
+    if metric == "price_eur":
+        return game.is_free or _get_price_eur(game) > 0
+    return _get_review_score(game) > 0
+
+
+def _draw_pair(metric: str) -> list[Game]:
+    games = list(Game.objects.order_by(F("owners_mid").desc(nulls_last=True))[:POOL_SIZE])
+    random.shuffle(games)
+    return list(islice((game for game in games if _has_value(game, metric)), 2))
 
 
 def _serialize_card(game: Game) -> dict:
@@ -79,12 +101,11 @@ def game_duel(request: Request) -> Response:
     if metric not in metrics:
         metric = random.choice(metrics)
 
-    games = list(Game.objects.all()[:50])
+    games = _draw_pair(metric)
     if len(games) < 2:
         game_a, game_b = _generate_fallback_pair()
     else:
-        sample = random.sample(games, 2)
-        game_a, game_b = _serialize_card(sample[0]), _serialize_card(sample[1])
+        game_a, game_b = _serialize_card(games[0]), _serialize_card(games[1])
 
     return Response(
         {

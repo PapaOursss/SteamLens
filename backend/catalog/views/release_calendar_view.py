@@ -20,12 +20,11 @@ from catalog.release_calendar import build_release_calendar_stats
     responses=inline_serializer(
         "ReleaseCalendarResponse",
         {
+            "is_sample": serializers.BooleanField(),
             "weekday_month": serializers.ListField(
                 child=serializers.ListField(child=serializers.IntegerField())
             ),
-            "daily_contributions": serializers.ListField(
-                child=serializers.ListField()
-            ),
+            "daily_contributions": serializers.ListField(child=serializers.ListField()),
             "selected_year": serializers.IntegerField(),
             "available_years": serializers.ListField(child=serializers.IntegerField()),
             "days": serializers.ListField(child=serializers.CharField()),

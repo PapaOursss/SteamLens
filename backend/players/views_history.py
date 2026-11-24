@@ -39,6 +39,7 @@ def _mock_timeline() -> dict:
         timeline_data[month] = entries[:TOP_N_DEFAULT]
 
     return {
+        "is_sample": True,
         "months": months,
         "timeline": timeline_data,
     }
@@ -58,7 +59,8 @@ def _mock_timeline() -> dict:
 @api_view(["GET"])
 def monthly_player_race(request: Request) -> Response:
     """Historique mensuel des jeux les plus joués pour bar chart race et bump chart."""
-    top_limit = int(request.query_params.get("top", TOP_N_DEFAULT))
+    top = request.query_params.get("top", "")
+    top_limit = int(top) if top.isdecimal() and int(top) > 0 else TOP_N_DEFAULT
     peaks = (
         PlayerCountSnapshot.objects.annotate(month=TruncMonth("taken_at"))
         .order_by()
@@ -85,6 +87,7 @@ def monthly_player_race(request: Request) -> Response:
 
     return Response(
         {
+            "is_sample": False,
             "months": sorted_months,
             "timeline": timeline,
         }

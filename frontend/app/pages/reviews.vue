@@ -67,6 +67,7 @@
 import type { BombedGame, GameReviews, RankRow } from '~/types'
 
 const PERCENT = 100
+const ALL_LANGUAGES = 'all'
 
 useHead({ title: 'Avis et review bombings' })
 
@@ -89,7 +90,7 @@ const languageRows = computed<RankRow[]>(() =>
     .sort((first, second) => second.positive_share - first.positive_share)
     .map((row) => ({
       key: row.language,
-      label: row.language,
+      label: row.language === ALL_LANGUAGES ? 'Toutes langues' : row.language,
       value: row.positive_share * PERCENT,
       display: shareLabel(row.positive_share)
     }))

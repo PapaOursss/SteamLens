@@ -11,6 +11,7 @@ from catalog.sankey_price_review import build_sankey_data
     responses=inline_serializer(
         "SankeyPriceReviewResponse",
         {
+            "is_sample": serializers.BooleanField(),
             "nodes": inline_serializer("SankeyNode", {"name": serializers.CharField()}, many=True),
             "links": inline_serializer(
                 "SankeyLink",

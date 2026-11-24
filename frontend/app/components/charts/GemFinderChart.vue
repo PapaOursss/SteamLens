@@ -5,8 +5,8 @@
 <script setup lang="ts">
 import type { GemCriteria, GemFinderGame } from '~/types'
 
-const MIN_SYMBOL_SIZE = 8
-const MAX_SYMBOL_SIZE = 34
+const MIN_SYMBOL_SIZE = 4
+const MAX_SYMBOL_SIZE = 20
 const LOG_BASE = 10
 
 const PALETTE = [
@@ -80,7 +80,7 @@ const option = computed(() => {
       type: 'scatter',
       itemStyle: {
         color: genreColorMap.get(genre),
-        opacity: 0.85
+        opacity: 0.55
       },
       data: genreGames.map((g) => ({
         value: [g.price_eur, g.positive_percent],
@@ -93,11 +93,14 @@ const option = computed(() => {
   return {
     ...chartBase(),
     legend: {
+      type: 'scroll',
       data: genres,
       top: 0,
+      pageTextStyle: { color: COLORS.soft },
+      pageIconColor: COLORS.soft,
       textStyle: { color: COLORS.soft, fontFamily: FONT_BODY }
     },
-    grid: { left: 50, right: 30, top: 40, bottom: 45 },
+    grid: { left: 50, right: 30, top: 72, bottom: 45 },
     tooltip: {
       ...chartBase().tooltip,
       trigger: 'item',

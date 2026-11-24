@@ -4,6 +4,10 @@
       L'évolution des jeux les plus fréquentés sur Steam mois par mois depuis 2012 (bar chart race et bump chart).
     </PageIntro>
 
+    <SampleNotice v-if="data?.is_sample" class="mb-6">
+      Les relevés de joueurs n'ont pas encore été importés : ces chiffres illustrent la page, ce ne sont pas des mesures.
+    </SampleNotice>
+
     <DataBlock
       title="Course au fil des mois"
       :is-loading="isLoading"

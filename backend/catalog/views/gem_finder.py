@@ -11,6 +11,7 @@ from catalog.gem_finder import build_gem_finder_data
     responses=inline_serializer(
         "GemFinderResponse",
         {
+            "is_sample": serializers.BooleanField(),
             "games": serializers.ListField(
                 child=inline_serializer(
                     "GemFinderGame",

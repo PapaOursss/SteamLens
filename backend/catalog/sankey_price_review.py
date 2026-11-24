@@ -99,6 +99,7 @@ def _fallback_sankey() -> dict[str, Any]:
     nodes = [{"name": name} for name in nodes_set]
     links = [{"source": src, "target": tgt, "value": val} for src, tgt, val in flows]
     return {
+        "is_sample": True,
         "nodes": sorted(nodes, key=lambda n: n["name"]),
         "links": links,
         "genres": sorted(genres),
@@ -157,6 +158,9 @@ def build_sankey_data() -> dict[str, Any]:
             price_to_review[(price_bracket, review_bucket)] += 1
             active_genres.add(genre.name)
 
+    if not active_genres:
+        return _fallback_sankey()
+
     nodes_set = active_genres | set(PRICE_BRACKETS) | set(REVIEW_BUCKETS)
     nodes = [{"name": name} for name in sorted(nodes_set)]
 
@@ -167,6 +171,7 @@ def build_sankey_data() -> dict[str, Any]:
         links.append({"source": bracket, "target": review_b, "value": count})
 
     return {
+        "is_sample": False,
         "nodes": nodes,
         "links": links,
         "genres": sorted(active_genres),

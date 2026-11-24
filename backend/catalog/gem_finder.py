@@ -79,7 +79,8 @@ def build_gem_finder_data() -> dict[str, Any]:
         if item["year"]:
             years_set.add(item["year"])
 
-    if not items:
+    is_sample = not items
+    if is_sample:
         # Données de démonstration si la base est vide
         items = _fallback_gems()
         for it in items:
@@ -88,6 +89,7 @@ def build_gem_finder_data() -> dict[str, Any]:
                 years_set.add(it["year"])
 
     return {
+        "is_sample": is_sample,
         "games": items,
         "genres": sorted(genres_set),
         "years": sorted(years_set),

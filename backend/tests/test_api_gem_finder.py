@@ -45,3 +45,19 @@ def test_gem_finder_with_sample_game(client: Client, catalog_sample: dict[str, G
     assert sd["genre"] == "Simulation"
     assert sd["year"] == 2016
     assert sd["is_gem"] is True
+
+
+@pytest.mark.django_db
+def test_gem_finder_skips_games_without_price(
+    client: Client, catalog_sample: dict[str, Game]
+) -> None:
+    unknown = Game.objects.create(appid=999_001, name="Sans prix", owners_mid=10_000)
+    for game in (unknown, catalog_sample["stardew"]):
+        game.owners_mid = 10_000
+        game.save()
+        ReviewSummary.objects.create(
+            game=game, language="all", positive=9, negative=1, date=datetime.date(2026, 11, 1)
+        )
+
+    games = client.get("/api/stats/gem-finder/").json()["games"]
+    assert unknown.appid not in [g["appid"] for g in games]

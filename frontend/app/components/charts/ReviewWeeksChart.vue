@@ -28,7 +28,7 @@ const option = computed(() => {
     ...chartBase(),
     grid: GRID,
     tooltip: { ...chartBase().tooltip, trigger: 'axis', formatter: tooltipText },
-    xAxis: { type: 'time', ...axisStyle(), splitLine: { show: false } },
+    xAxis: { type: 'time', ...axisStyle(), axisLabel: { color: COLORS.soft, hideOverlap: true }, splitLine: { show: false } },
     yAxis: { type: 'value', min: 0, max: PERCENT, ...axisStyle(), axisLine: { show: false }, axisLabel: { color: COLORS.soft, formatter: '{value} %' } },
     series: [
       {

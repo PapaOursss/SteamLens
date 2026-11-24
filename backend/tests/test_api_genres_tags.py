@@ -48,3 +48,16 @@ def test_sunburst_igdb(client: Client, catalog_sample: dict[str, Game]) -> None:
     assert rpg_node["value"] == 1
     assert rpg_node["children"][0]["name"] == "Sandbox"
     assert rpg_node["children"][0]["children"][0]["name"] == "Co-operative"
+
+
+def test_treemap_counts_a_game_once_per_genre(
+    client: Client, catalog_sample: dict[str, Game]
+) -> None:
+    game = catalog_sample["counter_strike"]
+    game.genres.add(Genre.objects.create(name="Second genre"))
+
+    children = client.get("/api/stats/treemap/").json()["children"]
+    action = next(c for c in children if c["name"] == "Action")
+    fps = next(t for t in action["children"] if t["name"] == "FPS")
+    assert fps["games"] == 1
+    assert fps["votes"] == 900

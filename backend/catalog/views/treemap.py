@@ -53,6 +53,8 @@ def _aggregate_genre_tags() -> dict[int, list[dict[str, Any]]]:
         GameTag.objects.select_related("game", "tag")
         .prefetch_related("game__genres")
         .filter(game__genres__isnull=False)
+        # La jointure répète la ligne pour chaque genre du jeu.
+        .distinct()
     )
     for row in rows:
         for genre in row.game.genres.all():

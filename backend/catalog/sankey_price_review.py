@@ -1,9 +1,9 @@
 from collections import defaultdict
 from typing import Any
 
-from django.db.models import OuterRef, Subquery
+from django.db.models import OuterRef, Q, Subquery
 
-from catalog.models import Game
+from catalog.models import Game, ReviewSummary
 from pricing.models import PricePoint
 
 PRICE_BRACKETS = [
@@ -110,15 +110,28 @@ def _fallback_sankey() -> dict[str, Any]:
 def build_sankey_data() -> dict[str, Any]:
     """Construit les flux Sankey: Genre -> Tranche de prix -> Accueil (avis)."""
     latest_price_subquery = (
-        PricePoint.objects.filter(game=OuterRef("pk"), price_eur__isnull=False)
+        PricePoint.objects.filter(game=OuterRef("pk"), country="FR", price_eur__isnull=False)
         .order_by("-date")
         .values("price_eur")[:1]
     )
 
+    latest_review = ReviewSummary.objects.filter(game=OuterRef("pk"), language="all").order_by(
+        "-date"
+    )
+
+    # Prix ou avis inconnus : le jeu est laissé de côté, jamais inventé.
     games = list(
-        Game.objects.annotate(latest_price=Subquery(latest_price_subquery))
-        .filter(genres__isnull=False)
-        .prefetch_related("genres", "reviews")
+        Game.objects.annotate(
+            latest_price=Subquery(latest_price_subquery),
+            positive=Subquery(latest_review.values("positive")[:1]),
+            negative=Subquery(latest_review.values("negative")[:1]),
+        )
+        .filter(
+            Q(latest_price__isnull=False) | Q(is_free=True),
+            genres__isnull=False,
+            positive__isnull=False,
+        )
+        .prefetch_related("genres")
         .distinct()[:500]
     )
 
@@ -130,18 +143,13 @@ def build_sankey_data() -> dict[str, Any]:
     active_genres: set[str] = set()
 
     for game in games:
-        price_val = (
-            float(game.latest_price)
-            if game.latest_price is not None
-            else (0.0 if game.is_free else 19.99)
-        )
+        total_rev = game.positive + game.negative
+        if not total_rev:
+            continue
+        price_val = float(game.latest_price) if game.latest_price is not None else 0.0
         price_bracket = _get_price_bracket(price_val, game.is_free)
 
-        review = game.reviews.first()
-        total_rev = review.total if review else 0
-        positive_pct = (
-            int((review.positive / total_rev) * 100) if (review and total_rev > 0) else 75
-        )
+        positive_pct = int((game.positive / total_rev) * 100)
         review_bucket = _get_review_bucket(positive_pct)
 
         for genre in game.genres.all()[:2]:

@@ -1,12 +1,14 @@
 from typing import Any
 
-from django.db.models import OuterRef, Subquery
+from django.db.models import OuterRef, Q, Subquery
 from django.db.models.functions import ExtractYear
 
-from catalog.models import Game
+from catalog.models import Game, ReviewSummary
 from pricing.models import PricePoint
 
-MAX_SCATTER_GAMES = 300
+MAX_SCATTER_GAMES = 2000
+FRANCE_ISO2 = "FR"
+ALL_LANGUAGES = "all"
 GEM_MAX_PRICE = 15.0
 GEM_MIN_SCORE = 85
 GEM_MAX_OWNERS = 500_000
@@ -16,7 +18,8 @@ def _build_game_item(
     game: Game, price: float, score: int, owners: int, year: int | None
 ) -> dict[str, Any]:
     is_gem = (price <= GEM_MAX_PRICE) and (score >= GEM_MIN_SCORE) and (owners <= GEM_MAX_OWNERS)
-    genre_name = game.genres.first().name if game.genres.exists() else "Autre"
+    genres = list(game.genres.all())
+    genre_name = genres[0].name if genres else "Autre"
     return {
         "appid": game.appid,
         "name": game.name,
@@ -33,19 +36,30 @@ def _build_game_item(
 def build_gem_finder_data() -> dict[str, Any]:
     """Prépare les points du nuage 'chercheur de pépites' avec filtres possibles."""
     latest_price_subquery = (
-        PricePoint.objects.filter(game=OuterRef("pk"), price_eur__isnull=False)
+        PricePoint.objects.filter(game=OuterRef("pk"), country=FRANCE_ISO2, price_eur__isnull=False)
         .order_by("-date")
         .values("price_eur")[:1]
     )
 
+    latest_review = ReviewSummary.objects.filter(
+        game=OuterRef("pk"), language=ALL_LANGUAGES
+    ).order_by("-date")
+
+    # Prix, avis ou possesseurs inconnus : le jeu est laissé de côté, jamais inventé.
     games_qs = (
         Game.objects.annotate(
             latest_price=Subquery(latest_price_subquery),
             year=ExtractYear("release_date"),
+            positive=Subquery(latest_review.values("positive")[:1]),
+            negative=Subquery(latest_review.values("negative")[:1]),
         )
-        .filter(reviews__isnull=False)
-        .prefetch_related("genres", "reviews")
-        .distinct()[:MAX_SCATTER_GAMES]
+        .filter(
+            Q(latest_price__isnull=False) | Q(is_free=True),
+            positive__isnull=False,
+            owners_mid__isnull=False,
+        )
+        .prefetch_related("genres")
+        .order_by("-owners_mid", "appid")[:MAX_SCATTER_GAMES]
     )
 
     items: list[dict[str, Any]] = []
@@ -53,19 +67,13 @@ def build_gem_finder_data() -> dict[str, Any]:
     years_set: set[int] = set()
 
     for game in games_qs:
-        price_val = (
-            float(game.latest_price)
-            if game.latest_price is not None
-            else (0.0 if game.is_free else 19.99)
-        )
-        review = game.reviews.first()
-        total_reviews = review.total if review else 0
-        score = (
-            int((review.positive / total_reviews) * 100) if (review and total_reviews > 0) else 75
-        )
-        owners = game.owners_mid or 50_000
+        total_reviews = game.positive + game.negative
+        if not total_reviews:
+            continue
+        price_val = float(game.latest_price) if game.latest_price is not None else 0.0
+        score = int((game.positive / total_reviews) * 100)
 
-        item = _build_game_item(game, price_val, score, owners, game.year)
+        item = _build_game_item(game, price_val, score, game.owners_mid, game.year)
         items.append(item)
         genres_set.add(item["genre"])
         if item["year"]:

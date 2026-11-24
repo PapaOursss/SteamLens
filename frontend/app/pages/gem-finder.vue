@@ -4,6 +4,10 @@
       Trouvez des jeux très bien notés, accessibles en prix et encore méconnus. Cliquez sur un point pour ouvrir sa fiche.
     </PageIntro>
 
+    <SampleNotice v-if="data?.is_sample" class="mb-6">
+      Les prix et les avis n'ont pas encore été importés : ces chiffres illustrent la page, ce ne sont pas des mesures.
+    </SampleNotice>
+
     <div class="gutter mb-6 flex flex-wrap items-center gap-4">
       <label class="flex flex-col text-sm text-soft">
         <span class="mb-1 font-semibold text-text">Genre</span>

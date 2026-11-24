@@ -202,6 +202,7 @@ export interface GemCriteria {
 }
 
 export interface GemFinderResponse {
+  is_sample: boolean
   games: GemFinderGame[]
   genres: string[]
   years: number[]
@@ -232,6 +233,7 @@ export interface SankeyLink {
 }
 
 export interface SankeyPriceReviewResponse {
+  is_sample: boolean
   nodes: SankeyNode[]
   links: SankeyLink[]
   genres: string[]
@@ -240,6 +242,7 @@ export interface SankeyPriceReviewResponse {
 }
 
 export interface ReleaseCalendarResponse {
+  is_sample: boolean
   weekday_month: [number, number, number][]
   daily_contributions: [string, number][]
   selected_year: number

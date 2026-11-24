@@ -24,7 +24,9 @@ import {
   DataZoomComponent,
   CalendarComponent,
   RadarComponent,
-  SingleAxisComponent
+  SingleAxisComponent,
+  MarkAreaComponent,
+  GraphicComponent
 } from 'echarts/components'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -48,7 +50,9 @@ export default defineNuxtPlugin((nuxtApp) => {
     DataZoomComponent,
     CalendarComponent,
     RadarComponent,
-    SingleAxisComponent
+    SingleAxisComponent,
+    MarkAreaComponent,
+    GraphicComponent
   ])
 
   registerLocale('FR', frenchLocale)

@@ -4,6 +4,10 @@
       Les jeux chers sont-ils mieux notés ? Ce diagramme Sankey visualise les flux reliant chaque genre à sa tranche de prix, puis au verdict des joueurs.
     </PageIntro>
 
+    <SampleNotice v-if="data?.is_sample" class="mb-6">
+      Les prix et les avis n'ont pas encore été importés : ces chiffres illustrent la page, ce ne sont pas des mesures.
+    </SampleNotice>
+
     <DataBlock
       title="Flux Genre → Tranche de prix → Accueil"
       note="Tranches : gratuit, < 5 €, 5-15 €, 15-30 €, > 30 €. Accueil basé sur le pourcentage d'avis positifs."

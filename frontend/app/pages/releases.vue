@@ -4,6 +4,10 @@
       Tout le monde sort-il son jeu le jeudi ? Retrouvez la répartition des dates de sortie par jour de la semaine et par mois, ainsi que le calendrier annuel détaillé façon contributions GitHub.
     </PageIntro>
 
+    <SampleNotice v-if="data?.is_sample" class="mb-6">
+      Les jeux datés n'ont pas encore été importés : ces chiffres illustrent la page, ce ne sont pas des mesures.
+    </SampleNotice>
+
     <div class="space-y-8">
       <DataBlock
         title="Jour de la semaine × mois de l'année"
@@ -49,6 +53,7 @@ import type { ChoiceOption } from '~/types'
 useHead({ title: 'Calendrier des sorties' })
 
 const {
+  data,
   selectedYear,
   weekdayMonth,
   dailyContributions,

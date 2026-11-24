@@ -1,3 +1,5 @@
+import re
+
 from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework import serializers
 from rest_framework.decorators import api_view
@@ -56,7 +58,8 @@ def _calculate_top_discount() -> dict:
 @api_view(["GET"])
 def steam_wrapped(request: Request) -> Response:
     """Rétrospective interactive annuelle façon Spotify Wrapped."""
-    year = int(request.query_params.get("year", 2026))
+    year_param = request.query_params.get("year", "")
+    year = int(year_param) if re.fullmatch(r"[12]\d{3}", year_param) else 2026
 
     game_of_the_year = _calculate_top_game()
     biggest_discount = _calculate_top_discount()

@@ -49,7 +49,12 @@ def _aggregate_genre_tags() -> dict[int, list[dict[str, Any]]]:
     data_map: dict[tuple[int, int, str], dict[str, Any]] = defaultdict(
         lambda: {"games": 0, "owners": 0, "scores": [], "votes": 0}
     )
-    for row in GameTag.objects.select_related("game", "tag").filter(game__genres__isnull=False):
+    rows = (
+        GameTag.objects.select_related("game", "tag")
+        .prefetch_related("game__genres")
+        .filter(game__genres__isnull=False)
+    )
+    for row in rows:
         for genre in row.game.genres.all():
             key = (genre.id, row.tag.id, row.tag.name)
             data_map[key]["games"] += 1

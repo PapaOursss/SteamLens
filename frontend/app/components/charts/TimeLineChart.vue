@@ -41,7 +41,8 @@ const option = computed(() => ({
     {
       type: 'line',
       data: props.points.map((point) => [point.date, point.value]),
-      showSymbol: false,
+      // Un seul point ne trace pas de ligne : on le montre.
+      showSymbol: props.points.length === 1,
       sampling: 'lttb',
       lineStyle: { color: COLORS.hot, width: LINE_WIDTH },
       itemStyle: { color: COLORS.hot },

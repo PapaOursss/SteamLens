@@ -1,5 +1,7 @@
 from collections import defaultdict
 
+from django.db.models import Max
+from django.db.models.functions import TruncMonth
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.decorators import api_view
@@ -57,22 +59,20 @@ def _mock_timeline() -> dict:
 def monthly_player_race(request: Request) -> Response:
     """Historique mensuel des jeux les plus joués pour bar chart race et bump chart."""
     top_limit = int(request.query_params.get("top", TOP_N_DEFAULT))
-    snapshots = PlayerCountSnapshot.objects.select_related("game").order_by("taken_at")
-
-    if not snapshots.exists():
-        return Response(_mock_timeline())
+    peaks = (
+        PlayerCountSnapshot.objects.annotate(month=TruncMonth("taken_at"))
+        .order_by()
+        .values("month", "game_id", "game__name")
+        .annotate(peak=Max("players"))
+    )
 
     by_month: dict[str, dict[int, dict]] = defaultdict(dict)
-    for snap in snapshots:
-        m = snap.taken_at.strftime("%Y-%m")
-        aid = snap.game_id
-        current = by_month[m].get(aid)
-        if not current or snap.players > current["players"]:
-            by_month[m][aid] = {
-                "appid": aid,
-                "name": snap.game.name,
-                "players": snap.players,
-            }
+    for row in peaks:
+        by_month[row["month"].strftime("%Y-%m")][row["game_id"]] = {
+            "appid": row["game_id"],
+            "name": row["game__name"],
+            "players": row["peak"],
+        }
 
     sorted_months = sorted(by_month.keys())
     if len(sorted_months) < 2:

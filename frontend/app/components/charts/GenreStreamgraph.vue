@@ -90,6 +90,8 @@ const option = computed(() => {
     series: [
       {
         type: 'themeRiver',
+        // La légende nomme déjà les genres : à gauche, leurs noms se superposent.
+        label: { show: false },
         emphasis: {
           itemStyle: {
             shadowBlur: 15,

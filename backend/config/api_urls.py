@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 from catalog.views import GameViewSet, dashboard_stats, genre_stats, rating_comparison, tag_stats
 from catalog.views.achievements import game_achievements, least_finished_games
+from catalog.views.game_map import game_map
 from catalog.views.game_reviews import game_reviews, review_bombings
 from catalog.views.gem_finder import gem_finder
 from catalog.views.minigame import game_duel
@@ -45,6 +46,7 @@ urlpatterns = [
     path("stats/dashboard/", dashboard_stats, name="stats-dashboard"),
     path("stats/genres/", genre_stats, name="stats-genres"),
     path("stats/tags/", tag_stats, name="stats-tags"),
+    path("stats/game-map/", game_map, name="stats-game-map"),
     path("stats/tag-network/", tag_network, name="stats-tag-network"),
     path("stats/treemap/", genre_tags_treemap, name="stats-treemap"),
     path("stats/streamgraph/", genre_streamgraph, name="stats-streamgraph"),

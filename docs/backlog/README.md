@@ -1,15 +1,18 @@
 # Backlog
 
-What is left to do on Kiln Adopt, what is done, and what was turned down. **This folder is the
-only up-to-date source.**
+Everything left to do on SteamLens: one file per ticket in [tickets/](tickets/), one per planned
+release in [releases/](releases/). Started on **2026-10-21**. How to write a ticket:
+[how-to.md](how-to.md); data sources and technical choices: [sources.md](sources.md); closed
+tickets: [done.md](done.md); turned down: [rejected.md](rejected.md); what only a human can do:
+[urgent.md](urgent.md). **Nothing else is open.**
 
-| File | Content |
-|---|---|
-| [backlog.md](backlog.md) | **Everything**: the single list ordered by priority, one `T-NN` ticket per thing to do with its type, status and details; at the bottom, the "Done" log |
-| [rejected.md](rejected.md) | What was turned down, dropped, or ruled out for good |
-| [urgent.md](urgent.md) | What only a human on the team can do (access, payment, decision), one checkbox per action |
+North star: **SteamLens montre, sur une carte et des graphiques interactifs, ce qui se joue sur
+Steam, où, à quel prix et depuis quand — à partir d'au moins dix sources de données gratuites.**
 
-An audit writes its dated report next to these files (`audit-<topic>-YYYY-MM-DD.md`) while it
-runs, copies its open findings into [backlog.md](backlog.md) (with a pointer to their lines),
-then moves to `docs/_archive/YYYY-MM-DD-topic/`. Archives **can be read, but everything in them
-is old and must be checked** against the current code; they are never edited.
+**Next free: T-51.**
+
+## Releases
+
+- [v1.0.0 · Ça s'affiche](releases/v1.0.0.md)
+- [v2.0.0 · Le monde entier](releases/v2.0.0.md)
+- [v3.0.0 · Bonus pour la soutenance](releases/v3.0.0.md)

@@ -33,6 +33,7 @@ const EXPERIMENTS = [
   { title: 'Chercheur de pépites', to: '/gem-finder', description: 'Repérer les jeux pas chers, très bien notés et méconnus (nuage de points).' },
   { title: 'Prix et accueil (Sankey)', to: '/sankey-pricing', description: 'Les jeux chers sont-ils mieux notés ? Flux genre → prix → verdict des avis.' },
   { title: 'Réseau des tags', to: '/tag-network', description: 'Les familles de tags qui vont ensemble et leurs liens de co-occurrence.' },
+  { title: 'La carte des jeux', to: '/game-map', description: 'Tout le catalogue en nuage de points : les jeux aux tags proches tombent côte à côte.' },
   { title: 'Calendrier des sorties', to: '/releases', description: 'Heatmap jour × mois et calendrier annuel des sorties de jeux.' }
 ]
 

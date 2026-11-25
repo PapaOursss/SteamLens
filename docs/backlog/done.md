@@ -3,6 +3,7 @@
 One line per closed ticket, most recent first:
 `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
 
+- **2026-11-25** · T-19 · CheapShark : promos du moment, tous magasins — `deals?steamAppID=` : prix sur Steam, GOG, Humble, Fanatical… ; Graphique « Steam est-il le moins cher ? » : barres par magasin pour un jeu ; Page « bonnes affaires » : les plus grosses remises du jour sur les jeux bien notés (feat/T-19-cheapshark-deals) · opened 2026-10-23
 - **2026-11-25** · T-17 · Recherche de jeu avec autocomplétion — Barre de recherche globale (raccourci `/`), suggestions avec jaquette dès 2 lettres ; Côté backend : `icontains` d'abord, recherche floue plus tard si besoin (feat/T-17-recherche-autocompletion) · opened 2026-10-23
 - **2026-11-25** · T-50 · Page « Sources et méthode » pour la soutenance — Chaque source : logo, ce qu'on en tire, fraîcheur (dernier `ImportRun`), licence ; Limites honnêtes (propriétaires estimés, pays approximés par la langue…) ; Schéma du flux : sources → commandes d'import → base → API → graphiques (Samuel) · opened 2026-10-23
 - **2026-11-25** · T-43 · « Steam Wrapped » de l'année — Page en cartes défilantes façon Spotify Wrapped : jeu de l'année, genre qui monte, plus grosse promo, plus gros flop, pays le plus cher (Samuel) · opened 2026-10-23

@@ -17,8 +17,9 @@
       </NuxtLink>
     </nav>
 
-    <GameSearch ref="searchBar" class="ml-auto w-full sm:w-72 lg:w-80" field-id="recherche-globale" @select="openGame" />
-    <ThemeToggle />
+    <GameSearch ref="searchBar" class="order-2 w-full sm:order-none sm:ml-auto sm:w-72 lg:w-80" field-id="recherche-globale" @select="openGame" />
+    <!-- Sur téléphone, le bouton de thème reste sur la ligne du logo. -->
+    <ThemeToggle class="ml-auto sm:ml-0" />
   </header>
 </template>
 

@@ -2,7 +2,7 @@ from django.urls import path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import DefaultRouter
 
-from catalog.views import GameViewSet, dashboard_stats, genre_stats, tag_stats
+from catalog.views import GameViewSet, dashboard_stats, genre_stats, rating_comparison, tag_stats
 from catalog.views.achievements import game_achievements, least_finished_games
 from catalog.views.game_reviews import game_reviews, review_bombings
 from catalog.views.gem_finder import gem_finder
@@ -50,6 +50,7 @@ urlpatterns = [
     path("stats/sankey-pricing/", sankey_price_review_stats, name="stats-sankey-pricing"),
     path("stats/sunburst-igdb/", sunburst_igdb, name="stats-sunburst-igdb"),
     path("stats/review-sentiment/", review_sentiment, name="stats-review-sentiment"),
+    path("stats/rating-comparison/", rating_comparison, name="stats-rating-comparison"),
     path("stats/hardware-survey/", hardware_survey, name="stats-hardware-survey"),
     path("stats/price-history/<int:appid>/", price_history, name="stats-price-history"),
     path("stats/sales-calendar/", sales_calendar, name="stats-sales-calendar"),

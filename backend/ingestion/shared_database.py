@@ -11,6 +11,7 @@ SHARED_DATABASE_URL = (
 )
 SHARED_DATABASE_SHA256 = "01ce050e05713ad3c3c4d0516914de1aad27b2b89140a34679494aa7d51bb183"
 DOWNLOAD_TIMEOUT_SECONDS = 60
+DOWNLOAD_ATTEMPTS = 10
 
 
 class SharedDatabaseError(Exception):
@@ -18,19 +19,31 @@ class SharedDatabaseError(Exception):
 
 
 def download_archive(url: str, archive: Path) -> str:
-    """Télécharge l'archive et renvoie son empreinte SHA-256."""
-    digest = hashlib.sha256()
-    with (
-        httpx.stream(
-            "GET", url, follow_redirects=True, timeout=DOWNLOAD_TIMEOUT_SECONDS
-        ) as response,
-        archive.open("wb") as file,
-    ):
+    """Télécharge l'archive, reprise là où une coupure l'a laissée ; renvoie son SHA-256."""
+    archive.unlink(missing_ok=True)
+    for attempt in range(1, DOWNLOAD_ATTEMPTS + 1):
+        try:
+            _download_rest(url, archive)
+            break
+        except httpx.TransportError:
+            if attempt == DOWNLOAD_ATTEMPTS:
+                raise
+    with archive.open("rb") as file:
+        return hashlib.file_digest(file, "sha256").hexdigest()
+
+
+def _download_rest(url: str, archive: Path) -> None:
+    received = archive.stat().st_size if archive.exists() else 0
+    headers = {"Range": f"bytes={received}-"} if received else {}
+    with httpx.stream(
+        "GET", url, headers=headers, follow_redirects=True, timeout=DOWNLOAD_TIMEOUT_SECONDS
+    ) as response:
         response.raise_for_status()
-        for chunk in response.iter_bytes():
-            digest.update(chunk)
-            file.write(chunk)
-    return digest.hexdigest()
+        # Un serveur qui ignore Range renvoie tout : on repart de zéro.
+        resumed = response.status_code == httpx.codes.PARTIAL_CONTENT
+        with archive.open("ab" if resumed else "wb") as file:
+            for chunk in response.iter_raw():
+                file.write(chunk)
 
 
 def install_shared_database(

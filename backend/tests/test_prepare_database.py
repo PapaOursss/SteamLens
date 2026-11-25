@@ -3,6 +3,7 @@ import hashlib
 from pathlib import Path
 from unittest.mock import patch
 
+import httpx
 import pytest
 import respx
 from django.core.management import call_command
@@ -44,6 +45,27 @@ def test_failure_leaves_database_untouched(tmp_path: Path, response: Response) -
 
     assert database.read_bytes() == b"ancienne"
     assert len(list(tmp_path.iterdir())) == 1
+
+
+class CutStream(httpx.SyncByteStream):
+    """Une réponse coupée au milieu."""
+
+    def __iter__(self):
+        yield ARCHIVE[:5]
+        raise httpx.ReadTimeout("coupure")
+
+
+@respx.mock
+def test_download_resumes_after_a_cut(tmp_path: Path) -> None:
+    route = respx.get(URL).mock(
+        side_effect=[Response(200, stream=CutStream()), Response(206, content=ARCHIVE[5:])]
+    )
+    database = tmp_path / "db.sqlite3"
+
+    install_shared_database(database, URL, SHA256)
+
+    assert database.read_bytes() == b"nouvelle base"
+    assert route.calls[1].request.headers["Range"] == "bytes=5-"
 
 
 @pytest.mark.django_db

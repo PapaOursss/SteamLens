@@ -2,7 +2,7 @@
 
 ## Sources
 
-Pas de dossier client : `docs/backlog/backlog.md` (cap du projet, releases), `README.md`,
+Pas de dossier client : `docs/backlog/README.md` (cap du projet, releases), `README.md`,
 `GEMINI.md`, l'API locale le 2026-11-05. Demande de l'équipe le 2026-11-05 : « refais entièrement
 le front ». Tout ce qui suit la demande est une `hypothèse`, à confirmer au choix de la direction.
 

@@ -4,6 +4,8 @@ import pytest
 from django.test import Client
 
 from catalog.models import Game, ReviewSummary
+from geography.models import Country
+from pricing.models import PricePoint
 
 
 @pytest.mark.django_db
@@ -61,3 +63,39 @@ def test_gem_finder_skips_games_without_price(
 
     games = client.get("/api/stats/gem-finder/").json()["games"]
     assert unknown.appid not in [g["appid"] for g in games]
+
+
+def add_us_price(game: Game, price_eur: str) -> None:
+    usa, _ = Country.objects.get_or_create(iso2="US", iso3="USA", name_fr="États-Unis")
+    PricePoint.objects.create(
+        game=game, country=usa, currency="USD", price=price_eur, price_eur=price_eur,
+        date=datetime.date(2026, 9, 8), source="kaggle_fronkongames",
+    )  # fmt: skip
+
+
+@pytest.mark.django_db
+def test_gem_finder_falls_back_on_the_american_price(client: Client) -> None:
+    gem = Game.objects.create(appid=999_002, name="Pépite", owners_mid=20_000)
+    add_us_price(gem, "4.50")
+    ReviewSummary.objects.create(
+        game=gem, language="all", positive=480, negative=20, date=datetime.date(2026, 11, 1)
+    )
+
+    games = client.get("/api/stats/gem-finder/").json()["games"]
+
+    found = next(g for g in games if g["appid"] == gem.appid)
+    assert found["price_eur"] == 4.5
+    assert found["is_gem"] is True
+
+
+@pytest.mark.django_db
+def test_gem_finder_needs_enough_reviews_to_judge(client: Client) -> None:
+    lucky = Game.objects.create(appid=999_003, name="Trois avis", owners_mid=5_000)
+    add_us_price(lucky, "2.00")
+    ReviewSummary.objects.create(
+        game=lucky, language="all", positive=3, negative=0, date=datetime.date(2026, 11, 1)
+    )
+
+    games = client.get("/api/stats/gem-finder/").json()["games"]
+
+    assert lucky.appid not in [g["appid"] for g in games]

@@ -1,10 +1,8 @@
 from collections import Counter
 from typing import Any
 
-from django.db.models import OuterRef, Q, Subquery
-
-from catalog.models import Game, ReviewSummary
-from pricing.models import PricePoint
+from catalog.models import Game
+from catalog.priced_games import priced_games
 
 PRICE_BRACKETS = [
     "Gratuit",
@@ -112,34 +110,6 @@ def _fallback_sankey() -> dict[str, Any]:
     }
 
 
-def _measured_games() -> list[Game]:
-    """Jeux au prix connu : un prix relevé en France, ou gratuits d'après leur page Steam.
-
-    Le catalogue Kaggle marque des dizaines de milliers de jeux gratuits sans que leur page ait
-    été lue ; les mêler aux quelques centaines de prix relevés ferait croire que Steam est
-    surtout gratuit. Prix ou avis inconnus : le jeu est laissé de côté, jamais inventé.
-    """
-    french_prices = PricePoint.objects.filter(country="FR", price_eur__isnull=False)
-    latest_price = french_prices.filter(game=OuterRef("pk")).order_by("-date").values("price_eur")
-    latest_review = ReviewSummary.objects.filter(game=OuterRef("pk"), language="all").order_by(
-        "-date"
-    )
-    # Le filtre passe avant les sous-requêtes : sinon elles tournent sur tout le catalogue.
-    priced = Q(appid__in=french_prices.values("game_id")) | Q(
-        is_free=True, store_fetched_at__isnull=False
-    )
-    return list(
-        Game.objects.filter(priced)
-        .annotate(
-            latest_price=Subquery(latest_price[:1]),
-            positive=Subquery(latest_review.values("positive")[:1]),
-            negative=Subquery(latest_review.values("negative")[:1]),
-        )
-        .filter(positive__isnull=False)
-        .prefetch_related("genres")
-    )
-
-
 def _main_genres(games: list[Game]) -> dict[int, str]:
     """Un genre par jeu, le plus courant des siens : chaque jeu passe une fois par colonne."""
     frequency = Counter(genre.name for game in games for genre in game.genres.all())
@@ -154,7 +124,8 @@ def _main_genres(games: list[Game]) -> dict[int, str]:
 
 def build_sankey_data() -> dict[str, Any]:
     """Construit les flux Sankey : genre principal -> tranche de prix -> accueil (avis)."""
-    games = [game for game in _measured_games() if game.positive + game.negative]
+    measured = priced_games().prefetch_related("genres")
+    games = [game for game in measured if game.positive + game.negative]
     main_genres = _main_genres(games)
     if not main_genres:
         return _fallback_sankey()

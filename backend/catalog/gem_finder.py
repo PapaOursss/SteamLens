@@ -1,14 +1,16 @@
 from typing import Any
 
-from django.db.models import OuterRef, Q, Subquery
+from django.db.models import F, Q
 from django.db.models.functions import ExtractYear
 
-from catalog.models import Game, ReviewSummary
-from pricing.models import PricePoint
+from catalog.models import Game
+from catalog.priced_games import priced_games
 
 MAX_SCATTER_GAMES = 2000
-FRANCE_ISO2 = "FR"
-ALL_LANGUAGES = "all"
+MAX_GEMS = 600
+MIN_REVIEWS = 50
+PERCENT = 100
+PRICE_COUNTRIES = ("FR", "US")
 GEM_MAX_PRICE = 15.0
 GEM_MIN_SCORE = 85
 GEM_MAX_OWNERS = 500_000
@@ -33,43 +35,45 @@ def _build_game_item(
     }
 
 
-def build_gem_finder_data() -> dict[str, Any]:
-    """Prépare les points du nuage 'chercheur de pépites' avec filtres possibles."""
-    latest_price_subquery = (
-        PricePoint.objects.filter(game=OuterRef("pk"), country=FRANCE_ISO2, price_eur__isnull=False)
-        .order_by("-date")
-        .values("price_eur")[:1]
-    )
+def _scatter_games() -> list[Game]:
+    """Les pépites d'abord, sinon le tri par possesseurs écarterait les jeux méconnus.
 
-    latest_review = ReviewSummary.objects.filter(
-        game=OuterRef("pk"), language=ALL_LANGUAGES
-    ).order_by("-date")
-
-    # Prix, avis ou possesseurs inconnus : le jeu est laissé de côté, jamais inventé.
-    games_qs = (
-        Game.objects.annotate(
-            latest_price=Subquery(latest_price_subquery),
+    Prix français, sinon le prix américain converti (dataset Kaggle) : le prix français n'est
+    relevé que pour quelques centaines de jeux. Moins de `MIN_REVIEWS` avis : la note ne dit
+    rien. Possesseurs inconnus : le jeu est laissé de côté, jamais inventé.
+    """
+    judged = (
+        priced_games(PRICE_COUNTRIES)
+        .annotate(
             year=ExtractYear("release_date"),
-            positive=Subquery(latest_review.values("positive")[:1]),
-            negative=Subquery(latest_review.values("negative")[:1]),
+            review_count=F("positive") + F("negative"),
+            positive_hundredths=F("positive") * PERCENT,
         )
-        .filter(
-            Q(latest_price__isnull=False) | Q(is_free=True),
-            positive__isnull=False,
-            owners_mid__isnull=False,
-        )
+        .filter(owners_mid__isnull=False, review_count__gte=MIN_REVIEWS)
         .prefetch_related("genres")
-        .order_by("-owners_mid", "appid")[:MAX_SCATTER_GAMES]
+        .order_by("-owners_mid", "appid")
     )
+    # Même règle que `_build_game_item`, en entiers pour éviter les arrondis de SQLite.
+    is_gem = Q(
+        latest_price__lte=GEM_MAX_PRICE,
+        owners_mid__lte=GEM_MAX_OWNERS,
+        positive_hundredths__gte=F("review_count") * GEM_MIN_SCORE,
+    )
+    gems = list(judged.filter(is_gem)[:MAX_GEMS])
+    others = list(
+        judged.exclude(appid__in=[game.appid for game in gems])[: MAX_SCATTER_GAMES - len(gems)]
+    )
+    return gems + others
 
+
+def build_gem_finder_data() -> dict[str, Any]:
+    """Points du nuage « chercheur de pépites » : toutes les pépites, puis les plus possédés."""
     items: list[dict[str, Any]] = []
     genres_set: set[str] = set()
     years_set: set[int] = set()
 
-    for game in games_qs:
+    for game in _scatter_games():
         total_reviews = game.positive + game.negative
-        if not total_reviews:
-            continue
         price_val = float(game.latest_price) if game.latest_price is not None else 0.0
         score = int((game.positive / total_reviews) * 100)
 

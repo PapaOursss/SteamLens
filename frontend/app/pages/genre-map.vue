@@ -21,7 +21,7 @@
       <template #actions>
         <label class="flex items-center gap-2">
           <span class="text-soft">Pays</span>
-          <select v-model="selected" class="min-h-11 rounded-md bg-deep px-3 text-text">
+          <select v-model="selected" class="field">
             <option v-for="row in data?.countries" :key="row.iso3" :value="row.iso3">{{ row.name }}</option>
           </select>
         </label>

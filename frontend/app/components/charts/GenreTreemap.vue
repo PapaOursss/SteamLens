@@ -55,7 +55,7 @@ const nodes = computed(() =>
 )
 
 function tooltipText({ name, data }: TreemapTooltipParam): string {
-  const score = data.score > 0 ? `<br>Note moyenne : ${data.score}` : ''
+  const score = data.score > 0 ? `<br>Note Metacritic moyenne : ${formatNumber(data.score)}` : ''
   return `<strong>${escapeHtml(name)}</strong><br>${formatNumber(data.games)} jeux<br>${formatCompact(data.owners)} possesseurs estimés${score}`
 }
 

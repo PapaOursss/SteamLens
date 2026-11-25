@@ -382,16 +382,6 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 - [x] Ridgeline (courbes de densité empilées) du temps de jeu médian par genre
 - [x] « Prix par heure de jeu » : classement des jeux les plus rentables
 
-### T-40 · Nuage de mots des avis positifs et négatifs
-- **Type**: idea
-- **Status**: todo
-- **Opened**: 2026-10-23
-- **Effort**: M · **Owner**: Pavel · **Due**: —
-- **Origin**: texte des avis (T-22, T-47)
-
-- [ ] Mots les plus fréquents des avis 👍 et 👎 en deux nuages côte à côte (`echarts-wordcloud`)
-- [ ] Mots vides retirés, une langue à la fois (anglais et français)
-
 ### T-41 · Jeux similaires par tags
 - **Type**: idea
 - **Status**: todo
@@ -451,6 +441,7 @@ des streams Twitch (T-21), reportée sur les pays qui parlent cette langue.
 One line per closed ticket, most recent first:
 `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
 
+- **2026-11-25** · T-40 · Nuage de mots des avis positifs et négatifs — `manage.py import_reviews` garde aussi 50 extraits 👍 et 50 👎 par jeu en anglais et en français (texte seul, sans auteur) dans `ReviewExcerpt`, à côté de ceux de Kaggle (T-47) ; mots vides retirés par langue (`catalog/stopwords.py`), un mot compté une fois par avis, sur `/api/stats/review-words/` (tous les jeux ou `appid`) ; page `/review-words` avec deux nuages côte à côte (composant maison : `echarts-wordcloud` ne suit pas echarts 6) (feat/T-40-nuage-mots) · opened 2026-10-23
 - **2026-11-17** · T-44 · Ventes par région (Kaggle vgsales) — `manage.py import_kaggle_vgsales` (`--file` ou téléchargement par l'API Kaggle) : une ligne par jeu et plateforme dans `RegionalSales`, remplacées à chaque import ; `/api/stats/regional-sales/` en tire les ventes par genre des quatre marchés, le genre en tête de chacun et `is_sample` tant que rien n'est importé ; page `/regional-sales` avec carte des quatre marchés et total mondial ; à lancer une fois le jeton Kaggle dans `.env` (feat/T-44-import-vgsales) · opened 2026-10-23
 - **2026-11-05** · T-37 · Carte n°6 : pays déclarés des profils publics — `manage.py import_profile_countries` (top 50, chaque semaine, clé `STEAM_API_KEY`) : auteurs des avis récents (T-22) gardés en mémoire seulement, `GetPlayerSummaries` par lots de 100 sans cache disque, comptes par pays dans `ProfileCountryCount` et taille d'échantillon / profils sans pays dans `ProfileSample` ; carte `/api/map/profile-countries/`, `/api/stats/profile-countries/` (échantillon, top pays, pays dominant par genre), page `/profile-map` (feat/taches-pavel-t18-t37) · opened 2026-10-23
 - **2026-11-05** · T-35 · Succès : les jeux que personne ne finit — `manage.py import_achievements` (top 300, chaque semaine ; noms lisibles avec `STEAM_API_KEY`) dans `AchievementStat` ; courbe d'abandon et plus gros décrochage sur `/api/stats/achievements/<appid>/`, classement des plus faibles taux de fin (succès de fin repéré par mots-clés) sur `/api/stats/least-finished/`, page `/achievements` (feat/taches-pavel-t18-t37) · opened 2026-10-23

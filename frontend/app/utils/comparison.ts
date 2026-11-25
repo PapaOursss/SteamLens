@@ -2,10 +2,10 @@ import type { PlayerCountSnapshotItem, TimePoint } from '~/types'
 
 /** Un jeu garde sa couleur et son trait d'un graphique à l'autre : la couleur n'est pas seule. */
 export const COMPARED_STYLES = [
-  { color: SERIES_COLORS[0], line: 'solid' },
-  { color: SERIES_COLORS[1], line: 'dashed' },
-  { color: SERIES_COLORS[2], line: 'dotted' },
-  { color: '#3FB58A', line: [10, 4, 2, 4] }
+  { get color() { return seriesColor(0) }, line: 'solid' },
+  { get color() { return seriesColor(1) }, line: 'dashed' },
+  { get color() { return seriesColor(2) }, line: 'dotted' },
+  { get color() { return seriesColor(3) }, line: [10, 4, 2, 4] }
 ] as const
 
 const MONTH_LENGTH = 7

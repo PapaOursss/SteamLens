@@ -28,7 +28,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'fr' },
-      meta: [{ name: 'theme-color', content: '#1B1F6B' }],
+      meta: [{ name: 'theme-color', content: PALETTES.dark.ground }],
       style: [{ innerHTML: THEME_STYLESHEET }],
       script: [{ innerHTML: THEME_BOOT_SCRIPT }],
       link: [

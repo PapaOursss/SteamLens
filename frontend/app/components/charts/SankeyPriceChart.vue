@@ -4,24 +4,22 @@
 
 <script setup lang="ts">
 import type { SankeyLink, SankeyNode } from '~/types'
-import { chartBase, escapeHtml } from '~/utils/chartBase'
-import { COLORS } from '~/utils/tokens'
 
-const NODE_COLORS: Record<string, string> = {
-  // Tranches de prix
-  Gratuit: '#50C878',
-  '< 5 €': '#2E97D4',
-  '5-15 €': '#FFC53D',
-  '15-30 €': '#FF7F50',
-  '> 30 €': '#E0628F',
-  // Accueil
-  Négatif: '#D9534F',
-  Mitigé: '#F0AD4E',
-  Positif: '#5BC0DE',
-  'Très positif': '#5CB85C'
+const PRICE_BRACKETS = ['Gratuit', '< 5 €', '5-15 €', '15-30 €', '> 30 €']
+const POSITIVE_OPACITY = 0.6
+
+/** Prix : la rampe séquentielle (ordonnés). Accueil : les couleurs d'état. Genres : neutres. */
+function nodeColor(name: string): string {
+  const bracket = PRICE_BRACKETS.indexOf(name)
+  if (bracket >= 0) return SEQUENTIAL_COLORS[bracket]!
+  const verdicts: Record<string, string> = {
+    Négatif: STATUS_COLORS.critical,
+    Mitigé: STATUS_COLORS.warning,
+    Positif: STATUS_COLORS.good,
+    'Très positif': STATUS_COLORS.good
+  }
+  return verdicts[name] ?? COLORS.line
 }
-
-const DEFAULT_GENRE_COLOR = '#9CA0EC'
 
 const props = withDefaults(
   defineProps<{
@@ -42,7 +40,8 @@ const option = computed(() => {
   const echartsNodes = props.nodes.map((node) => ({
     name: node.name,
     itemStyle: {
-      color: NODE_COLORS[node.name] ?? DEFAULT_GENRE_COLOR,
+      color: nodeColor(node.name),
+      opacity: node.name === 'Positif' ? POSITIVE_OPACITY : 1,
       borderColor: COLORS.deep,
       borderWidth: 1
     }
@@ -54,9 +53,9 @@ const option = computed(() => {
       ...base.tooltip,
       formatter: (params: { dataType: string; data: { name?: string; source?: string; target?: string; value: number } }) => {
         if (params.dataType === 'edge') {
-          return `${escapeHtml(params.data.source ?? '')} &rarr; ${escapeHtml(params.data.target ?? '')} : <strong>${params.data.value}</strong> jeux`
+          return `${escapeHtml(params.data.source ?? '')} &rarr; ${escapeHtml(params.data.target ?? '')} : <strong>${formatNumber(params.data.value)}</strong> jeux`
         }
-        return `Nœud : <strong>${escapeHtml(params.data.name ?? '')}</strong>`
+        return `<strong>${escapeHtml(params.data.name ?? '')}</strong>`
       }
     },
     series: [
@@ -68,9 +67,11 @@ const option = computed(() => {
         links: props.links,
         orient: 'horizontal',
         draggable: false,
+        nodeGap: 10,
         label: {
           color: COLORS.text,
-          fontSize: 12
+          fontFamily: FONT_BODY,
+          fontSize: 13
         },
         lineStyle: {
           color: 'source',

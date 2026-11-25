@@ -41,10 +41,39 @@ export const PALETTES: Record<ThemeName, Palette> = {
 
 export type Scale = [string, string, string, string, string]
 
-/** Grandeurs : un seul ton, du plus proche du fond (peu) au plus contrasté (beaucoup). */
+/**
+ * Grandeurs : un seul ton, du plus proche du fond (peu) au plus contrasté (beaucoup), à pas de
+ * clarté réguliers (OKLCH L : 0,43 → 0,97 en sombre, 0,87 → 0,29 en clair).
+ */
 export const SEQUENTIAL_PALETTES: Record<ThemeName, Scale> = {
-  dark: ['#3D42A0', '#5359BE', '#9CA0EC', '#CDCFF7', '#F4F3FF'],
-  light: ['#CDCFF7', '#9CA0EC', '#5359BE', '#3D42A0', '#1B1F6B']
+  dark: ['#3D42A0', '#6A71C6', '#9CA0EC', '#C7CAF7', '#F4F3FF'],
+  light: ['#CDCFF7', '#9CA0EC', '#6A71C6', '#3D42A0', '#1B1F6B']
+}
+
+export type Categorical = [string, string, string, string, string, string, string, string]
+
+/**
+ * Séries distinctes (genres, régions, jeux comparés) : bleu, orange, vert d'eau, jaune, magenta,
+ * vert, violet, rouge, toujours dans cet ordre, jamais en boucle (au-delà : « Autres »).
+ * Validé contre `ground` des deux thèmes (daltonisme : ΔE ≥ 8 entre voisins, contraste 3:1 en
+ * sombre). En clair, le jaune, le magenta et le vert d'eau sont sous 3:1 : étiquettes visibles.
+ * Les 3 premières restent distinctes deux à deux : seules elles servent aux nuages et cartes.
+ */
+export const CATEGORICAL_PALETTES: Record<ThemeName, Categorical> = {
+  dark: ['#3987E5', '#D95926', '#199E70', '#C98500', '#D55181', '#0CA30C', '#9085E9', '#E66767'],
+  light: ['#2A78D6', '#EB6834', '#1BAF7A', '#EDA100', '#E87BA4', '#008300', '#6250D6', '#E34948']
+}
+
+export interface StatusColors {
+  good: string
+  warning: string
+  critical: string
+}
+
+/** Bon, moyen, mauvais : réservés à ce sens (avis, compatibilité), toujours avec un libellé. */
+export const STATUS_PALETTES: Record<ThemeName, StatusColors> = {
+  dark: { good: '#0CA30C', warning: '#FAB219', critical: '#E66767' },
+  light: { good: '#0CA30C', warning: '#FAB219', critical: '#D03B3B' }
 }
 
 function rgbChannels(hex: string): string {

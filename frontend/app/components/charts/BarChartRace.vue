@@ -50,7 +50,7 @@ const gameColorMap = computed(() => {
     .slice(0, MAX_TRACKED_GAMES)
 
   topGames.forEach((name, index) => {
-    map.set(name, ECHARTS_PALETTE[index % ECHARTS_PALETTE.length])
+    map.set(name, ECHARTS_PALETTE[index % ECHARTS_PALETTE.length] ?? COLORS.hot)
   })
 
   return map

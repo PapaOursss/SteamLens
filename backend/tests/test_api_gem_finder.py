@@ -89,6 +89,19 @@ def test_gem_finder_falls_back_on_the_american_price(client: Client) -> None:
 
 
 @pytest.mark.django_db
+def test_gem_finder_ignores_an_implausible_price(client: Client) -> None:
+    delisted = Game.objects.create(appid=999_004, name="F1 2015", owners_mid=2_000_000)
+    add_us_price(delisted, "645.66")
+    ReviewSummary.objects.create(
+        game=delisted, language="all", positive=900, negative=100, date=datetime.date(2026, 11, 1)
+    )
+
+    games = client.get("/api/stats/gem-finder/").json()["games"]
+
+    assert delisted.appid not in [g["appid"] for g in games]
+
+
+@pytest.mark.django_db
 def test_gem_finder_needs_enough_reviews_to_judge(client: Client) -> None:
     lucky = Game.objects.create(appid=999_003, name="Trois avis", owners_mid=5_000)
     add_us_price(lucky, "2.00")

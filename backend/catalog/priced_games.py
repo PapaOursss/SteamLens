@@ -6,6 +6,9 @@ from pricing.models import PricePoint
 
 FRANCE_ISO2 = "FR"
 ALL_LANGUAGES = "all"
+# Au-delà, une erreur de source : le dataset Kaggle donne 707,84 $ à des jeux retirés de la
+# vente (F1 2015, DiRT Rally). Les jeux les plus chers de Steam restent sous cette barre.
+MAX_PLAUSIBLE_PRICE_EUR = 200
 
 
 def priced_games(countries: tuple[str, ...] = (FRANCE_ISO2,)) -> QuerySet[Game]:
@@ -17,7 +20,9 @@ def priced_games(countries: tuple[str, ...] = (FRANCE_ISO2,)) -> QuerySet[Game]:
     compter ferait croire que Steam est surtout gratuit. Prix ou avis inconnus : le jeu est
     laissé de côté, jamais inventé.
     """
-    prices = PricePoint.objects.filter(country__in=countries, price_eur__isnull=False)
+    prices = PricePoint.objects.filter(
+        country__in=countries, price_eur__isnull=False, price_eur__lte=MAX_PLAUSIBLE_PRICE_EUR
+    )
     latest_by_country = [
         Subquery(
             prices.filter(game=OuterRef("pk"), country=country)

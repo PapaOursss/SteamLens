@@ -1,7 +1,7 @@
 from collections import defaultdict
 from typing import Any
 
-from django.db.models import Avg, Sum
+from django.db.models import Avg, Count, Sum
 from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework import serializers
 from rest_framework.decorators import api_view
@@ -45,36 +45,29 @@ def _aggregate_genres() -> dict[int, dict[str, Any]]:
 
 
 def _aggregate_genre_tags() -> dict[int, list[dict[str, Any]]]:
+    """Agrégé par la base : plus d'un million de liens jeu-tag, trop pour les lire un par un."""
     mapping: dict[int, list[dict[str, Any]]] = defaultdict(list)
-    data_map: dict[tuple[int, int, str], dict[str, Any]] = defaultdict(
-        lambda: {"games": 0, "owners": 0, "scores": [], "votes": 0}
-    )
     rows = (
-        GameTag.objects.select_related("game", "tag")
-        .prefetch_related("game__genres")
-        .filter(game__genres__isnull=False)
-        # La jointure répète la ligne pour chaque genre du jeu.
-        .distinct()
+        GameTag.objects.filter(game__genres__isnull=False)
+        .order_by()
+        .values("game__genres", "tag_id", "tag__name")
+        .annotate(
+            games=Count("id"),
+            owners=Sum("game__owners_mid"),
+            score=Avg("game__metacritic_score"),
+            total_votes=Sum("votes"),
+        )
     )
     for row in rows:
-        for genre in row.game.genres.all():
-            key = (genre.id, row.tag.id, row.tag.name)
-            data_map[key]["games"] += 1
-            data_map[key]["owners"] += row.game.owners_mid or 0
-            if row.game.metacritic_score is not None:
-                data_map[key]["scores"].append(row.game.metacritic_score)
-            data_map[key]["votes"] += row.votes
-
-    for (genre_id, tag_id, tag_name), stat in data_map.items():
-        avg_score = round(sum(stat["scores"]) / len(stat["scores"]), 1) if stat["scores"] else 0.0
+        genre_id = row["game__genres"]
         mapping[genre_id].append(
             {
-                "id": f"tag-{genre_id}-{tag_id}",
-                "name": tag_name,
-                "games": stat["games"],
-                "owners": stat["owners"],
-                "score": avg_score,
-                "votes": stat["votes"],
+                "id": f"tag-{genre_id}-{row['tag_id']}",
+                "name": row["tag__name"],
+                "games": row["games"],
+                "owners": row["owners"] or 0,
+                "score": round(row["score"] or 0.0, 1),
+                "votes": row["total_votes"],
             }
         )
 

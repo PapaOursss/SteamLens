@@ -22,16 +22,19 @@ class Command(BaseCommand):
     help = "Télécharge la base partagée si la base locale est vide, puis applique les migrations."
 
     def handle(self, *args: object, **options: object) -> None:
-        if not has_games():
-            self.download()
+        downloaded = not has_games() and self.download()
         call_command("migrate", verbosity=0)
+        if downloaded:
+            self.stdout.write("Calcul des statistiques lentes…")
+            call_command("precompute_stats")
 
-    def download(self) -> None:
+    def download(self) -> bool:
         self.stdout.write("Base vide : téléchargement de la base partagée (126 Mo)…")
         connection.close()
         try:
             install_shared_database(Path(connection.settings_dict["NAME"]))
         except SharedDatabaseError as error:
             self.stderr.write(f"Base partagée non installée ({error}) : démarrage sans données.")
-        else:
-            self.stdout.write("Base partagée installée.")
+            return False
+        self.stdout.write("Base partagée installée.")
+        return True

@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from catalog.models import GamePlaytime, Genre
 from pricing.models import PricePoint
 
+FRANCE_ISO2 = "FR"
 MAX_GENRES = 15
 MAX_SAMPLES = 30
 MINUTES_PER_HOUR = 60
@@ -48,16 +49,20 @@ def _calculate_genre_medians() -> list[dict]:
 
 
 def _calculate_best_value_games() -> list[dict]:
-    latest_price = PricePoint.objects.filter(game=OuterRef("game")).order_by("-date")
+    latest_price = PricePoint.objects.filter(
+        game=OuterRef("game"), country=FRANCE_ISO2, price_eur__gt=0
+    ).order_by("-date")
     playtimes = (
         GamePlaytime.objects.filter(median_playtime_minutes__gt=120)
         .select_related("game")
-        .annotate(latest_price=Subquery(latest_price.values("price_eur")[:1]))[:50]
+        .annotate(latest_price=Subquery(latest_price.values("price_eur")[:1]))
+        # Prix inconnu ou jeu gratuit : pas de rapport prix / heure, jamais de prix inventé.
+        .filter(latest_price__isnull=False)[:50]
     )
     items = []
     for item in playtimes:
         hours = item.median_hours
-        price_eur = float(item.latest_price) if item.latest_price else 19.99
+        price_eur = float(item.latest_price)
         cost_per_hour = round(price_eur / hours, 2) if hours > 0 else 0.0
         items.append(
             {

@@ -9,6 +9,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from catalog.models import GameTag, Genre
+from catalog.precomputed import precomputed
 
 MAX_TAGS_PER_GENRE = 15
 
@@ -78,6 +79,19 @@ def _aggregate_genre_tags() -> dict[int, list[dict[str, Any]]]:
     return mapping
 
 
+def _build_treemap() -> dict[str, Any]:
+    genre_totals = _aggregate_genres()
+    tags_by_genre = _aggregate_genre_tags()
+
+    genres = Genre.objects.filter(id__in=genre_totals.keys()).order_by("name")
+    nodes = [_build_genre_node(g, tags_by_genre, genre_totals) for g in genres]
+    return {"name": "Steam", "children": nodes}
+
+
+def load_treemap() -> dict[str, Any]:
+    return precomputed("treemap", _build_treemap)
+
+
 @extend_schema(
     responses=inline_serializer(
         "TreemapResponse",
@@ -90,15 +104,4 @@ def _aggregate_genre_tags() -> dict[int, list[dict[str, Any]]]:
 @api_view(["GET"])
 def genre_tags_treemap(request: Request) -> Response:
     """Hiérarchie Genre -> Tags pour le treemap (T-15)."""
-    genre_totals = _aggregate_genres()
-    tags_by_genre = _aggregate_genre_tags()
-
-    genres = Genre.objects.filter(id__in=genre_totals.keys()).order_by("name")
-    nodes = [_build_genre_node(g, tags_by_genre, genre_totals) for g in genres]
-
-    return Response(
-        {
-            "name": "Steam",
-            "children": nodes,
-        }
-    )
+    return Response(load_treemap())

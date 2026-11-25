@@ -12,6 +12,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from catalog.models import GameTag, Tag
+from catalog.precomputed import precomputed
 
 TOP_TAGS_LIMIT = 150
 MIN_EDGE_WEIGHT = 2
@@ -104,6 +105,10 @@ def _build_tag_network_data() -> dict[str, Any]:
     return {"nodes": nodes, "edges": edges}
 
 
+def load_tag_network() -> dict[str, Any]:
+    return precomputed("tag-network", _build_tag_network_data)
+
+
 @extend_schema(
     responses=inline_serializer(
         "TagNetworkResponse",
@@ -133,5 +138,4 @@ def _build_tag_network_data() -> dict[str, Any]:
 @api_view(["GET"])
 def tag_network(request: Request) -> Response:
     """Réseau de co-occurrence des tags principaux avec détection de communautés."""
-    data = _build_tag_network_data()
-    return Response(data)
+    return Response(load_tag_network())

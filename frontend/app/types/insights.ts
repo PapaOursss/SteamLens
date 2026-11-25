@@ -119,3 +119,25 @@ export interface ReviewWords {
   positive: ReviewWordsSide
   negative: ReviewWordsSide
 }
+
+export interface SimilarGame {
+  appid: number
+  name: string
+  header_image: string
+  score: number
+  shared_tags: string[]
+}
+
+export interface GameMapPoint {
+  appid: number
+  name: string
+  x: number
+  y: number
+  family: string
+  owners: number | null
+}
+
+export interface GameMap {
+  families: string[]
+  points: GameMapPoint[]
+}

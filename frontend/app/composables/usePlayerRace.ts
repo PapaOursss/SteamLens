@@ -1,7 +1,8 @@
 import type { Ref } from 'vue'
 
 export interface RaceGameEntry {
-  appid: number
+  /** null : pas sur Steam (catégories Twitch comme « Just Chatting »). */
+  appid: number | null
   name: string
   players: number
 }
@@ -12,8 +13,9 @@ export interface MonthlyRaceResponse {
   timeline: Record<string, RaceGameEntry[]>
 }
 
-export function usePlayerRace() {
-  const { data, isLoading, hasError, refresh } = useApiResource<MonthlyRaceResponse>('/stats/monthly-player-race/')
+/** Course mois par mois ; `path` change la mesure (joueurs Steam, spectateurs Twitch…). */
+export function usePlayerRace(path = '/stats/monthly-player-race/') {
+  const { data, isLoading, hasError, refresh } = useApiResource<MonthlyRaceResponse>(path)
 
   const currentIndex = ref(0)
   const isPlaying = ref(false)

@@ -46,14 +46,24 @@ class ApiClient:
             follow_redirects=True,
         )
 
-    def get_json(self, url: str, params: QueryParams | None = None) -> JsonValue:
-        """GET qui renvoie le JSON, depuis le cache si possible, sinon depuis l'API."""
+    def get_json(
+        self,
+        url: str,
+        params: QueryParams | None = None,
+        headers: Mapping[str, str] | None = None,
+    ) -> JsonValue:
+        """GET qui renvoie le JSON, depuis le cache si possible, sinon depuis l'API.
+
+        Les en-têtes (jeton d'accès) n'entrent pas dans la clé du cache.
+        """
         query = params or {}
         if self.cache is not None:
             cached = self.cache.get(url, query)
             if cached is not None:
                 return cached
-        body = self._fetch_with_retries(url, lambda: self.http.get(url, params=query))
+        body = self._fetch_with_retries(
+            url, lambda: self.http.get(url, params=query, headers=headers)
+        )
         if self.cache is not None:
             self.cache.set(url, query, body)
         return body

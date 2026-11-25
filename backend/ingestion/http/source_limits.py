@@ -23,6 +23,8 @@ MIN_INTERVAL_SECONDS: dict[str, float] = {
     "twitch": SECONDS_PER_MINUTE / 800,
     # 20 000 requêtes par mois : on espace un peu pour ne pas tout brûler d'un coup.
     "rawg": 0.5,
+    # Wikidata Query Service : 60 s de calcul par minute et par client, on reste très en dessous.
+    "wikidata": 2.0,
     # Google Trends : espacer pour éviter d'être bloqué (429).
     "google_trends": 2.0,
     # CheapShark : API gratuite sans clé, polie à 1 req/sec.

@@ -1,0 +1,7 @@
+{
+  "data": [
+    {"id": "3", "user_id": "13", "user_login": "c", "user_name": "C", "game_id": "32982", "game_name": "Grand Theft Auto V", "type": "live", "title": "RP", "viewer_count": 1000, "started_at": "2026-11-25T08:00:00Z", "language": "EN", "thumbnail_url": "", "tags": [], "is_mature": false},
+    {"id": "4", "user_id": "14", "user_login": "d", "user_name": "D", "game_id": "32982", "game_name": "Grand Theft Auto V", "type": "live", "title": "RP", "viewer_count": 500, "started_at": "2026-11-25T08:00:00Z", "language": "", "thumbnail_url": "", "tags": [], "is_mature": false}
+  ],
+  "pagination": {}
+}

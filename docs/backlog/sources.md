@@ -6,14 +6,14 @@
 |---|---|---|---|
 | Kaggle — Steam Games Complete (trolukovich) | compte Kaggle | catalogue, genres, tags, prix, dates | T-06 |
 | Kaggle — Steam Games Dataset (fronkongames) | compte Kaggle | catalogue récent, CCU, temps de jeu | T-07 |
-| Kaggle — Steam Reviews, vgsales, historiques de joueurs | compte Kaggle | avis, ventes par région, joueurs par mois | T-28, T-44, T-47 |
+| Kaggle — Steam Reviews, vgsales, historiques de joueurs, top Twitch | compte Kaggle | avis, ventes par région, joueurs par mois, jeux regardés par mois | T-21, T-28, T-44, T-47 |
 | SteamSpy API | non | propriétaires estimés, tags pondérés, top 100 | T-08 |
 | Steam Web API (officielle) | oui | joueurs en direct, succès, actus, pays des profils | T-09, T-35, T-37 |
 | Steam Store API (non documentée) | non | fiche, prix par pays, avis par langue | T-10, T-22 |
 | Steam Hardware & Software Survey | non (page) | langues, OS, GPU des joueurs | T-27 |
 | IGDB | oui (Twitch) | genres, thèmes, modes, PopScore | T-11 |
 | RAWG | oui | notes, Metacritic, tags | T-20 |
-| Twitch Helix | oui (même appli qu'IGDB) | jeux les plus streamés | T-21 |
+| Twitch Helix | oui (même appli qu'IGDB) | jeux les plus streamés, langue des streams | T-21 |
 | IsThereAnyDeal | oui | historique des prix | T-18 |
 | CheapShark | non | promos, plus bas prix tous magasins | T-19 |
 | Google Trends (pytrends) | non | intérêt par pays | T-24 |

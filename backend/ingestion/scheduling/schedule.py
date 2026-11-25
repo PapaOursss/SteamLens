@@ -22,6 +22,7 @@ SCHEDULE: tuple[ScheduledCommand, ...] = (
     ScheduledCommand("import_google_trends", WEEKLY, "T-24"),
     ScheduledCommand("import_igdb", WEEKLY, "T-11"),
     ScheduledCommand("import_itad_history", WEEKLY, "T-18"),
+    ScheduledCommand("import_wikidata_studios", WEEKLY, "T-26"),
     ScheduledCommand("import_achievements", WEEKLY, "T-35"),
     ScheduledCommand("import_profile_countries", WEEKLY, "T-37"),
     ScheduledCommand("compute_similar_games", WEEKLY, "T-41"),

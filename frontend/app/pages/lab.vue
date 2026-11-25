@@ -32,6 +32,8 @@ const EXPERIMENTS = [
   { title: 'Genres par pays', to: '/genre-map', description: 'Le genre le plus surreprésenté de chaque pays.' },
   { title: 'Comparateur', to: '/comparer', description: 'Deux à quatre jeux côte à côte : ADN, joueurs et prix.' },
   { title: 'Google Trends', to: '/trends', description: "L'intérêt pour un jeu ou un genre, pays par pays, date après date." },
+  { title: "D'où viennent les studios", to: '/studios', description: 'Les jeux par pays du studio, et le genre que chaque pays fait plus que les autres.' },
+  { title: 'Twitch', to: '/twitch', description: 'Les jeux les plus regardés en ce moment, la langue des streams, et la course depuis 2016.' },
   { title: 'Course des jeux', to: '/player-race', description: "L'évolution des jeux les plus joués mois par mois depuis 2012." },
   { title: 'Chercheur de pépites', to: '/gem-finder', description: 'Repérer les jeux pas chers, très bien notés et méconnus (nuage de points).' },
   { title: 'Prix et accueil (Sankey)', to: '/sankey-pricing', description: 'Les jeux chers sont-ils mieux notés ? Flux genre → prix → verdict des avis.' },

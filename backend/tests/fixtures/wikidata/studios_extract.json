@@ -1,0 +1,396 @@
+{
+ "head": {
+  "vars": [
+   "appid",
+   "developer",
+   "developerLabel",
+   "p17_iso2",
+   "p17_iso3",
+   "p17Label",
+   "p495_iso2",
+   "p495_iso3",
+   "p495Label",
+   "p159_iso2",
+   "p159_iso3",
+   "p159Label",
+   "p27_iso2",
+   "p27_iso3",
+   "p27Label"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "developer": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q44914560"
+    },
+    "p27_iso2": {
+     "type": "literal",
+     "value": "US"
+    },
+    "p27_iso3": {
+     "type": "literal",
+     "value": "USA"
+    },
+    "appid": {
+     "type": "literal",
+     "value": "413150"
+    },
+    "developerLabel": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "Eric Barone"
+    },
+    "p27Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "États-Unis"
+    }
+   },
+   {
+    "developer": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q1172164"
+    },
+    "appid": {
+     "type": "literal",
+     "value": "292030"
+    },
+    "developerLabel": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "CD Projekt RED"
+    },
+    "p159_iso2": {
+     "type": "literal",
+     "value": "PL"
+    },
+    "p159_iso3": {
+     "type": "literal",
+     "value": "POL"
+    },
+    "p17_iso2": {
+     "type": "literal",
+     "value": "PL"
+    },
+    "p17_iso3": {
+     "type": "literal",
+     "value": "POL"
+    },
+    "p17Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "Pologne"
+    },
+    "p159Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "Pologne"
+    }
+   },
+   {
+    "developer": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q1172164"
+    },
+    "appid": {
+     "type": "literal",
+     "value": "292030"
+    },
+    "developerLabel": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "CD Projekt RED"
+    },
+    "p159_iso2": {
+     "type": "literal",
+     "value": "PL"
+    },
+    "p159_iso3": {
+     "type": "literal",
+     "value": "POL"
+    },
+    "p17_iso2": {
+     "type": "literal",
+     "value": "PL"
+    },
+    "p17_iso3": {
+     "type": "literal",
+     "value": "POL"
+    },
+    "p17Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "Pologne"
+    },
+    "p159Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "Pologne"
+    }
+   },
+   {
+    "developer": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q2068658"
+    },
+    "appid": {
+     "type": "literal",
+     "value": "105600"
+    },
+    "developerLabel": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "505 Games"
+    },
+    "p159_iso2": {
+     "type": "literal",
+     "value": "IT"
+    },
+    "p159_iso3": {
+     "type": "literal",
+     "value": "ITA"
+    },
+    "p17_iso2": {
+     "type": "literal",
+     "value": "IT"
+    },
+    "p17_iso3": {
+     "type": "literal",
+     "value": "ITA"
+    },
+    "p17Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "Italie"
+    },
+    "p159Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "Italie"
+    }
+   },
+   {
+    "developer": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q2414469"
+    },
+    "appid": {
+     "type": "literal",
+     "value": "1245620"
+    },
+    "developerLabel": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "FromSoftware"
+    },
+    "p159_iso2": {
+     "type": "literal",
+     "value": "JP"
+    },
+    "p159_iso3": {
+     "type": "literal",
+     "value": "JPN"
+    },
+    "p17_iso2": {
+     "type": "literal",
+     "value": "JP"
+    },
+    "p17_iso3": {
+     "type": "literal",
+     "value": "JPN"
+    },
+    "p17Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "Japon"
+    },
+    "p159Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "Japon"
+    }
+   },
+   {
+    "developer": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q2414469"
+    },
+    "appid": {
+     "type": "literal",
+     "value": "1245620"
+    },
+    "developerLabel": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "FromSoftware"
+    },
+    "p159_iso2": {
+     "type": "literal",
+     "value": "JP"
+    },
+    "p159_iso3": {
+     "type": "literal",
+     "value": "JPN"
+    },
+    "p17_iso2": {
+     "type": "literal",
+     "value": "JP"
+    },
+    "p17_iso3": {
+     "type": "literal",
+     "value": "JPN"
+    },
+    "p17Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "Japon"
+    },
+    "p159Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "Japon"
+    }
+   },
+   {
+    "developer": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q3054268"
+    },
+    "appid": {
+     "type": "literal",
+     "value": "105600"
+    },
+    "developerLabel": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "Engine Software"
+    }
+   },
+   {
+    "developer": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q4042609"
+    },
+    "appid": {
+     "type": "literal",
+     "value": "1086940"
+    },
+    "developerLabel": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "Larian Studios"
+    },
+    "p159_iso2": {
+     "type": "literal",
+     "value": "BE"
+    },
+    "p159_iso3": {
+     "type": "literal",
+     "value": "BEL"
+    },
+    "p17_iso2": {
+     "type": "literal",
+     "value": "BE"
+    },
+    "p17_iso3": {
+     "type": "literal",
+     "value": "BEL"
+    },
+    "p17Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "Belgique"
+    },
+    "p159Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "Belgique"
+    }
+   },
+   {
+    "developer": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q20747389"
+    },
+    "appid": {
+     "type": "literal",
+     "value": "105600"
+    },
+    "developerLabel": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "Re-Logic"
+    },
+    "p159_iso2": {
+     "type": "literal",
+     "value": "US"
+    },
+    "p159_iso3": {
+     "type": "literal",
+     "value": "USA"
+    },
+    "p17_iso2": {
+     "type": "literal",
+     "value": "US"
+    },
+    "p17_iso3": {
+     "type": "literal",
+     "value": "USA"
+    },
+    "p17Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "États-Unis"
+    },
+    "p159Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "États-Unis"
+    }
+   },
+   {
+    "developer": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q137650268"
+    },
+    "appid": {
+     "type": "literal",
+     "value": "413150"
+    },
+    "developerLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "ConcernedApe LLC"
+    },
+    "p159_iso2": {
+     "type": "literal",
+     "value": "US"
+    },
+    "p159_iso3": {
+     "type": "literal",
+     "value": "USA"
+    },
+    "p17_iso2": {
+     "type": "literal",
+     "value": "US"
+    },
+    "p17_iso3": {
+     "type": "literal",
+     "value": "USA"
+    },
+    "p17Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "États-Unis"
+    },
+    "p159Label": {
+     "xml:lang": "fr",
+     "type": "literal",
+     "value": "États-Unis"
+    }
+   }
+  ]
+ }
+}

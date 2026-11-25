@@ -24,12 +24,14 @@ from geography.views import world_map
 from geography.views_genres import genres_by_country_stats
 from geography.views_profiles import profile_countries
 from geography.views_sales import regional_sales_stats
+from geography.views_studios import studio_countries
 from geography.views_trends import trends_map_stats
 from ingestion.views import sources_overview
 from players.views import top_played
 from players.views_hardware import hardware_survey
 from players.views_history import monthly_player_race
 from players.views_hype import hype_stats
+from players.views_twitch import twitch_history, twitch_stats
 from pricing.views import game_deals, price_history, sales_calendar, top_deals
 from pricing.views_giveaways import giveaways
 from pricing.views_purchasing_power import purchasing_power_stats
@@ -44,6 +46,8 @@ urlpatterns = [
     path("stats/proton/", proton_stats, name="stats-proton"),
     path("stats/playtime/", playtime_stats, name="stats-playtime"),
     path("stats/hype/", hype_stats, name="stats-hype"),
+    path("stats/twitch/", twitch_stats, name="stats-twitch"),
+    path("stats/twitch-history/", twitch_history, name="stats-twitch-history"),
     path("stats/wrapped/", steam_wrapped, name="stats-wrapped"),
     path("stats/regional-sales/", regional_sales_stats, name="stats-regional-sales"),
     path("stats/dashboard/", dashboard_stats, name="stats-dashboard"),
@@ -75,6 +79,7 @@ urlpatterns = [
     path("stats/review-bombings/", review_bombings, name="stats-review-bombings"),
     path("stats/profile-countries/", profile_countries, name="stats-profile-countries"),
     path("stats/genres-by-country/", genres_by_country_stats, name="stats-genres-by-country"),
+    path("stats/studio-countries/", studio_countries, name="stats-studio-countries"),
     path("stats/trends/", trends_map_stats, name="stats-trends"),
     path("map/<slug:indicator>/", world_map, name="world-map"),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),

@@ -35,7 +35,7 @@ const gameColorMap = computed(() => {
   const map = new Map<string, string>()
   if (!props.timeline || !props.months) return map
 
-  const counts: Record<string, { appid: number; count: number }> = {}
+  const counts: Record<string, { appid: number | null; count: number }> = {}
   for (const m of props.months) {
     const list = props.timeline[m] || []
     list.slice(0, 5).forEach((item) => {

@@ -45,7 +45,7 @@ const NAV_ITEMS: NavItem[] = [
       '/steam-deck', '/playtime', '/minigame', '/wrapped', '/regional-sales',
       '/price-history', '/reviews', '/review-words', '/hardware', '/achievements', '/profile-map', '/trends',
       '/player-race', '/purchasing-power', '/genre-map', '/game-map', '/comparer',
-      '/sankey-pricing', '/tag-network', '/releases'
+      '/twitch', '/studios', '/sankey-pricing', '/tag-network', '/releases'
     ]
   }
 ]

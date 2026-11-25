@@ -250,3 +250,49 @@ export interface ReleaseCalendarResponse {
   days: string[]
   months: string[]
 }
+
+export interface TwitchTopCategory {
+  rank: number
+  name: string
+  /** null : la catégorie n'est pas un jeu Steam (« Just Chatting », League of Legends…). */
+  appid: number | null
+  box_art_url: string
+  viewers: number
+  streams: number
+}
+
+export interface TwitchLanguageShare {
+  /** Code ISO 639-1 de Twitch (`en`, `fr`…) ou `other`. */
+  language: string
+  share: number
+}
+
+export interface TwitchStats {
+  is_sample: boolean
+  taken_at: string | null
+  top: TwitchTopCategory[]
+  languages: TwitchLanguageShare[]
+}
+
+export interface StudioGenreScore {
+  genre: string
+  games: number
+  /** Part du genre dans le pays ÷ part du genre partout : au-dessus de 1, il est surreprésenté. */
+  index: number
+}
+
+export interface StudioCountry {
+  iso3: string
+  name: string
+  studios: number
+  games: number
+  favorite_genre: string | null
+  favorite_index: number | null
+  top_genres: StudioGenreScore[]
+  top_studios: { name: string; games: number }[]
+}
+
+export interface StudioCountriesStats {
+  is_sample: boolean
+  countries: StudioCountry[]
+}

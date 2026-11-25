@@ -17,7 +17,7 @@
       </NuxtLink>
     </nav>
 
-    <GameSearch class="ml-auto w-full sm:w-72 lg:w-80" field-id="recherche-globale" @select="openGame" />
+    <GameSearch ref="searchBar" class="ml-auto w-full sm:w-72 lg:w-80" field-id="recherche-globale" @select="openGame" />
   </header>
 </template>
 
@@ -50,13 +50,34 @@ const NAV_ITEMS: NavItem[] = [
 
 const route = useRoute()
 const navigation = useTemplateRef<HTMLElement>('navigation')
+const searchBar = useTemplateRef<{ focus: () => void }>('searchBar')
+
+function isTextInput(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false
+  return target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable
+}
+
+function handleGlobalKeydown(event: KeyboardEvent) {
+  if (event.key === '/' && !isTextInput(event.target)) {
+    event.preventDefault()
+    searchBar.value?.focus()
+  }
+}
 
 /** Sur téléphone, le menu défile : garde l'entrée de la page courante visible. */
 function revealActiveItem() {
   navigation.value?.querySelector('[aria-current="page"]')?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
 }
 
-onMounted(revealActiveItem)
+onMounted(() => {
+  revealActiveItem()
+  window.addEventListener('keydown', handleGlobalKeydown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleGlobalKeydown)
+})
+
 watch(() => route.path, () => nextTick(revealActiveItem))
 
 function isActive(item: NavItem): boolean {

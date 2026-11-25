@@ -1,4 +1,3 @@
-from collections.abc import Callable
 from typing import Any
 from urllib.parse import urlparse
 
@@ -33,7 +32,9 @@ class RawgClient:
         data = self._get(f"/games/{rawg_id}/stores")
         results = data.get("results", []) if isinstance(data, dict) else []
         for store in results:
-            if store.get("store_id") == STEAM_STORE_ID or "store.steampowered.com" in store.get("url", ""):
+            if store.get("store_id") == STEAM_STORE_ID or "store.steampowered.com" in store.get(
+                "url", ""
+            ):
                 url = store.get("url", "")
                 parts = [p for p in urlparse(url).path.split("/") if p]
                 if "app" in parts:

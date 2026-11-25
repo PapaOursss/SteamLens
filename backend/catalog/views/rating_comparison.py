@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from catalog.models import Game, ReviewSummary
+from catalog.models import Game
 from ingestion.writing.game_writer import ALL_LANGUAGES
 
 PERCENT = 100

@@ -2,7 +2,7 @@ import pytest
 from django.core.management import call_command
 from django.test import override_settings
 
-from catalog.models import Game, GamePlaytime, Tag
+from catalog.models import Game, GamePlaytime
 from ingestion.management.commands import import_rawg
 from ingestion.sources.rawg import RawgClient
 from tests.fixture_files import load_fixture

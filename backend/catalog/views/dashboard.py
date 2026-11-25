@@ -1,14 +1,14 @@
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 
-from django.db.models import Avg, Count, OuterRef, Subquery, Sum
+from django.db.models import Avg, Count, Exists, OuterRef, Subquery, Sum
 from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework import serializers
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from catalog.models import Game, Genre
+from catalog.models import Game, Genre, ReviewSummary
 from players.models import PlayerCountSnapshot
 from pricing.models import PricePoint
 
@@ -80,15 +80,12 @@ def _build_top_games() -> list[dict]:
 
 
 def _build_featured_gem() -> dict | None:
-    gem = (
-        Game.objects.filter(
-            reviews__positive__gt=0,
-            prices__price_eur__gt=0,
-            prices__price_eur__lte=Decimal("15.00"),
-        )
-        .distinct()
-        .first()
+    # Exists plutôt que des jointures : la base s'arrête au premier jeu qui convient.
+    reviews = ReviewSummary.objects.filter(game=OuterRef("pk"), positive__gt=0)
+    prices = PricePoint.objects.filter(
+        game=OuterRef("pk"), price_eur__gt=0, price_eur__lte=Decimal("15.00")
     )
+    gem = Game.objects.filter(Exists(reviews), Exists(prices)).first()
     if not gem:
         gem = Game.objects.filter(header_image__isnull=False).exclude(header_image="").first()
     if not gem:

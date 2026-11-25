@@ -7,6 +7,23 @@ from rest_framework.response import Response
 
 from catalog.models import Genre, ProtonReport
 
+MAX_GENRES = 15
+COUNTED_TIERS = ("platinum", "gold", "silver", "bronze", "borked")
+
+
+def _tiers_by_genre() -> list[dict]:
+    genres = list(Genre.objects.all()[:MAX_GENRES])
+    counts = {genre.id: dict.fromkeys(COUNTED_TIERS, 0) for genre in genres}
+    rows = (
+        ProtonReport.objects.filter(game__genres__in=list(counts), tier__in=COUNTED_TIERS)
+        .order_by()
+        .values_list("game__genres", "tier")
+        .annotate(total=Count("id"))
+    )
+    for genre_id, tier, total in rows:
+        counts[genre_id][tier] = total
+    return [{"genre": genre.name, "counts": counts[genre.id]} for genre in genres]
+
 
 @extend_schema(
     responses=inline_serializer(
@@ -22,21 +39,7 @@ def proton_stats(request: Request) -> Response:
     """Statistiques globales et répartition par genre des niveaux de compatibilité Proton."""
     tier_counts = ProtonReport.objects.values("tier").annotate(total=Count("id")).order_by("-total")
 
-    genres = Genre.objects.prefetch_related("games__proton_report")[:15]
-    genre_breakdown = []
-    for genre in genres:
-        t_counts = {"platinum": 0, "gold": 0, "silver": 0, "bronze": 0, "borked": 0}
-        for game in genre.games.all():
-            if hasattr(game, "proton_report") and game.proton_report:
-                t = game.proton_report.tier
-                if t in t_counts:
-                    t_counts[t] += 1
-        genre_breakdown.append(
-            {
-                "genre": genre.name,
-                "counts": t_counts,
-            }
-        )
+    genre_breakdown = _tiers_by_genre()
 
     return Response(
         {

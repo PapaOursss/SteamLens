@@ -1,5 +1,7 @@
 import statistics
+from collections import defaultdict
 
+from django.db.models import OuterRef, Subquery
 from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework import serializers
 from rest_framework.decorators import api_view
@@ -9,23 +11,36 @@ from rest_framework.response import Response
 from catalog.models import GamePlaytime, Genre
 from pricing.models import PricePoint
 
+MAX_GENRES = 15
+MAX_SAMPLES = 30
+MINUTES_PER_HOUR = 60
+
+
+def _hours_by_genre(genre_ids: list[int]) -> dict[int, list[float]]:
+    """Durées médianes par genre, lues en une requête : des milliers de jeux par genre."""
+    hours: dict[int, list[float]] = defaultdict(list)
+    rows = (
+        GamePlaytime.objects.filter(game__genres__in=genre_ids)
+        .order_by("game__name")
+        .values_list("game__genres", "median_playtime_minutes")
+    )
+    for genre_id, minutes in rows:
+        hours[genre_id].append(round(minutes / MINUTES_PER_HOUR, 1))
+    return hours
+
 
 def _calculate_genre_medians() -> list[dict]:
+    genres = list(Genre.objects.all()[:MAX_GENRES])
+    hours = _hours_by_genre([genre.id for genre in genres])
     results = []
-    genres = Genre.objects.prefetch_related("games__playtime")[:15]
     for genre in genres:
-        times = [
-            g.playtime.median_hours
-            for g in genre.games.all()
-            if hasattr(g, "playtime") and g.playtime
-        ]
-        median_val = statistics.median(times) if times else 0.0
+        times = hours.get(genre.id, [])
         results.append(
             {
                 "genre": genre.name,
-                "median_hours": round(median_val, 1),
+                "median_hours": round(statistics.median(times), 1) if times else 0.0,
                 "sample_size": len(times),
-                "samples": times[:30],
+                "samples": times[:MAX_SAMPLES],
             }
         )
     results.sort(key=lambda x: x["median_hours"], reverse=True)
@@ -33,14 +48,16 @@ def _calculate_genre_medians() -> list[dict]:
 
 
 def _calculate_best_value_games() -> list[dict]:
-    playtimes = GamePlaytime.objects.filter(median_playtime_minutes__gt=120).select_related("game")[
-        :50
-    ]
+    latest_price = PricePoint.objects.filter(game=OuterRef("game")).order_by("-date")
+    playtimes = (
+        GamePlaytime.objects.filter(median_playtime_minutes__gt=120)
+        .select_related("game")
+        .annotate(latest_price=Subquery(latest_price.values("price_eur")[:1]))[:50]
+    )
     items = []
     for item in playtimes:
         hours = item.median_hours
-        price_pt = PricePoint.objects.filter(game=item.game).order_by("-date").first()
-        price_eur = float(price_pt.price_eur) if price_pt and price_pt.price_eur else 19.99
+        price_eur = float(item.latest_price) if item.latest_price else 19.99
         cost_per_hour = round(price_eur / hours, 2) if hours > 0 else 0.0
         items.append(
             {

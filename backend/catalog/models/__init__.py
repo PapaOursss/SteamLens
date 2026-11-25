@@ -1,6 +1,7 @@
 from catalog.models.achievement_stat import AchievementStat
 from catalog.models.company import Company
 from catalog.models.game import Game
+from catalog.models.game_map_point import GameMapPoint
 from catalog.models.game_mode import GameMode
 from catalog.models.game_playtime import GamePlaytime
 from catalog.models.game_tag import GameTag
@@ -12,6 +13,7 @@ from catalog.models.proton_report import ProtonReport
 from catalog.models.review_excerpt import ReviewExcerpt
 from catalog.models.review_summary import ReviewSummary
 from catalog.models.review_week import ReviewWeek
+from catalog.models.similar_game import SimilarGame
 from catalog.models.tag import Tag
 from catalog.models.theme import Theme
 
@@ -19,6 +21,7 @@ __all__ = [
     "AchievementStat",
     "Company",
     "Game",
+    "GameMapPoint",
     "GameMode",
     "GamePlaytime",
     "GameTag",
@@ -30,6 +33,7 @@ __all__ = [
     "ReviewExcerpt",
     "ReviewSummary",
     "ReviewWeek",
+    "SimilarGame",
     "Tag",
     "Theme",
 ]

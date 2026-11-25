@@ -1,4 +1,4 @@
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from datetime import date, timedelta
 
@@ -26,3 +26,15 @@ def count_by_week(reviews: Iterable[RecentReview]) -> dict[date, WeekCounts]:
         else:
             counts.negative += 1
     return weeks
+
+
+def sum_by_week(days: Mapping[date, WeekCounts]) -> dict[date, WeekCounts]:
+    """Jours regroupés par semaine ; une première semaine entamée en cours de route est ôtée."""
+    weeks: dict[date, WeekCounts] = {}
+    for day, counts in days.items():
+        week = weeks.setdefault(week_start(day), WeekCounts())
+        week.positive += counts.positive
+        week.negative += counts.negative
+    if days and min(days).weekday() != 0:
+        del weeks[week_start(min(days))]
+    return {start: week for start, week in weeks.items() if week.positive + week.negative}

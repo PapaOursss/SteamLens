@@ -1,15 +1,19 @@
 from collections.abc import Iterator
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from typing import Any
 
 from ingestion.sources.json_fetcher import JsonFetcher, live_fetcher
 from ingestion.sources.steam_reviews.recent_review import RecentReview
 from ingestion.sources.steam_reviews.review_counts import ReviewCounts
+from ingestion.sources.steam_reviews.weekly_counts import WeekCounts
 
 # `appreviews` redirige vers l'accueil du Store ; `ajaxappreviews` rend le même JSON.
 API_URL = "https://store.steampowered.com/ajaxappreviews/{appid}"
+HISTOGRAM_URL = "https://store.steampowered.com/appreviewhistogram/{appid}"
 FIRST_CURSOR = "*"
 REVIEWS_PER_PAGE = 100
+# Steam retire parfois quelques avis d'une page : 99 avis ne veut pas dire « la dernière ».
+MIN_FULL_PAGE = 90
 DEFAULT_MAX_PAGES = 5
 SUCCESS = 1
 
@@ -50,9 +54,23 @@ class SteamReviewsClient:
             reviews = (payload or {}).get("reviews") or []
             yield from (_recent_review(review) for review in reviews)
             next_cursor = (payload or {}).get("cursor")
-            if len(reviews) < REVIEWS_PER_PAGE or not next_cursor or next_cursor == cursor:
+            if len(reviews) < MIN_FULL_PAGE or not next_cursor or next_cursor == cursor:
                 return
             cursor = next_cursor
+
+    def daily_counts(self, appid: int) -> dict[date, WeekCounts]:
+        """Avis 👍 et 👎 de chacun des 30 derniers jours environ (histogramme du Store)."""
+        payload = self._fetch_json(HISTOGRAM_URL.format(appid=appid), {"l": "english"})
+        if not isinstance(payload, dict) or payload.get("success") != SUCCESS:
+            return {}
+        days = (payload.get("results") or {}).get("recent") or []
+        return {
+            datetime.fromtimestamp(int(day["date"]), UTC).date(): WeekCounts(
+                positive=int(day["recommendations_up"]),
+                negative=int(day["recommendations_down"]),
+            )
+            for day in days
+        }
 
     def _request(self, appid: int, **params: str) -> dict[str, Any] | None:
         payload = self._fetch_json(

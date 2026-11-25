@@ -6,8 +6,8 @@ from django.core.management.base import BaseCommand
 from catalog.models import ReviewSummary, ReviewWeek
 from ingestion.http import ApiError
 from ingestion.import_tracking import tracked_import
-from ingestion.sources.steam_reviews import SteamReviewsClient, count_by_week
-from ingestion.sources.steam_reviews.steam_reviews_client import REVIEWS_PER_PAGE
+from ingestion.sources.steam_reviews import SteamReviewsClient, count_by_week, sum_by_week
+from ingestion.sources.steam_reviews.steam_reviews_client import MIN_FULL_PAGE
 from ingestion.sources.top_games import most_owned_appids
 
 SOURCE = "steam_reviews"
@@ -76,9 +76,11 @@ def import_language_counts(client: SteamReviewsClient, appid: int, day: date) ->
 def import_weeks(client: SteamReviewsClient, appid: int, pages: int) -> int:
     reviews = list(client.recent_reviews(appid, max_pages=pages))
     weeks = count_by_week(reviews)
-    if weeks and len(reviews) >= pages * REVIEWS_PER_PAGE:
+    if weeks and len(reviews) >= pages * MIN_FULL_PAGE:
         # Pagination coupée : la semaine la plus ancienne n'est vue qu'en partie.
         del weeks[min(weeks)]
+        # Trop d'avis pour les lire un par un : l'histogramme donne les semaines manquantes.
+        weeks = sum_by_week(client.daily_counts(appid)) | weeks
     rows = [
         ReviewWeek(game_id=appid, week_start=start, positive=counts.positive,
                    negative=counts.negative)

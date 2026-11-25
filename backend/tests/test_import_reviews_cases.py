@@ -74,7 +74,7 @@ def test_a_rerun_the_same_day_updates_the_counts(monkeypatch: pytest.MonkeyPatch
 def test_the_oldest_week_is_dropped_when_pages_ran_out(monkeypatch: pytest.MonkeyPatch) -> None:
     full_page = reviews_page(REVIEWS_PER_PAGE - 1, NEW_WEEK_TIMESTAMP)
     full_page["reviews"].append({"timestamp_created": OLD_WEEK_TIMESTAMP, "voted_up": True})
-    use_responses(monkeypatch, *[EMPTY_SUMMARY] * LANGUAGE_COUNT, full_page)
+    use_responses(monkeypatch, *[EMPTY_SUMMARY] * LANGUAGE_COUNT, full_page, {"success": 2})
     call_command("import_reviews", limit=1, pages=1)
     assert list(ReviewWeek.objects.values_list("week_start", flat=True)) == [
         datetime.date(2026, 11, 2)
@@ -114,3 +114,35 @@ def test_no_steamid_reaches_the_database(monkeypatch: pytest.MonkeyPatch) -> Non
     for model in (ReviewSummary, ReviewWeek):
         stored = [str(value) for row in model.objects.values() for value in row.values()]
         assert not any("765" in value for value in stored)
+
+
+def histogram_day(day: datetime.date, positive: int, negative: int) -> dict:
+    midnight = datetime.datetime.combine(day, datetime.time(), datetime.UTC)
+    return {
+        "date": int(midnight.timestamp()),
+        "recommendations_up": positive,
+        "recommendations_down": negative,
+    }
+
+
+@pytest.mark.usefixtures("stardew")
+def test_the_histogram_fills_the_weeks_of_a_big_game(monkeypatch: pytest.MonkeyPatch) -> None:
+    histogram = {
+        "success": 1,
+        "results": {
+            "recent": [
+                histogram_day(datetime.date(2026, 10, 25), 99, 99),  # dimanche : semaine entamée
+                histogram_day(datetime.date(2026, 10, 26), 30, 10),
+                histogram_day(datetime.date(2026, 10, 28), 5, 5),
+                histogram_day(datetime.date(2026, 11, 2), 8, 2),
+            ]
+        },
+    }
+    full_page = reviews_page(REVIEWS_PER_PAGE - 1, NEW_WEEK_TIMESTAMP)
+    use_responses(monkeypatch, *[EMPTY_SUMMARY] * LANGUAGE_COUNT, full_page, histogram)
+    call_command("import_reviews", limit=1, pages=1)
+    weeks = ReviewWeek.objects.order_by("week_start")
+    assert list(weeks.values_list("week_start", "positive", "negative")) == [
+        (datetime.date(2026, 10, 26), 35, 15),
+        (datetime.date(2026, 11, 2), 8, 2),
+    ]

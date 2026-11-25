@@ -17,6 +17,14 @@ def test_lists_the_games_paginated(client: Client, catalog_sample: dict[str, Gam
     assert names(body) == ["Counter-Strike 2", "Dota 2", "Stardew Valley"]
 
 
+def test_page_size_follows_the_request(client: Client, catalog_sample: dict[str, Game]) -> None:
+    body = client.get("/api/games/?page_size=2").json()
+
+    assert body["count"] == 3
+    assert len(body["results"]) == 2
+    assert body["next"] is not None
+
+
 def test_filters_by_search_genre_and_tag(client: Client, catalog_sample: dict[str, Game]) -> None:
     assert names(client.get("/api/games/?search=dota").json()) == ["Dota 2"]
     assert names(client.get("/api/games/?genre=action").json()) == ["Counter-Strike 2", "Dota 2"]

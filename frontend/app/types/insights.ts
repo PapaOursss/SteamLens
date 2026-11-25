@@ -101,3 +101,21 @@ export interface ProfileCountries {
   countries: { iso3: string; name: string; profiles: number; share: number }[]
   by_genre: { genre: string; profiles: number; top_country: string; top_country_share: number }[]
 }
+
+export interface ReviewWord {
+  word: string
+  count: number
+}
+
+export interface ReviewWordsSide {
+  reviews: number
+  words: ReviewWord[]
+}
+
+export interface ReviewWords {
+  language: string
+  appid: number | null
+  name: string | null
+  positive: ReviewWordsSide
+  negative: ReviewWordsSide
+}

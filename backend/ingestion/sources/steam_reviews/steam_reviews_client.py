@@ -87,4 +87,6 @@ def _recent_review(review: dict[str, Any]) -> RecentReview:
         created_at=datetime.fromtimestamp(int(review["timestamp_created"]), UTC),
         voted_up=bool(review.get("voted_up")),
         author_steamid=str(author.get("steamid", "")),
+        language=str(review.get("language", "")),
+        text=str(review.get("review", "")),
     )

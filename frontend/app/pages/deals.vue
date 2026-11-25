@@ -33,7 +33,7 @@
             <div class="mt-2 flex items-center gap-2 text-xs text-soft">
               <img v-if="deal.store_icon" :src="deal.store_icon" :alt="deal.store_name" class="h-4 w-4" />
               <span>{{ deal.store_name }}</span>
-              <span v-if="deal.steam_rating_percent" class="ml-auto text-accent font-semibold">
+              <span v-if="deal.steam_rating_percent" class="ml-auto text-hot font-semibold">
                 ★ {{ deal.steam_rating_percent }}% avis positifs
               </span>
             </div>
@@ -60,7 +60,7 @@
               :href="deal.redirect_url"
               target="_blank"
               rel="noopener noreferrer"
-              class="flex-1 rounded bg-accent/10 py-1.5 text-center font-bold text-accent transition hover:bg-accent hover:text-deep"
+              class="flex-1 rounded bg-hot/10 py-1.5 text-center font-bold text-hot transition hover:bg-hot hover:text-deep"
             >
               Voir l'offre ↗
             </a>

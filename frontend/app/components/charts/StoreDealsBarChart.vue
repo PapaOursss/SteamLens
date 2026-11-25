@@ -2,10 +2,10 @@
   <div class="space-y-4">
     <div class="flex flex-wrap items-center justify-between gap-4">
       <div class="text-sm text-soft">
-        <span v-if="comparison.steam_is_cheapest" class="font-semibold text-accent">
+        <span v-if="comparison.steam_is_cheapest" class="font-semibold text-hot">
           Steam propose le meilleur prix !
         </span>
-        <span v-else-if="comparison.cheapest_store" class="font-semibold text-warn">
+        <span v-else-if="comparison.cheapest_store" class="font-semibold text-hot">
           Moins cher sur {{ comparison.cheapest_store }} ({{ comparison.cheapest_price?.toFixed(2) }} $)
         </span>
       </div>
@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <ChartFrame :options="chartOptions" :height="Math.max(220, comparison.deals.length * 36)" :label="label" />
+    <ChartFrame :option="chartOptions" :height="Math.max(220, comparison.deals.length * 36)" :label="label" />
 
     <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
       <a
@@ -27,7 +27,7 @@
       >
         <div class="flex items-center gap-2 truncate">
           <img v-if="deal.store_icon" :src="deal.store_icon" :alt="deal.store_name" class="h-4 w-4 shrink-0" />
-          <span class="truncate" :class="{ 'font-semibold text-accent': deal.is_steam }">{{ deal.store_name }}</span>
+          <span class="truncate" :class="{ 'font-semibold text-hot': deal.is_steam }">{{ deal.store_name }}</span>
         </div>
         <div class="flex items-center gap-2">
           <span v-if="deal.cut_percent > 0" class="rounded bg-hot/20 px-1 text-xs text-hot font-bold">
@@ -42,8 +42,6 @@
 
 <script setup lang="ts">
 import type { EChartsOption } from 'echarts'
-import { BASE_CHART_OPTIONS } from '~/utils/chartBase'
-import { COLOR_PALETTE } from '~/utils/tokens'
 
 export interface DealItem {
   store_id: string
@@ -78,13 +76,14 @@ const chartOptions = computed<EChartsOption>(() => {
   const prices = deals.map((d) => ({
     value: d.price,
     itemStyle: {
-      color: d.is_steam ? COLOR_PALETTE[0] : (d.price === props.comparison.cheapest_price ? COLOR_PALETTE[3] : '#64748b')
+      color: d.is_steam ? SERIES_COLORS[0] : (d.price === props.comparison.cheapest_price ? SERIES_COLORS[1] : COLORS.line)
     }
   }))
 
   return {
-    ...BASE_CHART_OPTIONS,
+    ...chartBase(),
     tooltip: {
+      ...chartBase().tooltip,
       trigger: 'axis',
       axisPointer: { type: 'shadow' },
       formatter: (params: any) => {

@@ -1,0 +1,72 @@
+[
+  {
+    "page": 1,
+    "pages": 1,
+    "per_page": 400,
+    "total": 251,
+    "sourceid": null,
+    "lastupdated": "2026-11-11"
+  },
+  [
+    {
+      "indicator": {
+        "id": "NY.GDP.PCAP.PP.CD",
+        "value": "GDP per capita, PPP (current international $)"
+      },
+      "country": {
+        "id": "ZH",
+        "value": "Africa Eastern and Southern"
+      },
+      "countryiso3code": "AFE",
+      "date": "2025",
+      "value": 4840.26519950124,
+      "obs_status": "",
+      "decimal": 1
+    },
+    {
+      "indicator": {
+        "id": "NY.GDP.PCAP.PP.CD",
+        "value": "GDP per capita, PPP (current international $)"
+      },
+      "country": {
+        "id": "FR",
+        "value": "France"
+      },
+      "countryiso3code": "FRA",
+      "date": "2025",
+      "value": 63975.353585864,
+      "obs_status": "",
+      "decimal": 1
+    },
+    {
+      "indicator": {
+        "id": "NY.GDP.PCAP.PP.CD",
+        "value": "GDP per capita, PPP (current international $)"
+      },
+      "country": {
+        "id": "TR",
+        "value": "Turkiye"
+      },
+      "countryiso3code": "TUR",
+      "date": "2025",
+      "value": 45288.4750285273,
+      "obs_status": "",
+      "decimal": 1
+    },
+    {
+      "indicator": {
+        "id": "NY.GDP.PCAP.PP.CD",
+        "value": "GDP per capita, PPP (current international $)"
+      },
+      "country": {
+        "id": "US",
+        "value": "United States"
+      },
+      "countryiso3code": "USA",
+      "date": "2025",
+      "value": 90026.5163005744,
+      "obs_status": "",
+      "decimal": 1
+    }
+  ]
+]

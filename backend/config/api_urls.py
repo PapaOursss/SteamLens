@@ -28,6 +28,7 @@ from players.views import top_played
 from players.views_hardware import hardware_survey
 from players.views_history import monthly_player_race
 from players.views_hype import hype_stats
+from players.views_twitch import twitch_history, twitch_stats
 from pricing.views import price_history, sales_calendar
 
 router = DefaultRouter(trailing_slash=True)
@@ -40,6 +41,8 @@ urlpatterns = [
     path("stats/proton/", proton_stats, name="stats-proton"),
     path("stats/playtime/", playtime_stats, name="stats-playtime"),
     path("stats/hype/", hype_stats, name="stats-hype"),
+    path("stats/twitch/", twitch_stats, name="stats-twitch"),
+    path("stats/twitch-history/", twitch_history, name="stats-twitch-history"),
     path("stats/wrapped/", steam_wrapped, name="stats-wrapped"),
     path("stats/regional-sales/", regional_sales_stats, name="stats-regional-sales"),
     path("stats/dashboard/", dashboard_stats, name="stats-dashboard"),

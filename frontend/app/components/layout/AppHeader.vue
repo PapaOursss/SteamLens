@@ -43,7 +43,7 @@ const NAV_ITEMS: NavItem[] = [
     sections: [
       '/steam-deck', '/playtime', '/minigame', '/wrapped', '/regional-sales',
       '/price-history', '/reviews', '/review-words', '/hardware', '/achievements', '/profile-map', '/trends',
-      '/player-race', '/sankey-pricing', '/tag-network', '/releases'
+      '/player-race', '/twitch', '/sankey-pricing', '/tag-network', '/releases'
     ]
   }
 ]

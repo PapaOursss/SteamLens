@@ -17,7 +17,7 @@ const props = defineProps<{
 
 // Sélectionner les jeux qui sont apparus le plus souvent dans le top
 const trackedGames = computed(() => {
-  const counts: Record<string, { appid: number; count: number }> = {}
+  const counts: Record<string, { appid: number | null; count: number }> = {}
   for (const m of props.months) {
     const list = props.timeline[m] || []
     list.slice(0, 5).forEach((item) => {

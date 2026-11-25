@@ -24,6 +24,14 @@ KNOWN_SOURCES = [
         "limits": "Périodicité de mise à jour dépendante des dépôts Kaggle.",
     },
     {
+        "key": "kaggle_twitch",
+        "name": "Kaggle — Top games on Twitch 2016-2024 (rankirsh)",
+        "logo": "kaggle",
+        "role": "Top 200 des jeux regardés sur Twitch chaque mois depuis 2016.",
+        "license": "CC0: Public Domain",
+        "limits": "Relevés SullyGnome ; s'arrête en septembre 2024.",
+    },
+    {
         "key": "kaggle_vgsales",
         "name": "Kaggle — Video Game Sales (gregorut)",
         "logo": "kaggle",
@@ -85,7 +93,7 @@ KNOWN_SOURCES = [
         "logo": "twitch",
         "role": "Streams actifs, nombre de spectateurs par jeu et langues de diffusion.",
         "license": "Twitch Developer Services Agreement",
-        "limits": "Données très volatiles capturées en direct.",
+        "limits": "Relevé toutes les heures ; spectateurs comptés sur les 500 streams les plus suivis de chaque jeu.",
     },
     {
         "key": "isthereanydeal",

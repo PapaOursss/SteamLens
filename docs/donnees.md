@@ -94,7 +94,7 @@ erDiagram
 
 | App | Modèles |
 |---|---|
-| `catalog` | `ReviewWeek` (avis récents comptés par semaine, T-22), `AchievementStat` (part des joueurs par succès, T-35), `PlayerPerspective`, `IgdbPopularity` (PopScore IGDB), `ReviewExcerpt` (extraits d'avis anonymes, Kaggle et boutique Steam, nuages de mots T-40), `Game`, `Genre`, `Tag`, `GameTag`, `Theme`, `GameMode`, `Platform`, `Company`, `ReviewSummary` |
+| `catalog` | `ReviewWeek` (avis récents comptés par semaine, T-22), `AchievementStat` (part des joueurs par succès, T-35), `PlayerPerspective`, `IgdbPopularity` (PopScore IGDB), `ReviewExcerpt` (extraits d'avis anonymes, Kaggle et boutique Steam, nuages de mots T-40), `SimilarGame` (10 voisins par tags, T-41), `GameMapPoint` (place sur la carte 2D du catalogue, T-41), `Game`, `Genre`, `Tag`, `GameTag`, `Theme`, `GameMode`, `Platform`, `Company`, `ReviewSummary` |
 | `geography` | `Country` (rempli par `geography.country_table.ensure_countries`), `GoogleTrendsInterest`, `RegionalSales` (ventes Kaggle vgsales par jeu et plateforme, T-44), `ProfileCountryCount` et `ProfileSample` (pays déclarés des profils publics, comptes seulement, T-37) |
 | `pricing` | `PricePoint`, `PriceChange` (chaque changement de prix Steam d'après IsThereAnyDeal, T-18) |
 | `players` | `PlayerCountSnapshot`, `TwitchStreamSnapshot`, `RankingEntry` (top 100 SteamSpy), `HardwareShare` (enquête matériel Steam par mois, T-27), `TwitchCategory`, `TwitchTopSnapshot` (top Twitch par heure), `TwitchLanguageDay` (heures regardées par langue et par jour), `TwitchMonth` (top 200 mensuel Kaggle depuis 2016), T-21 |

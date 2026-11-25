@@ -11,6 +11,7 @@ from catalog.filters import GameFilter
 from catalog.game_dna import game_dna
 from catalog.models import Game
 from catalog.serializers import GameDetailSerializer, GameListSerializer
+from catalog.similar_games import similar_games
 from players.serializers import PlayerCountSerializer
 from pricing.serializers import PricePointSerializer
 
@@ -69,3 +70,21 @@ class GameViewSet(viewsets.ReadOnlyModelViewSet):
     def dna(self, request: Request, appid: str) -> Response:
         """« ADN du jeu » : chaque axe rangé de 0 à 100 parmi les jeux mesurés, None sans donnée."""
         return Response(game_dna(self.get_object()))
+
+    @extend_schema(
+        responses=inline_serializer(
+            "SimilarGame",
+            {
+                "appid": serializers.IntegerField(),
+                "name": serializers.CharField(),
+                "header_image": serializers.CharField(),
+                "score": serializers.FloatField(),
+                "shared_tags": serializers.ListField(child=serializers.CharField()),
+            },
+            many=True,
+        )
+    )
+    @action(detail=True, pagination_class=None, filterset_class=None)
+    def similar(self, request: Request, appid: str) -> Response:
+        """Les 10 jeux aux tags les plus proches (cosinus), précalculés par compute_similar_games."""
+        return Response(similar_games(self.get_object()))

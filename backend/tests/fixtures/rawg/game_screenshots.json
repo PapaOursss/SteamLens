@@ -1,0 +1,9 @@
+{
+  "count": 2,
+  "next": null,
+  "previous": null,
+  "results": [
+    {"id": 101, "image": "https://media.rawg.io/media/screenshots/shot101.jpg"},
+    {"id": 102, "image": "https://media.rawg.io/media/screenshots/shot102.jpg"}
+  ]
+}

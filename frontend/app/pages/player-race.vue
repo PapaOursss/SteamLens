@@ -42,6 +42,8 @@
         <BarChartRace
           :entries="currentEntries"
           :current-month="currentMonth"
+          :timeline="data?.timeline || {}"
+          :months="months"
           :height="460"
           label="Course des jeux les plus joués par mois"
         />

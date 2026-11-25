@@ -1,8 +1,12 @@
+import datetime
+
 import pytest
 from django.urls import reverse
 from rest_framework.test import APIClient
 
 from catalog.models import Game, GamePlaytime, Genre
+from geography.models import Country
+from pricing.models import PricePoint
 
 
 @pytest.mark.django_db
@@ -25,6 +29,14 @@ def test_playtime_stats_with_data():
     GamePlaytime.objects.create(
         game=game, median_playtime_minutes=3600, average_playtime_minutes=4200
     )
+
+    unpriced = Game.objects.create(appid=1, name="Sans prix")
+    GamePlaytime.objects.create(game=unpriced, median_playtime_minutes=6000)
+    france = Country.objects.create(iso2="FR", iso3="FRA", name_fr="France")
+    PricePoint.objects.create(
+        game=game, country=france, currency="EUR", price=12, price_eur=12,
+        date=datetime.date(2026, 10, 1), source="steam_store",
+    )  # fmt: skip
 
     client = APIClient()
     url = reverse("stats-playtime")

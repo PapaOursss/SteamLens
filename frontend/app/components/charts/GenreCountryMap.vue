@@ -59,7 +59,7 @@ const option = computed(() => ({
         value: country.reviews,
         itemStyle: { areaColor: genreColor(props.genres.indexOf(country.dominant)) }
       })),
-      itemStyle: { areaColor: NO_DATA_COLOR, borderColor: COLORS.ground, borderWidth: 0.5 },
+      itemStyle: { areaColor: COLORS.deep, borderColor: COLORS.ground, borderWidth: 0.5 },
       emphasis: { label: { show: false }, itemStyle: { areaColor: COLORS.hot } },
       select: { disabled: true }
     }

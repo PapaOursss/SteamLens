@@ -18,6 +18,7 @@
     </nav>
 
     <GameSearch ref="searchBar" class="ml-auto w-full sm:w-72 lg:w-80" field-id="recherche-globale" @select="openGame" />
+    <ThemeToggle />
   </header>
 </template>
 

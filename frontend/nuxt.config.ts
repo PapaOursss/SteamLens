@@ -1,5 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { COLORS } from './app/utils/tokens'
+import { PALETTES, THEME_BOOT_SCRIPT, THEME_STYLESHEET } from './app/utils/palettes'
+
+const COLORS = Object.fromEntries(
+  Object.keys(PALETTES.dark).map((name) => [name, `rgb(var(--${name}) / <alpha-value>)`])
+)
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -9,7 +13,7 @@ export default defineNuxtConfig({
     config: {
       theme: {
         extend: {
-          colors: { ...COLORS },
+          colors: COLORS,
           fontFamily: {
             sans: ['"Instrument Sans"', 'system-ui', 'sans-serif'],
             display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif']
@@ -25,6 +29,8 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: { lang: 'fr' },
       meta: [{ name: 'theme-color', content: '#1B1F6B' }],
+      style: [{ innerHTML: THEME_STYLESHEET }],
+      script: [{ innerHTML: THEME_BOOT_SCRIPT }],
       link: [
         { rel: 'preload', as: 'font', type: 'font/woff2', href: '/fonts/bricolage-grotesque.woff2', crossorigin: '' },
         { rel: 'preload', as: 'font', type: 'font/woff2', href: '/fonts/instrument-sans.woff2', crossorigin: '' }

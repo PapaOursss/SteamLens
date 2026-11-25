@@ -39,7 +39,7 @@ export const SALES_REGIONS: SalesRegion[] = [
     key: 'other',
     label: 'Reste du monde',
     area: 'Amérique du Sud, Afrique, Asie, Océanie',
-    color: COLORS.line,
+    get color() { return COLORS.line },
     description: 'Les marchés émergents : Asie-Pacifique, Brésil, Moyen-Orient, où les franchises mondiales dominent.',
     hits: ['Grand Theft Auto: San Andreas', 'FIFA', 'Gran Turismo 4']
   }

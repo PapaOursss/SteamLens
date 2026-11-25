@@ -4,6 +4,7 @@
       class="h-full w-full"
       :style="height ? { height: `${height}px` } : undefined"
       :option="option"
+      :theme="theme"
       :init-options="{ locale: 'FR' }"
       role="img"
       :aria-label="label"
@@ -18,4 +19,6 @@
 <script setup lang="ts">
 /** Sans `height`, le graphique remplit son parent. */
 defineProps<{ option: object; height?: number; label: string }>()
+
+const theme = computed(() => chartTheme())
 </script>

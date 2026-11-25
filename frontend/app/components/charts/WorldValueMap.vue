@@ -59,7 +59,7 @@ const option = computed(() => ({
       top: 0,
       bottom: 0,
       data: props.values.map((entry) => ({ name: entry.iso3, value: entry.value })),
-      itemStyle: { areaColor: NO_DATA_COLOR, borderColor: COLORS.ground, borderWidth: 0.5 },
+      itemStyle: { areaColor: COLORS.deep, borderColor: COLORS.ground, borderWidth: 0.5 },
       emphasis: { label: { show: false }, itemStyle: { areaColor: COLORS.hot } },
       select: { disabled: true }
     }

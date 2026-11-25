@@ -24,6 +24,7 @@ const EXPERIMENTS = [
   { title: 'Ventes régionales', to: '/regional-sales', description: "Ce qui se vend en Amérique du Nord, en Europe, au Japon et ailleurs." },
   { title: 'Historique des prix', to: '/price-history', description: 'Chaque changement de prix, et les soldes qui reviennent chaque année.' },
   { title: 'Avis et review bombings', to: '/reviews', description: "Le ratio d'avis positifs par langue et par semaine, et ses chutes brutales." },
+  { title: 'Les mots des avis', to: '/review-words', description: 'Les mots qui reviennent dans les avis positifs et négatifs, en anglais et en français.' },
   { title: 'Matériel des joueurs', to: '/hardware', description: "L'enquête de Steam mois après mois : langues, systèmes, cartes graphiques." },
   { title: 'Les jeux jamais finis', to: '/achievements', description: "Où les joueurs décrochent, d'après leurs succès." },
   { title: 'Pays des profils', to: '/profile-map', description: "Le pays affiché sur les profils publics d'auteurs d'avis." },

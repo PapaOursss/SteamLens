@@ -35,10 +35,12 @@ Le serveur Django :
 
 ```bash
 cp .env.example .env                 # puis y coller les clés d'API qu'on a (facultatif)
-uv run python manage.py migrate      # prépare la base de données
-uv run python manage.py runserver    # http://127.0.0.1:8000/api/docs/
+uv run python manage.py runserver    # http://127.0.0.1:8000/api/docs/ (prépare aussi la base)
 uv run pytest                        # les tests, sans réseau
 ```
+
+Au premier lancement, si la base est vide, `runserver` télécharge la base partagée (126 Mo) ;
+sans réseau, il démarre sans données. Une base déjà remplie n'est jamais remplacée.
 
 Les imports planifiés tournent avec `uv run python manage.py run_scheduler`
 (`--list` affiche le planning) ; leurs traces sont dans l'admin (`/admin/`, « Import runs »).

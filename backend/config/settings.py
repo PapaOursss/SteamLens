@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    # Avant staticfiles : son runserver prépare la base.
+    "ingestion",
     "django.contrib.staticfiles",
     "corsheaders",
     "django_filters",
@@ -49,7 +51,6 @@ INSTALLED_APPS = [
     "rest_framework",
     "catalog",
     "geography",
-    "ingestion",
     "players",
     "pricing",
 ]

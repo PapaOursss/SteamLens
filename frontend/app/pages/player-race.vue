@@ -1,7 +1,7 @@
 <template>
   <div>
     <PageIntro title="Course des jeux les plus joués" is-lab>
-      L'évolution des jeux les plus fréquentés sur Steam mois par mois depuis 2012 (bar chart race et bump chart).
+      L'évolution des jeux les plus fréquentés sur Steam mois par mois depuis 2012 : le mois en barres, ou le rang de chaque jeu dans le temps.
     </PageIntro>
 
     <SampleNotice v-if="data?.is_sample" class="mb-6">
@@ -27,7 +27,7 @@
             {{ isPlaying ? 'Pause' : 'Lecture animée' }}
           </button>
           <label class="flex min-w-48 flex-1 flex-col">
-            <span class="text-soft">Mois : <strong class="figure text-text">{{ currentMonth }}</strong></span>
+            <span class="text-soft">Mois : <strong class="figure text-text">{{ formatMonth(currentMonth) }}</strong></span>
             <input
               type="range"
               min="0"
@@ -57,7 +57,7 @@
           :months="months"
           :timeline="data?.timeline || {}"
           :height="480"
-          label="Classement des jeux dans le temps (bump chart)"
+          label="Rang des jeux les plus joués, mois après mois"
         />
       </div>
     </DataBlock>
@@ -74,8 +74,8 @@ import type { ChoiceOption } from '~/types'
 type ViewMode = 'race' | 'bump'
 
 const VIEW_OPTIONS: ChoiceOption<ViewMode>[] = [
-  { value: 'race', label: 'Bar Chart Race' },
-  { value: 'bump', label: 'Bump Chart' }
+  { value: 'race', label: 'Mois par mois' },
+  { value: 'bump', label: 'Rangs' }
 ]
 
 useHead({ title: 'Course des jeux' })

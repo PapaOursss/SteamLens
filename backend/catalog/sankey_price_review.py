@@ -1,10 +1,8 @@
-from collections import defaultdict
+from collections import Counter
 from typing import Any
 
-from django.db.models import OuterRef, Q, Subquery
-
-from catalog.models import Game, ReviewSummary
-from pricing.models import PricePoint
+from catalog.models import Game
+from catalog.priced_games import priced_games
 
 PRICE_BRACKETS = [
     "Gratuit",
@@ -13,6 +11,10 @@ PRICE_BRACKETS = [
     "15-30 €",
     "> 30 €",
 ]
+
+# Au-delà, les genres rares (logiciels, vidéo…) rejoignent « Autres genres ».
+TOP_GENRES = 8
+OTHER_GENRES = "Autres genres"
 
 REVIEW_BUCKETS = [
     "Négatif",
@@ -108,73 +110,49 @@ def _fallback_sankey() -> dict[str, Any]:
     }
 
 
-def build_sankey_data() -> dict[str, Any]:
-    """Construit les flux Sankey: Genre -> Tranche de prix -> Accueil (avis)."""
-    latest_price_subquery = (
-        PricePoint.objects.filter(game=OuterRef("pk"), country="FR", price_eur__isnull=False)
-        .order_by("-date")
-        .values("price_eur")[:1]
-    )
-
-    latest_review = ReviewSummary.objects.filter(game=OuterRef("pk"), language="all").order_by(
-        "-date"
-    )
-
-    # Prix ou avis inconnus : le jeu est laissé de côté, jamais inventé.
-    games = list(
-        Game.objects.annotate(
-            latest_price=Subquery(latest_price_subquery),
-            positive=Subquery(latest_review.values("positive")[:1]),
-            negative=Subquery(latest_review.values("negative")[:1]),
-        )
-        .filter(
-            Q(latest_price__isnull=False) | Q(is_free=True),
-            genres__isnull=False,
-            positive__isnull=False,
-        )
-        .prefetch_related("genres")
-        .distinct()[:500]
-    )
-
-    if not games:
-        return _fallback_sankey()
-
-    genre_to_price: dict[tuple[str, str], int] = defaultdict(int)
-    price_to_review: dict[tuple[str, str], int] = defaultdict(int)
-    active_genres: set[str] = set()
-
+def _main_genres(games: list[Game]) -> dict[int, str]:
+    """Un genre par jeu, le plus courant des siens : chaque jeu passe une fois par colonne."""
+    frequency = Counter(genre.name for game in games for genre in game.genres.all())
+    kept = {name for name, _ in frequency.most_common(TOP_GENRES)}
+    main: dict[int, str] = {}
     for game in games:
-        total_rev = game.positive + game.negative
-        if not total_rev:
-            continue
-        price_val = float(game.latest_price) if game.latest_price is not None else 0.0
-        price_bracket = _get_price_bracket(price_val, game.is_free)
+        names = sorted((genre.name for genre in game.genres.all()), key=lambda n: -frequency[n])
+        if names:
+            main[game.appid] = names[0] if names[0] in kept else OTHER_GENRES
+    return main
 
-        positive_pct = int((game.positive / total_rev) * 100)
-        review_bucket = _get_review_bucket(positive_pct)
 
-        for genre in game.genres.all()[:2]:
-            genre_to_price[(genre.name, price_bracket)] += 1
-            price_to_review[(price_bracket, review_bucket)] += 1
-            active_genres.add(genre.name)
-
-    if not active_genres:
+def build_sankey_data() -> dict[str, Any]:
+    """Construit les flux Sankey : genre principal -> tranche de prix -> accueil (avis)."""
+    measured = priced_games().prefetch_related("genres")
+    games = [game for game in measured if game.positive + game.negative]
+    main_genres = _main_genres(games)
+    if not main_genres:
         return _fallback_sankey()
 
-    nodes_set = active_genres | set(PRICE_BRACKETS) | set(REVIEW_BUCKETS)
-    nodes = [{"name": name} for name in sorted(nodes_set)]
+    genre_to_price: Counter[tuple[str, str]] = Counter()
+    price_to_review: Counter[tuple[str, str]] = Counter()
+    for game in games:
+        genre = main_genres.get(game.appid)
+        if genre is None:
+            continue
+        price = float(game.latest_price) if game.latest_price is not None else 0.0
+        bracket = _get_price_bracket(price, game.is_free)
+        positive_percent = int(game.positive * 100 / (game.positive + game.negative))
+        genre_to_price[genre, bracket] += 1
+        price_to_review[bracket, _get_review_bucket(positive_percent)] += 1
 
-    links: list[dict[str, Any]] = []
-    for (genre, bracket), count in genre_to_price.items():
-        links.append({"source": genre, "target": bracket, "value": count})
-    for (bracket, review_b), count in price_to_review.items():
-        links.append({"source": bracket, "target": review_b, "value": count})
-
+    genres = sorted(set(main_genres.values()))
+    links = [
+        {"source": source, "target": target, "value": count}
+        for flows in (genre_to_price, price_to_review)
+        for (source, target), count in flows.items()
+    ]
     return {
         "is_sample": False,
-        "nodes": nodes,
+        "nodes": [{"name": name} for name in sorted({*genres, *PRICE_BRACKETS, *REVIEW_BUCKETS})],
         "links": links,
-        "genres": sorted(active_genres),
+        "genres": genres,
         "price_brackets": PRICE_BRACKETS,
         "review_buckets": REVIEW_BUCKETS,
     }

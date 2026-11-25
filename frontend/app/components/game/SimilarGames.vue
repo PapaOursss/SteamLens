@@ -1,6 +1,6 @@
 <template>
   <DataBlock
-    title="Si tu aimes ce jeu…"
+    title="Si vous aimez ce jeu…"
     note="Les jeux dont les tags votés par les joueurs ressemblent le plus à ceux-ci (similarité cosinus des tags SteamSpy)."
     :is-loading="isLoading"
     :has-error="hasError"

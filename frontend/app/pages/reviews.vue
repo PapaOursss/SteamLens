@@ -62,7 +62,7 @@
     </DataBlock>
 
     <DataBlock
-      title="Note Presse vs Note Steam"
+      title="Presse et joueurs"
       note="Comparaison entre la note Metacritic (presse) et la part d'avis positifs sur Steam. La ligne pointillée marque l'accord parfait."
       :is-loading="comparisonLoading"
       :has-error="comparisonError"
@@ -80,8 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import type { BombedGame, GameReviews, RankRow } from '~/types'
-import type { RatingPoint } from '~/components/charts/RatingScatterChart.vue'
+import type { BombedGame, GameReviews, RankRow, RatingPoint } from '~/types'
 
 const PERCENT = 100
 

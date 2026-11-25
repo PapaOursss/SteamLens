@@ -135,9 +135,8 @@ MAILERS = {
 # API REST : pagination, filtres et schéma OpenAPI pour toutes les vues.
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "DEFAULT_PAGINATION_CLASS": "config.pagination.PageSizePagination",
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "PAGE_SIZE": 50,
 }
 
 SPECTACULAR_SETTINGS = {
@@ -156,5 +155,7 @@ PRECOMPUTED_DIR = BASE_DIR / "data" / "precomputed"
 RAW_DATA_DIR = BASE_DIR / "data" / "raw"
 HTTP_CACHE_TTL_SECONDS = env.int("HTTP_CACHE_TTL_SECONDS", default=HOURS_PER_DAY * SECONDS_PER_HOUR)
 
-# Le front Nuxt tourne sur le port 3000 en développement.
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
+# Origines du front autorisées à appeler l'API (Nuxt tourne sur le port 3000 en développement).
+CORS_ALLOWED_ORIGINS = env.list(
+    "DJANGO_CORS_ALLOWED_ORIGINS", default=["http://localhost:3000", "http://127.0.0.1:3000"]
+)

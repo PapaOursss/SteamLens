@@ -16,7 +16,8 @@ On est 7 sur le projet : les règles sont courtes exprès. Dans le doute, demand
 - `frontend/` : Nuxt 4 / Vue 3 + TypeScript + Tailwind. Le code est dans `frontend/app/` :
   `pages/` (une page = une route), `components/` (morceaux d'écran), `composables/`
   (logique réutilisable `useXxx`), `layouts/`, `middleware/`, `plugins/`, `types/`, `utils/`,
-  `assets/`.
+  `assets/`. Couleurs : seulement dans `utils/palettes.ts` (graphiques via `utils/tokens.ts`,
+  `seriesColor(i)`) ; vues du labo et menu « Labo » : `utils/labSections.ts`.
 - `compose.yml` : lance toute la pile dans podman (voir `docs/podman.md`) : `backend`,
   `worker` (imports planifiés), `frontend`.
 - `docs/` : documentation et backlog.

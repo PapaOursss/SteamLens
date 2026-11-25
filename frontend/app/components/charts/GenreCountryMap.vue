@@ -19,16 +19,15 @@ interface MapParam {
   name: string
 }
 
-const GENRE_COLORS = ['#C98500', '#2E97D4', '#E0628F', '#3FB58A', '#9B7BE0', '#D96B3C', '#7FA83A', '#5C7CFA']
-
 const props = defineProps<{ genres: string[]; countries: CountryTaste[] }>()
 const emit = defineEmits<{ select: [iso3: string] }>()
 
 const { isReady, hasError } = useWorldMap()
 const byIso3 = computed(() => new Map(props.countries.map((country) => [country.iso3, country])))
 
+/** Au-delà de huit genres, la couleur neutre : jamais deux genres de la même teinte. */
 function genreColor(index: number): string {
-  return GENRE_COLORS[index % GENRE_COLORS.length]!
+  return seriesColor(index)
 }
 
 function tooltipText(params: MapParam): string {

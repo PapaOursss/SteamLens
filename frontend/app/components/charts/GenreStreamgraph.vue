@@ -5,16 +5,6 @@
 <script setup lang="ts">
 import type { StreamgraphEvent } from '~/types'
 
-const PALETTE = [
-  '#FFC53D',
-  '#2E97D4',
-  '#E0628F',
-  '#6EE7B7',
-  '#F472B6',
-  '#60A5FA',
-  '#FBBF24',
-  '#A78BFA'
-]
 
 const props = withDefaults(
   defineProps<{
@@ -43,19 +33,35 @@ function tooltipFormatter(params: TooltipParam): string {
   return `<strong>${escapedGenre}</strong> (${year})<br>${formatNumber(count)} sorties`
 }
 
+/** En dessous, une année est un bruit de fond (quelques sorties avant l'ouverture de Steam). */
+const MIN_SHARE_OF_PEAK = 0.01
+
+/**
+ * Années montrées : depuis la première qui compte vraiment, jusqu'à la dernière complète.
+ * L'année en cours n'est pas finie : la courbe s'y effondrerait sans raison.
+ */
+const shownYears = computed(() => {
+  const totals = props.years.map((_, index) => props.series.reduce((sum, counts) => sum + (counts[index] ?? 0), 0))
+  const threshold = Math.max(...totals, 0) * MIN_SHARE_OF_PEAK
+  const first = totals.findIndex((total) => total >= threshold)
+  const currentYear = new Date().getFullYear()
+  return props.years
+    .map((year, index) => ({ year, index }))
+    .filter(({ year, index }) => index >= first && year < currentYear)
+})
+
 const option = computed(() => {
   const data: [string, number, string][] = []
   props.genres.forEach((genre, genreIdx) => {
-    const genreCounts = props.series[genreIdx] || []
-    props.years.forEach((year, yearIdx) => {
-      const count = genreCounts[yearIdx] ?? 0
-      data.push([`${year}/01/01`, count, genre])
-    })
+    const genreCounts = props.series[genreIdx] ?? []
+    for (const { year, index } of shownYears.value) {
+      data.push([`${year}/01/01`, genreCounts[index] ?? 0, genre])
+    }
   })
 
   return {
     ...chartBase(),
-    color: PALETTE,
+    color: [...SERIES_COLORS],
     tooltip: {
       ...chartBase().tooltip,
       trigger: 'item',
@@ -94,8 +100,8 @@ const option = computed(() => {
         label: { show: false },
         emphasis: {
           itemStyle: {
-            shadowBlur: 15,
-            shadowColor: 'rgba(0, 0, 0, 0.6)'
+            borderColor: COLORS.text,
+            borderWidth: 1
           }
         },
         data

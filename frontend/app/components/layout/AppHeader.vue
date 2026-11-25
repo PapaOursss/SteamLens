@@ -17,8 +17,9 @@
       </NuxtLink>
     </nav>
 
-    <GameSearch ref="searchBar" class="ml-auto w-full sm:w-72 lg:w-80" field-id="recherche-globale" @select="openGame" />
-    <ThemeToggle />
+    <GameSearch ref="searchBar" class="order-2 w-full sm:order-none sm:ml-auto sm:w-72 lg:w-80" field-id="recherche-globale" @select="openGame" />
+    <!-- Sur téléphone, le bouton de thème reste sur la ligne du logo. -->
+    <ThemeToggle class="ml-auto sm:ml-0" />
   </header>
 </template>
 
@@ -38,16 +39,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Monde', to: '/world' },
   { label: 'Prix', to: '/pricing', sections: ['/deals'] },
   { label: 'Tendances', to: '/hype' },
-  {
-    label: 'Labo',
-    to: '/lab',
-    sections: [
-      '/steam-deck', '/playtime', '/minigame', '/wrapped', '/regional-sales',
-      '/price-history', '/reviews', '/review-words', '/hardware', '/achievements', '/profile-map', '/trends',
-      '/player-race', '/purchasing-power', '/genre-map', '/game-map', '/comparer',
-      '/twitch', '/studios', '/sankey-pricing', '/tag-network', '/releases'
-    ]
-  }
+  { label: 'Labo', to: '/lab', sections: LAB_PATHS }
 ]
 
 const route = useRoute()
@@ -84,7 +76,8 @@ watch(() => route.path, () => nextTick(revealActiveItem))
 
 function isActive(item: NavItem): boolean {
   if (item.to === '/') return route.path === '/'
-  return [item.to, ...(item.sections ?? [])].some((path) => route.path.startsWith(path))
+  // `/games/730` relève de `/games`, mais `/game-map` non : le préfixe s'arrête à un `/`.
+  return [item.to, ...(item.sections ?? [])].some((path) => route.path === path || route.path.startsWith(`${path}/`))
 }
 
 function openGame(game: GameOption) {

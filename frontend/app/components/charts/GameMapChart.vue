@@ -5,9 +5,6 @@
 <script setup lang="ts">
 import type { GameMapPoint } from '~/types'
 
-/** Huit teintes validées contre `deep` (daltonisme, contraste) ; « Autres » reste neutre. */
-const FAMILY_COLORS = ['#3987e5', '#d95926', '#199e70', '#c98500', '#d55181', '#0ca30c', '#9085e9', '#e66767']
-const OTHER_COLOR = COLORS.line
 const OTHER_FAMILY = 'Autres'
 const MIN_SYMBOL_SIZE = 6
 const MAX_SYMBOL_SIZE = 16
@@ -31,7 +28,7 @@ function symbolSize(owners: number | null): number {
 }
 
 function familyColor(family: string, index: number): string {
-  return family === OTHER_FAMILY ? OTHER_COLOR : FAMILY_COLORS[index] ?? OTHER_COLOR
+  return family === OTHER_FAMILY ? COLORS.line : seriesColor(index)
 }
 
 function handleClick(params: { data?: { point?: GameMapPoint } }) {

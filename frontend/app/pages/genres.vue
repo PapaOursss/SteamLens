@@ -22,7 +22,7 @@
 
     <DataBlock
       title="Évolution des genres par année de sortie"
-      note="Nombre annuel de sorties par genre (ThemeRiver) et moments clés de l'écosystème Steam."
+      note="Sorties par genre et par année, jusqu'à la dernière année complète, et les moments clés de Steam."
       :is-loading="streamgraphLoading"
       :has-error="streamgraphError"
       :is-empty="!streamgraph?.years.length"
@@ -37,20 +37,12 @@
         :events="streamgraph!.events"
         label="Évolution des genres par année de sortie sur Steam"
       />
-      <div v-if="streamgraph?.events?.length" class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <div
-          v-for="event in streamgraph.events"
-          :key="event.year"
-          class="rounded-lg border border-line/40 bg-deep/50 p-3 text-xs"
-        >
-          <div class="flex items-center gap-1.5 font-semibold text-hot">
-            <span>{{ event.year }}</span>
-            <span>·</span>
-            <span>{{ event.title }}</span>
-          </div>
-          <p class="mt-1 text-soft">{{ event.description }}</p>
-        </div>
-      </div>
+      <ol v-if="streamgraph?.events?.length" class="mt-4 grid gap-px sm:grid-cols-3">
+        <li v-for="event in streamgraph.events" :key="event.year" class="bg-deep p-4">
+          <p class="font-semibold"><span class="figure text-hot">{{ event.year }}</span> · {{ event.title }}</p>
+          <p class="mt-1 text-sm text-soft">{{ event.description }}</p>
+        </li>
+      </ol>
     </DataBlock>
 
     <DataBlock

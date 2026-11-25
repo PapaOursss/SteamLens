@@ -51,7 +51,7 @@
             {{ isPlaying ? 'Pause' : 'Lecture animée' }}
           </button>
           <label class="flex min-w-48 flex-1 flex-col">
-            <span class="text-soft">Mois : <strong class="figure text-text">{{ currentMonth }}</strong></span>
+            <span class="text-soft">Mois : <strong class="figure text-text">{{ formatMonth(currentMonth) }}</strong></span>
             <input
               type="range"
               min="0"

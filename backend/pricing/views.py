@@ -8,6 +8,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from catalog.models import Game
+from pricing.cheapshark_compare import get_game_store_comparison
+from pricing.cheapshark_deals import get_top_deals
 from pricing.price_history import history_summary, promo_starts
 
 
@@ -93,23 +95,29 @@ def sales_calendar(request: Request) -> Response:
 @api_view(["GET"])
 def game_deals(request: Request, appid: int) -> Response:
     """Comparatif de prix multi-magasins pour un jeu Steam (CheapShark)."""
-    from pricing.cheapshark_compare import get_game_store_comparison
-
     return Response(get_game_store_comparison(appid))
 
 
 @extend_schema(
     responses=inline_serializer(
-        "TopDealsList",
+        "TopDeal",
         {
-            "deals": serializers.ListField(child=serializers.DictField()),
+            "title": serializers.CharField(),
+            "deal_id": serializers.CharField(),
+            "store_name": serializers.CharField(),
+            "store_icon": serializers.CharField(),
+            "sale_price": serializers.FloatField(),
+            "normal_price": serializers.FloatField(),
+            "cut_percent": serializers.IntegerField(),
+            "steam_rating_percent": serializers.IntegerField(),
+            "steam_appid": serializers.IntegerField(allow_null=True),
+            "thumb": serializers.CharField(),
+            "redirect_url": serializers.CharField(),
         },
+        many=True,
     ),
 )
 @api_view(["GET"])
 def top_deals(request: Request) -> Response:
-    """Les meilleures affaires actuelles sur des jeux bien notés (CheapShark)."""
-    from pricing.cheapshark_deals import get_top_deals
-
+    """Les meilleures affaires actuelles sur des jeux bien notés, une par jeu (CheapShark)."""
     return Response(get_top_deals())
-

@@ -25,6 +25,7 @@ erDiagram
     Game ||--o{ ReviewWeek : "avis par semaine"
     Game ||--o{ AchievementStat : succès
     Game ||--o{ PriceChange : "historique ITAD"
+    Country ||--o{ CountryIndicator : "indicateurs Banque mondiale"
     Game ||--o{ ProfileCountryCount : "pays des profils"
     Country ||--o{ ProfileCountryCount : ""
 
@@ -95,7 +96,7 @@ erDiagram
 | App | Modèles |
 |---|---|
 | `catalog` | `ReviewWeek` (avis récents comptés par semaine, T-22), `AchievementStat` (part des joueurs par succès, T-35), `PlayerPerspective`, `IgdbPopularity` (PopScore IGDB), `ReviewExcerpt` (extraits d'avis anonymes, Kaggle et boutique Steam, nuages de mots T-40), `SimilarGame` (10 voisins par tags, T-41), `GameMapPoint` (place sur la carte 2D du catalogue, T-41), `Game`, `Genre`, `Tag`, `GameTag`, `Theme`, `GameMode`, `Platform`, `Company`, `ReviewSummary` |
-| `geography` | `Country` (rempli par `geography.country_table.ensure_countries`), `GoogleTrendsInterest`, `RegionalSales` (ventes Kaggle vgsales par jeu et plateforme, T-44), `ProfileCountryCount` et `ProfileSample` (pays déclarés des profils publics, comptes seulement, T-37) |
+| `geography` | `Country` (rempli par `geography.country_table.ensure_countries`), `GoogleTrendsInterest`, `RegionalSales` (ventes Kaggle vgsales par jeu et plateforme, T-44), `ProfileCountryCount` et `ProfileSample` (pays déclarés des profils publics, comptes seulement, T-37), `CountryIndicator` (PIB par habitant en parité de pouvoir d'achat, Banque mondiale, T-25) |
 | `pricing` | `PricePoint`, `PriceChange` (chaque changement de prix Steam d'après IsThereAnyDeal, T-18) |
 | `players` | `PlayerCountSnapshot`, `TwitchStreamSnapshot`, `RankingEntry` (top 100 SteamSpy), `HardwareShare` (enquête matériel Steam par mois, T-27) |
 | `ingestion` | `ImportRun` (une ligne par import lancé : début, fin, lignes, erreurs) |

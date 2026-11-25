@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { chartBase, escapeHtml } from '~/utils/chartBase'
 import { formatNumber } from '~/utils/format'
-import { COLORS, NO_DATA_COLOR, SEQUENTIAL_COLORS } from '~/utils/tokens'
+import { COLORS, SEQUENTIAL_COLORS } from '~/utils/tokens'
 
 const props = withDefaults(
   defineProps<{
@@ -46,7 +46,7 @@ const option = computed(() => {
       cellSize: ['auto', 18],
       range: props.year,
       itemStyle: {
-        color: NO_DATA_COLOR,
+        color: COLORS.deep,
         borderColor: COLORS.ground,
         borderWidth: 2
       },

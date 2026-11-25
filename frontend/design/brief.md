@@ -65,5 +65,5 @@ Steam est un territoire vivant : on voit tout de suite ce qui s'y joue, où, et 
 
 « Le mur », choisie par l'équipe le 2026-11-05 parmi trois maquettes (mur, atlas, affiche). Fond
 indigo, mur de jaquettes bord à bord, l'audace à un seul endroit : la mosaïque de l'accueil, où la
-surface suit le nombre de joueurs. Tokens : `app/utils/tokens.ts`, seule source des couleurs.
+surface suit le nombre de joueurs. Tokens : `app/utils/palettes.ts`, seule source des couleurs (sombre, et clair en option).
 Niveau de mouvement : 1.

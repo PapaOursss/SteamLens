@@ -26,5 +26,6 @@ SCHEDULE: tuple[ScheduledCommand, ...] = (
     ScheduledCommand("import_profile_countries", WEEKLY, "T-37"),
     ScheduledCommand("compute_similar_games", WEEKLY, "T-41"),
     ScheduledCommand("import_hardware_survey", MONTHLY, "T-27"),
+    ScheduledCommand("import_world_bank", MONTHLY, "T-25"),
     ScheduledCommand("import_steamcharts_history", MONTHLY, "T-09"),
 )

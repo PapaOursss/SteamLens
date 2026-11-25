@@ -19,6 +19,8 @@ respx.get(STEAMSPY_URL).respond(json=load_fixture("steamspy_appdetails_413150"))
 | `steam_web_api/current_players_*.json` | `ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=730` (et un appid inconnu) |
 | `steamcharts/chart_data_413150_extract.json` | `steamcharts.com/app/413150/chart-data.json` (3 premiers et 3 derniers points) |
 | `steam_store/appdetails_413150_en.json` | `store.steampowered.com/api/appdetails?appids=413150&cc=fr&l=english` (allégée) |
+| `gamerpower/giveaways_extract.json` | `gamerpower.com/api/giveaways?platform=steam&type=game` |
+| `world_bank/gdp_extract.json` | `api.worldbank.org/v2/country/all/indicator/NY.GDP.PCAP.PP.CD?format=json&per_page=400&mrnev=1` (4 lignes) |
 | `frankfurter_latest_eur.json` | `api.frankfurter.dev/v1/latest?base=EUR&symbols=USD,GBP,BRL,TRY,JPY` |
 
 Ajouter une source : enregistrer sa réponse ici (`curl … -o`, puis indenter), sans clé d'API

@@ -135,6 +135,22 @@ KNOWN_SOURCES = [
         "license": "Données communautaires ProtonDB",
         "limits": "Rapports communautaires avec subjectivité possible.",
     },
+    {
+        "key": "world_bank",
+        "name": "Banque mondiale",
+        "logo": "world_bank",
+        "role": "PIB par habitant en parité de pouvoir d'achat, population.",
+        "license": "CC BY 4.0",
+        "limits": "Le PIB par habitant n'est pas un salaire ; une valeur par an.",
+    },
+    {
+        "key": "gamerpower",
+        "name": "GamerPower",
+        "logo": "gamerpower",
+        "role": "Jeux Steam offerts en ce moment.",
+        "license": "API gratuite GamerPower",
+        "limits": "Offres saisies par GamerPower, relues au plus une fois par jour.",
+    },
 ]
 
 

@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { axisStyle, chartBase } from '~/utils/chartBase'
 import { formatNumber } from '~/utils/format'
-import { COLORS, NO_DATA_COLOR, SEQUENTIAL_COLORS } from '~/utils/tokens'
+import { COLORS, SEQUENTIAL_COLORS } from '~/utils/tokens'
 
 const props = withDefaults(
   defineProps<{
@@ -36,7 +36,7 @@ const option = computed(() => {
   return {
     ...base,
     tooltip: { ...base.tooltip, formatter: tooltipText },
-    grid: { left: 80, right: 24, top: 20, bottom: 40, show: true, backgroundColor: NO_DATA_COLOR, borderWidth: 0 },
+    grid: { left: 80, right: 24, top: 20, bottom: 40, show: true, backgroundColor: COLORS.deep, borderWidth: 0 },
     xAxis: {
       type: 'category',
       data: props.months,

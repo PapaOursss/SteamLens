@@ -38,16 +38,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Monde', to: '/world' },
   { label: 'Prix', to: '/pricing', sections: ['/deals'] },
   { label: 'Tendances', to: '/hype' },
-  {
-    label: 'Labo',
-    to: '/lab',
-    sections: [
-      '/steam-deck', '/playtime', '/minigame', '/wrapped', '/regional-sales',
-      '/price-history', '/reviews', '/review-words', '/hardware', '/achievements', '/profile-map', '/trends',
-      '/player-race', '/purchasing-power', '/genre-map', '/game-map', '/comparer',
-      '/twitch', '/studios', '/sankey-pricing', '/tag-network', '/releases'
-    ]
-  }
+  { label: 'Labo', to: '/lab', sections: LAB_PATHS }
 ]
 
 const route = useRoute()
@@ -84,7 +75,8 @@ watch(() => route.path, () => nextTick(revealActiveItem))
 
 function isActive(item: NavItem): boolean {
   if (item.to === '/') return route.path === '/'
-  return [item.to, ...(item.sections ?? [])].some((path) => route.path.startsWith(path))
+  // `/games/730` relève de `/games`, mais `/game-map` non : le préfixe s'arrête à un `/`.
+  return [item.to, ...(item.sections ?? [])].some((path) => route.path === path || route.path.startsWith(`${path}/`))
 }
 
 function openGame(game: GameOption) {

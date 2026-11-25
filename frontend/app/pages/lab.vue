@@ -1,46 +1,39 @@
 <template>
   <div>
     <PageIntro title="Le labo">
-      Les vues qui sortent du cadre : des questions plus étroites, et un jeu.
+      Les vues qui sortent du cadre : des questions plus étroites, rangées par thème, et deux jeux.
     </PageIntro>
 
-    <ul class="gutter">
-      <li v-for="experiment in EXPERIMENTS" :key="experiment.to" class="border-t border-line">
-        <NuxtLink :to="experiment.to" class="group grid gap-1 py-5 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:items-baseline md:gap-8">
-          <span class="font-display text-3xl font-extrabold tracking-tight group-hover:text-hot md:text-4xl">{{ experiment.title }}</span>
-          <span class="max-w-prose leading-relaxed text-soft">{{ experiment.description }}</span>
-        </NuxtLink>
-      </li>
-    </ul>
+    <nav aria-label="Thèmes du labo" class="gutter -mt-2 mb-4 flex flex-wrap gap-1">
+      <a v-for="group in LAB_GROUPS" :key="group.title" :href="`#${anchor(group.title)}`" class="button-quiet">
+        {{ group.title }}
+      </a>
+    </nav>
+
+    <section v-for="group in LAB_GROUPS" :id="anchor(group.title)" :key="group.title" class="gutter scroll-mt-4 py-6">
+      <h2 class="mb-2 text-3xl md:text-4xl">{{ group.title }}</h2>
+      <ul class="grid gap-x-8 md:grid-cols-2">
+        <li v-for="section in group.sections" :key="section.to" class="border-t border-line">
+          <NuxtLink :to="section.to" class="group block py-4">
+            <span class="block font-display text-2xl font-extrabold tracking-tight group-hover:text-hot">{{ section.title }}</span>
+            <span class="mt-1 block max-w-prose leading-relaxed text-soft">{{ section.description }}</span>
+          </NuxtLink>
+        </li>
+      </ul>
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
-const EXPERIMENTS = [
-  { title: 'Plus ou moins', to: '/minigame', description: 'Deux jeux, un chiffre caché : à vous de deviner lequel gagne.' },
-  { title: 'Steam Wrapped', to: '/wrapped', description: "L'année de Steam en quelques records." },
-  { title: 'Steam Deck', to: '/steam-deck', description: 'Ce qui tourne sous Linux, genre par genre, selon ProtonDB.' },
-  { title: 'Durée de vie', to: '/playtime', description: "Le temps de jeu médian par genre, et ce que coûte une heure de jeu." },
-  { title: 'Ventes régionales', to: '/regional-sales', description: "Ce qui se vend en Amérique du Nord, en Europe, au Japon et ailleurs." },
-  { title: 'Historique des prix', to: '/price-history', description: 'Chaque changement de prix, et les soldes qui reviennent chaque année.' },
-  { title: 'Avis et review bombings', to: '/reviews', description: "Le ratio d'avis positifs par langue et par semaine, et ses chutes brutales." },
-  { title: 'Les mots des avis', to: '/review-words', description: 'Les mots qui reviennent dans les avis positifs et négatifs, en anglais et en français.' },
-  { title: 'Matériel des joueurs', to: '/hardware', description: "L'enquête de Steam mois après mois : langues, systèmes, cartes graphiques." },
-  { title: 'Les jeux jamais finis', to: '/achievements', description: "Où les joueurs décrochent, d'après leurs succès." },
-  { title: 'Pays des profils', to: '/profile-map', description: "Le pays affiché sur les profils publics d'auteurs d'avis." },
-  { title: "Pouvoir d'achat", to: '/purchasing-power', description: "Combien d'heures de travail coûte un jeu, pays par pays." },
-  { title: 'Genres par pays', to: '/genre-map', description: 'Le genre le plus surreprésenté de chaque pays.' },
-  { title: 'Comparateur', to: '/comparer', description: 'Deux à quatre jeux côte à côte : ADN, joueurs et prix.' },
-  { title: 'Google Trends', to: '/trends', description: "L'intérêt pour un jeu ou un genre, pays par pays, date après date." },
-  { title: "D'où viennent les studios", to: '/studios', description: 'Les jeux par pays du studio, et le genre que chaque pays fait plus que les autres.' },
-  { title: 'Twitch', to: '/twitch', description: 'Les jeux les plus regardés en ce moment, la langue des streams, et la course depuis 2016.' },
-  { title: 'Course des jeux', to: '/player-race', description: "L'évolution des jeux les plus joués mois par mois depuis 2012." },
-  { title: 'Chercheur de pépites', to: '/gem-finder', description: 'Repérer les jeux pas chers, très bien notés et méconnus (nuage de points).' },
-  { title: 'Prix et accueil (Sankey)', to: '/sankey-pricing', description: 'Les jeux chers sont-ils mieux notés ? Flux genre → prix → verdict des avis.' },
-  { title: 'Réseau des tags', to: '/tag-network', description: 'Les familles de tags qui vont ensemble et leurs liens de co-occurrence.' },
-  { title: 'La carte des jeux', to: '/game-map', description: 'Tout le catalogue en nuage de points : les jeux aux tags proches tombent côte à côte.' },
-  { title: 'Calendrier des sorties', to: '/releases', description: 'Heatmap jour × mois et calendrier annuel des sorties de jeux.' }
-]
-
 useHead({ title: 'Labo' })
+
+/** « Les joueurs » devient « les-joueurs » : l'ancre de la section. */
+function anchor(title: string): string {
+  return title
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+}
 </script>

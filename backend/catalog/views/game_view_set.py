@@ -1,4 +1,4 @@
-from django.db.models import QuerySet
+from django.db.models import F, QuerySet
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, inline_serializer
 from rest_framework import serializers, viewsets
@@ -23,12 +23,15 @@ class GameViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = "appid"
 
     def get_queryset(self) -> QuerySet[Game]:
-        games = Game.objects.prefetch_related("genres")
+        # Les plus possédés d'abord : par nom, la liste s'ouvrait sur « ! SHAKABULA ».
+        games = Game.objects.prefetch_related("genres").order_by(
+            F("owners_mid").desc(nulls_last=True), "name"
+        )
         if self.action == "retrieve":
             games = games.prefetch_related(
                 "game_tags__tag", "themes", "game_modes", "platforms", "developers", "publishers"
             )
-        return games.distinct()
+        return games
 
     def get_serializer_class(self) -> type[BaseSerializer]:
         if self.action == "retrieve":

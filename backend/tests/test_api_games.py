@@ -25,6 +25,15 @@ def test_page_size_follows_the_request(client: Client, catalog_sample: dict[str,
     assert body["next"] is not None
 
 
+def test_lists_the_most_owned_games_first(client: Client, catalog_sample: dict[str, Game]) -> None:
+    Game.objects.filter(appid=STARDEW_APPID).update(owners_mid=20_000_000)
+    Game.objects.filter(name="Dota 2").update(owners_mid=150_000_000)
+
+    body = client.get("/api/games/").json()
+
+    assert names(body) == ["Dota 2", "Stardew Valley", "Counter-Strike 2"]
+
+
 def test_filters_by_search_genre_and_tag(client: Client, catalog_sample: dict[str, Game]) -> None:
     assert names(client.get("/api/games/?search=dota").json()) == ["Dota 2"]
     assert names(client.get("/api/games/?genre=action").json()) == ["Counter-Strike 2", "Dota 2"]

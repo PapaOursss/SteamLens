@@ -74,3 +74,42 @@ def sales_calendar(request: Request) -> Response:
             "cells": [[year, week, count] for (year, week), count in sorted(starts.items())],
         }
     )
+
+
+@extend_schema(
+    responses=inline_serializer(
+        "GameStoreComparison",
+        {
+            "appid": serializers.IntegerField(),
+            "steam_price": serializers.FloatField(allow_null=True),
+            "cheapest_price": serializers.FloatField(allow_null=True),
+            "cheapest_store": serializers.CharField(allow_null=True),
+            "steam_is_cheapest": serializers.BooleanField(),
+            "stores_count": serializers.IntegerField(),
+            "deals": serializers.ListField(child=serializers.DictField()),
+        },
+    ),
+)
+@api_view(["GET"])
+def game_deals(request: Request, appid: int) -> Response:
+    """Comparatif de prix multi-magasins pour un jeu Steam (CheapShark)."""
+    from pricing.cheapshark_compare import get_game_store_comparison
+
+    return Response(get_game_store_comparison(appid))
+
+
+@extend_schema(
+    responses=inline_serializer(
+        "TopDealsList",
+        {
+            "deals": serializers.ListField(child=serializers.DictField()),
+        },
+    ),
+)
+@api_view(["GET"])
+def top_deals(request: Request) -> Response:
+    """Les meilleures affaires actuelles sur des jeux bien notés (CheapShark)."""
+    from pricing.cheapshark_deals import get_top_deals
+
+    return Response(get_top_deals())
+

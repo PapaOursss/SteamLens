@@ -1,0 +1,13 @@
+{
+  "id": 4200,
+  "slug": "portal-2",
+  "name": "Portal 2",
+  "rating": 4.57,
+  "metacritic": 95,
+  "playtime": 11,
+  "tags": [
+    {"id": 31, "name": "Singleplayer", "language": "eng"},
+    {"id": 18, "name": "Co-op", "language": "eng"},
+    {"id": 42417, "name": "Экшен", "language": "rus"}
+  ]
+}

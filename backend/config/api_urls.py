@@ -2,7 +2,7 @@ from django.urls import path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import DefaultRouter
 
-from catalog.views import GameViewSet, dashboard_stats, genre_stats, tag_stats
+from catalog.views import GameViewSet, dashboard_stats, genre_stats, rating_comparison, tag_stats
 from catalog.views.achievements import game_achievements, least_finished_games
 from catalog.views.game_reviews import game_reviews, review_bombings
 from catalog.views.gem_finder import gem_finder
@@ -28,7 +28,7 @@ from players.views import top_played
 from players.views_hardware import hardware_survey
 from players.views_history import monthly_player_race
 from players.views_hype import hype_stats
-from pricing.views import price_history, sales_calendar
+from pricing.views import game_deals, price_history, sales_calendar, top_deals
 
 router = DefaultRouter(trailing_slash=True)
 router.register("games", GameViewSet, basename="game")
@@ -51,9 +51,12 @@ urlpatterns = [
     path("stats/sankey-pricing/", sankey_price_review_stats, name="stats-sankey-pricing"),
     path("stats/sunburst-igdb/", sunburst_igdb, name="stats-sunburst-igdb"),
     path("stats/review-sentiment/", review_sentiment, name="stats-review-sentiment"),
+    path("stats/rating-comparison/", rating_comparison, name="stats-rating-comparison"),
     path("stats/review-words/", review_words, name="stats-review-words"),
     path("stats/hardware-survey/", hardware_survey, name="stats-hardware-survey"),
     path("stats/price-history/<int:appid>/", price_history, name="stats-price-history"),
+    path("stats/deals/<int:appid>/", game_deals, name="stats-game-deals"),
+    path("stats/deals/", top_deals, name="stats-top-deals"),
     path("stats/sales-calendar/", sales_calendar, name="stats-sales-calendar"),
     path("stats/release-calendar/", release_calendar_stats, name="stats-release-calendar"),
     path("stats/top-played/", top_played, name="stats-top-played"),

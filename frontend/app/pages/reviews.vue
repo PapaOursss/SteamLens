@@ -60,11 +60,28 @@
         </table>
       </div>
     </DataBlock>
+
+    <DataBlock
+      title="Note Presse vs Note Steam"
+      note="Comparaison entre la note Metacritic (presse) et la part d'avis positifs sur Steam. La ligne pointillée marque l'accord parfait."
+      :is-loading="comparisonLoading"
+      :has-error="comparisonError"
+      :is-empty="!comparisonPoints?.length"
+      empty-message="Pas assez de données de notes presse et Steam pour afficher le nuage."
+      @retry="refreshComparison()"
+    >
+      <RatingScatterChart
+        v-if="comparisonPoints?.length"
+        :points="comparisonPoints"
+        label="Nuage de points presse vs joueurs"
+      />
+    </DataBlock>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { BombedGame, GameReviews, RankRow } from '~/types'
+import type { RatingPoint } from '~/components/charts/RatingScatterChart.vue'
 
 const PERCENT = 100
 
@@ -79,6 +96,12 @@ const {
   refresh: refreshBombings
 } = useApiResource<BombedGame[]>('/stats/review-bombings/')
 const { data: reviews, isLoading, hasError, refresh } = useApiResource<GameReviews>(() => `/stats/reviews/${appid.value}/`)
+const {
+  data: comparisonPoints,
+  isLoading: comparisonLoading,
+  hasError: comparisonError,
+  refresh: refreshComparison
+} = useApiResource<RatingPoint[]>('/stats/rating-comparison/')
 
 function shareLabel(share: number): string {
   return formatPercent(Math.round(share * PERCENT))

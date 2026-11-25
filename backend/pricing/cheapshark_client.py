@@ -1,15 +1,22 @@
 from typing import Any
 
-from ingestion.http import ApiClient
+from django.conf import settings
+
+from ingestion.http import ApiClient, ResponseCache
 
 CHEAPSHARK_BASE_URL = "https://www.cheapshark.com/api/1.0"
+# Les promos changent vite : une heure, pas la journée des autres sources.
+CACHE_SECONDS = 3600
 
 
 class CheapsharkClient:
     """Client HTTP pour l'API CheapShark (sans clé requise)."""
 
     def __init__(self, api_client: ApiClient | None = None) -> None:
-        self.api = api_client or ApiClient("cheapshark")
+        self.api = api_client or ApiClient(
+            "cheapshark",
+            cache=ResponseCache(settings.HTTP_CACHE_DIR / "cheapshark", CACHE_SECONDS),
+        )
 
     def fetch_stores(self) -> list[dict[str, Any]]:
         """Liste tous les magasins partenaires suivis par CheapShark."""

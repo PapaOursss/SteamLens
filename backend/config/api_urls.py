@@ -21,6 +21,7 @@ from catalog.views.treemap import genre_tags_treemap
 from catalog.views.wrapped import steam_wrapped
 from config.health import health
 from geography.views import world_map
+from geography.views_genres import genres_by_country_stats
 from geography.views_profiles import profile_countries
 from geography.views_sales import regional_sales_stats
 from geography.views_trends import trends_map_stats
@@ -73,6 +74,7 @@ urlpatterns = [
     path("stats/gem-finder/", gem_finder, name="stats-gem-finder"),
     path("stats/review-bombings/", review_bombings, name="stats-review-bombings"),
     path("stats/profile-countries/", profile_countries, name="stats-profile-countries"),
+    path("stats/genres-by-country/", genres_by_country_stats, name="stats-genres-by-country"),
     path("stats/trends/", trends_map_stats, name="stats-trends"),
     path("map/<slug:indicator>/", world_map, name="world-map"),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),

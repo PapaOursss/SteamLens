@@ -96,6 +96,14 @@ KNOWN_SOURCES = [
         "limits": "Relevé toutes les heures ; spectateurs comptés sur les 500 streams les plus suivis de chaque jeu.",
     },
     {
+        "key": "wikidata",
+        "name": "Wikidata (SPARQL)",
+        "logo": "wikidata",
+        "role": "Studios des jeux Steam et pays de chaque studio, pour la carte des studios.",
+        "license": "CC0: Public Domain",
+        "limits": "Base collaborative : des studios n'ont pas de pays renseigné.",
+    },
+    {
         "key": "isthereanydeal",
         "name": "IsThereAnyDeal",
         "logo": "itad",

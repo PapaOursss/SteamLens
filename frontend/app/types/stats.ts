@@ -273,3 +273,26 @@ export interface TwitchStats {
   top: TwitchTopCategory[]
   languages: TwitchLanguageShare[]
 }
+
+export interface StudioGenreScore {
+  genre: string
+  games: number
+  /** Part du genre dans le pays ÷ part du genre partout : au-dessus de 1, il est surreprésenté. */
+  index: number
+}
+
+export interface StudioCountry {
+  iso3: string
+  name: string
+  studios: number
+  games: number
+  favorite_genre: string | null
+  favorite_index: number | null
+  top_genres: StudioGenreScore[]
+  top_studios: { name: string; games: number }[]
+}
+
+export interface StudioCountriesStats {
+  is_sample: boolean
+  countries: StudioCountry[]
+}

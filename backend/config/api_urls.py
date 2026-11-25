@@ -22,6 +22,7 @@ from config.health import health
 from geography.views import world_map
 from geography.views_profiles import profile_countries
 from geography.views_sales import regional_sales_stats
+from geography.views_studios import studio_countries
 from geography.views_trends import trends_map_stats
 from ingestion.views import sources_overview
 from players.views import top_played
@@ -67,6 +68,7 @@ urlpatterns = [
     path("stats/gem-finder/", gem_finder, name="stats-gem-finder"),
     path("stats/review-bombings/", review_bombings, name="stats-review-bombings"),
     path("stats/profile-countries/", profile_countries, name="stats-profile-countries"),
+    path("stats/studio-countries/", studio_countries, name="stats-studio-countries"),
     path("stats/trends/", trends_map_stats, name="stats-trends"),
     path("map/<slug:indicator>/", world_map, name="world-map"),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),

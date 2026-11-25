@@ -34,12 +34,10 @@ class Command(BaseCommand):
             saved_count = 0
             for game in games:
                 try:
-                    res = client.search_game(game.name)
-                    if not res:
+                    res = client.find_game(game.appid, game.name)
+                    if res is None:
                         continue
-                    rawg_id = res.get("id")
-                    if not rawg_id:
-                        continue
+                    rawg_id = res["id"]
                     details = client.game_details(rawg_id)
                     details["screenshots"] = client.game_screenshots(rawg_id)
                     if save_rawg_game_data(game.appid, details):

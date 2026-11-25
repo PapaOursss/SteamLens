@@ -15,15 +15,13 @@ class RawgClient:
         self._api_key = api_key
         self._fetch_json = fetch_json or cached_fetcher("rawg")
 
-    def search_game(self, name: str) -> dict[str, Any] | None:
-        """Cherche un jeu par nom sur RAWG."""
-        payload = self._get("/games", search=name, search_precise="true", page_size="5")
-        results = payload.get("results", []) if isinstance(payload, dict) else []
-        clean = name.strip().lower()
-        for res in results:
-            if res.get("name", "").strip().lower() == clean:
-                return res
-        return results[0] if results else None
+    def find_game(self, appid: int, name: str) -> dict[str, Any] | None:
+        """Le jeu RAWG vendu sur Steam sous cet appid : le nom seul confond les homonymes."""
+        for candidate in self._search(name):
+            rawg_id = candidate.get("id")
+            if rawg_id and self.game_steam_appid(rawg_id) == appid:
+                return candidate
+        return None
 
     def game_details(self, rawg_id: int) -> dict[str, Any]:
         """Détails complets d'un jeu RAWG."""
@@ -49,6 +47,13 @@ class RawgClient:
         data = self._get(f"/games/{rawg_id}/screenshots")
         results = data.get("results", []) if isinstance(data, dict) else []
         return [res["image"] for res in results if res.get("image")]
+
+    def _search(self, name: str) -> list[dict[str, Any]]:
+        """Résultats de la recherche, ceux qui portent exactement ce nom d'abord."""
+        payload = self._get("/games", search=name, search_precise="true", page_size="5")
+        results = payload.get("results", []) if isinstance(payload, dict) else []
+        clean = name.strip().lower()
+        return sorted(results, key=lambda result: result.get("name", "").strip().lower() != clean)
 
     def _get(self, path: str, **params: str) -> Any:
         return self._fetch_json(f"{API_URL}{path}", {"key": self._api_key, **params})

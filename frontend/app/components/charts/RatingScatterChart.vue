@@ -3,13 +3,7 @@
 </template>
 
 <script setup lang="ts">
-export interface RatingPoint {
-  appid: number
-  name: string
-  steam_score: number
-  press_score: number
-  rawg_rating: number | null
-}
+import type { RatingPoint } from '~/types'
 
 const props = withDefaults(
   defineProps<{
@@ -20,62 +14,59 @@ const props = withDefaults(
   { height: 450 }
 )
 
-const option = computed(() => {
-  const scatterData = props.points.map((p) => [p.press_score, p.steam_score, p])
+const AXIS_MIN = 40
+const PERCENT = 100
+const POINT_SIZE = 9
+const POINT_OPACITY = 0.75
 
-  return {
-    tooltip: {
-      formatter(params: { data: [number, number, RatingPoint] }) {
-        const item = params.data[2]
-        let res = `<strong>${escapeHtml(item.name)}</strong><br/>`
-        res += `Metacritic (Presse) : <strong>${item.press_score}/100</strong><br/>`
-        res += `Steam (Joueurs) : <strong>${item.steam_score}%</strong>`
-        if (item.rawg_rating) {
-          res += `<br/>Note RAWG : <strong>${item.rawg_rating}/5</strong>`
-        }
-        return res
-      }
+function tooltipText(params: { data: [number, number, RatingPoint] }): string {
+  const item = params.data[2]
+  const rawg = item.rawg_rating ? `<br>RAWG : <strong>${formatNumber(item.rawg_rating)}/5</strong>` : ''
+  return `<strong>${escapeHtml(item.name)}</strong><br>`
+    + `Metacritic : <strong>${item.press_score}/100</strong><br>`
+    + `Avis Steam : <strong>${formatPercent(item.steam_score)}</strong>${rawg}`
+}
+
+const option = computed(() => ({
+  ...chartBase(),
+  tooltip: { ...chartBase().tooltip, trigger: 'item', formatter: tooltipText },
+  grid: { left: 56, right: 24, top: 24, bottom: 56 },
+  xAxis: {
+    type: 'value',
+    name: 'Note Metacritic (presse)',
+    nameLocation: 'middle',
+    nameGap: 32,
+    min: AXIS_MIN,
+    max: PERCENT,
+    ...axisStyle()
+  },
+  yAxis: {
+    type: 'value',
+    name: 'Avis positifs sur Steam',
+    nameLocation: 'middle',
+    nameGap: 40,
+    min: AXIS_MIN,
+    max: PERCENT,
+    ...axisStyle(),
+    axisLabel: { color: COLORS.soft, formatter: '{value} %' }
+  },
+  series: [
+    {
+      name: 'Accord parfait',
+      type: 'line',
+      data: [[AXIS_MIN, AXIS_MIN], [PERCENT, PERCENT]],
+      lineStyle: { type: 'dashed', color: COLORS.soft, width: 1 },
+      symbol: 'none',
+      silent: true,
+      tooltip: { show: false }
     },
-    grid: { left: 50, right: 30, top: 40, bottom: 50 },
-    xAxis: {
-      type: 'value',
-      name: 'Metacritic',
-      nameLocation: 'middle',
-      nameGap: 30,
-      min: 40,
-      max: 100
-    },
-    yAxis: {
-      type: 'value',
-      name: 'Avis Steam (%)',
-      nameLocation: 'middle',
-      nameGap: 35,
-      min: 40,
-      max: 100
-    },
-    series: [
-      {
-        name: 'Accord parfait',
-        type: 'line',
-        data: [
-          [40, 40],
-          [100, 100]
-        ],
-        lineStyle: { type: 'dashed', color: '#6EE7B7', width: 2 },
-        symbol: 'none',
-        tooltip: { show: false }
-      },
-      {
-        name: 'Jeux',
-        type: 'scatter',
-        symbolSize: 10,
-        itemStyle: {
-          color: '#38BDF8',
-          opacity: 0.8
-        },
-        data: scatterData
-      }
-    ]
-  }
-})
+    {
+      name: 'Jeux',
+      type: 'scatter',
+      symbolSize: POINT_SIZE,
+      itemStyle: { color: COLORS.hot, opacity: POINT_OPACITY, borderColor: COLORS.deep, borderWidth: 1 },
+      data: props.points.map((point) => [point.press_score, point.steam_score, point])
+    }
+  ]
+}))
 </script>

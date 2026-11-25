@@ -296,3 +296,12 @@ export interface StudioCountriesStats {
   is_sample: boolean
   countries: StudioCountry[]
 }
+
+/** Un jeu noté par la presse (Metacritic) et par les joueurs (`/stats/rating-comparison/`). */
+export interface RatingPoint {
+  appid: number
+  name: string
+  steam_score: number
+  press_score: number
+  rawg_rating: number | null
+}

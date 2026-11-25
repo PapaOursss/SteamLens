@@ -32,8 +32,20 @@ def test_cheapshark_compare_detects_cheapest_store():
     client = MagicMock(spec=CheapsharkClient)
     client.fetch_stores.return_value = fake_stores()
     client.fetch_deals_for_game.return_value = [
-        {"storeID": "1", "salePrice": "19.99", "normalPrice": "19.99", "savings": "0", "dealID": "d1"},
-        {"storeID": "2", "salePrice": "9.99", "normalPrice": "19.99", "savings": "50", "dealID": "d2"},
+        {
+            "storeID": "1",
+            "salePrice": "19.99",
+            "normalPrice": "19.99",
+            "savings": "0",
+            "dealID": "d1",
+        },
+        {
+            "storeID": "2",
+            "salePrice": "9.99",
+            "normalPrice": "19.99",
+            "savings": "50",
+            "dealID": "d2",
+        },
     ]
 
     result = get_game_store_comparison(570, client=client)
@@ -50,8 +62,20 @@ def test_cheapshark_compare_when_steam_is_cheapest():
     client = MagicMock(spec=CheapsharkClient)
     client.fetch_stores.return_value = fake_stores()
     client.fetch_deals_for_game.return_value = [
-        {"storeID": "1", "salePrice": "4.99", "normalPrice": "19.99", "savings": "75", "dealID": "d1"},
-        {"storeID": "3", "salePrice": "14.99", "normalPrice": "19.99", "savings": "25", "dealID": "d3"},
+        {
+            "storeID": "1",
+            "salePrice": "4.99",
+            "normalPrice": "19.99",
+            "savings": "75",
+            "dealID": "d1",
+        },
+        {
+            "storeID": "3",
+            "salePrice": "14.99",
+            "normalPrice": "19.99",
+            "savings": "25",
+            "dealID": "d3",
+        },
     ]
 
     result = get_game_store_comparison(730, client=client)
@@ -91,3 +115,47 @@ def test_cheapshark_top_deals_formats_deal_attributes():
     assert deal["steam_appid"] == 504230
     assert deal["store_name"] == "Steam"
     assert "deal123" in deal["redirect_url"]
+
+
+def test_cheapshark_compare_counts_a_tie_as_steam_cheapest():
+    client = MagicMock(spec=CheapsharkClient)
+    client.fetch_stores.return_value = fake_stores()
+    client.fetch_deals_for_game.return_value = [
+        {
+            "storeID": "3",
+            "salePrice": "59.99",
+            "normalPrice": "59.99",
+            "savings": "0",
+            "dealID": "d3",
+        },
+        {
+            "storeID": "1",
+            "salePrice": "59.99",
+            "normalPrice": "59.99",
+            "savings": "0",
+            "dealID": "d1",
+        },
+    ]
+
+    result = get_game_store_comparison(1091500, client=client)
+
+    assert result["steam_is_cheapest"] is True
+    assert result["cheapest_store"] == "Steam"
+
+
+def top_deal(game_id: str, store_id: str, deal_id: str) -> dict[str, str]:
+    return {"gameID": game_id, "title": f"Jeu {game_id}", "storeID": store_id, "dealID": deal_id}
+
+
+def test_cheapshark_top_deals_keeps_one_offer_per_game():
+    client = MagicMock(spec=CheapsharkClient)
+    client.fetch_stores.return_value = fake_stores()
+    client.fetch_top_deals.return_value = [
+        top_deal("10", "2", "best"),
+        top_deal("20", "1", "other-game"),
+        top_deal("10", "3", "worse"),
+    ]
+
+    deals = get_top_deals(client=client)
+
+    assert [deal["deal_id"] for deal in deals] == ["best", "other-game"]

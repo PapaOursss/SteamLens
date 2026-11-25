@@ -39,3 +39,15 @@ class CheapsharkClient:
             },
         )
         return data if isinstance(data, list) else []
+
+
+def store_directory(client: CheapsharkClient) -> dict[str, dict[str, str]]:
+    """Nom et icône de chaque magasin, par identifiant CheapShark."""
+    return {
+        str(store.get("storeID")): {
+            "name": store.get("storeName", "Inconnu"),
+            "icon": f"https://www.cheapshark.com{store.get('images', {}).get('icon', '')}",
+        }
+        for store in client.fetch_stores()
+        if isinstance(store, dict)
+    }

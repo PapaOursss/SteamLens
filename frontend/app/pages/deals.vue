@@ -1,94 +1,74 @@
 <template>
   <div>
-    <PageIntro
-      title="Bonnes affaires du moment"
-      tagline="Les plus grosses remises du jour sur les jeux PC les mieux notés (Steam, GOG, Humble, Fanatical… source CheapShark)."
-    />
+    <PageIntro title="Bonnes affaires du moment">
+      Les plus grosses remises du jour sur des jeux PC bien notés, d'une boutique à l'autre (Steam,
+      GOG, Humble, Fanatical…). Une offre par jeu, la mieux classée.
+    </PageIntro>
 
     <DataBlock
       title="Offres immanquables"
-      note="Offres triées par Deal Rating, sur les jeux ayant au moins 70% d'avis positifs sur Steam."
+      note="Classées par CheapShark (remise, note et prix), sur les jeux à 70 % d'avis positifs ou plus sur Steam. Prix en dollars US."
       :is-loading="isLoading"
       :has-error="hasError"
-      :is-empty="!deals || !deals.length"
+      :is-empty="!deals?.length"
       empty-message="Aucune promotion trouvée pour le moment."
       @retry="refresh()"
     >
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <article
-          v-for="deal in deals"
-          :key="deal.deal_id"
-          class="flex flex-col justify-between overflow-hidden rounded-lg border border-line bg-raised transition hover:border-hot"
-        >
-          <div class="p-4">
-            <div class="flex items-start justify-between gap-2">
-              <h3 class="font-bold text-text leading-snug line-clamp-2">
-                {{ deal.title }}
-              </h3>
-              <span class="rounded bg-hot px-2 py-0.5 text-xs font-extrabold text-deep shrink-0">
-                -{{ deal.cut_percent }}%
-              </span>
-            </div>
-
-            <div class="mt-2 flex items-center gap-2 text-xs text-soft">
-              <img v-if="deal.store_icon" :src="deal.store_icon" :alt="deal.store_name" class="h-4 w-4" />
-              <span>{{ deal.store_name }}</span>
-              <span v-if="deal.steam_rating_percent" class="ml-auto text-hot font-semibold">
-                ★ {{ deal.steam_rating_percent }}% avis positifs
-              </span>
-            </div>
-
-            <div class="mt-4 flex items-baseline gap-2">
-              <span class="font-mono text-xl font-black text-text">
-                {{ deal.sale_price.toFixed(2) }} $
-              </span>
-              <span v-if="deal.normal_price > deal.sale_price" class="font-mono text-sm text-soft line-through">
-                {{ deal.normal_price.toFixed(2) }} $
-              </span>
-            </div>
+      <ul class="grid gap-px sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+        <li v-for="deal in deals" :key="deal.deal_id" class="flex flex-col bg-deep">
+          <div class="relative aspect-[460/215] overflow-hidden bg-raised">
+            <GameCover
+              :sources="coverSources(deal)"
+              :name="deal.title"
+              :width="460"
+              :height="215"
+              class="h-full w-full"
+            />
+            <span class="figure absolute right-0 top-0 bg-hot px-2 py-1 font-display text-lg font-extrabold text-deep">
+              −{{ deal.cut_percent }} %
+            </span>
           </div>
 
-          <div class="flex border-t border-line bg-deep/50 p-2 text-xs">
-            <NuxtLink
-              v-if="deal.steam_appid"
-              :to="`/games/${deal.steam_appid}`"
-              class="flex-1 py-1.5 text-center font-medium text-soft hover:text-text"
-            >
-              Fiche jeu
-            </NuxtLink>
-            <a
-              :href="deal.redirect_url"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="flex-1 rounded bg-hot/10 py-1.5 text-center font-bold text-hot transition hover:bg-hot hover:text-deep"
-            >
-              Voir l'offre ↗
-            </a>
+          <div class="flex flex-1 flex-col gap-2 p-4">
+            <h3 class="line-clamp-2 text-xl leading-tight">{{ deal.title }}</h3>
+            <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-soft">
+              <span class="inline-flex items-center gap-2">
+                <img v-if="deal.store_icon" :src="deal.store_icon" alt="" width="16" height="16" class="h-4 w-4">
+                {{ deal.store_name }}
+              </span>
+              <span v-if="deal.steam_rating_percent">{{ formatPercent(deal.steam_rating_percent) }} d'avis positifs</span>
+            </p>
+            <p class="figure mt-auto flex items-baseline gap-3 pt-2">
+              <strong class="font-display text-3xl font-extrabold">{{ usd(deal.sale_price) }}</strong>
+              <s v-if="deal.normal_price > deal.sale_price" class="text-soft">{{ usd(deal.normal_price) }}</s>
+            </p>
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-2 pt-2">
+              <a :href="deal.redirect_url" target="_blank" rel="noopener noreferrer" class="button">
+                Voir l'offre<span class="sr-only"> (nouvel onglet)</span>
+              </a>
+              <NuxtLink v-if="deal.steam_appid" :to="gameLink(deal.steam_appid)" class="link">Fiche du jeu</NuxtLink>
+            </div>
           </div>
-        </article>
-      </div>
+        </li>
+      </ul>
     </DataBlock>
   </div>
 </template>
 
 <script setup lang="ts">
-export interface DealItem {
-  title: string
-  deal_id: string
-  store_name: string
-  store_icon: string
-  sale_price: number
-  normal_price: number
-  cut_percent: number
-  steam_rating_percent: number
-  steam_rating_text: string
-  deal_rating: number
-  steam_appid: number | null
-  thumb: string
-  redirect_url: string
+import type { TopDeal } from '~/types'
+
+useHead({ title: 'Bonnes affaires' })
+
+const { data: deals, isLoading, hasError, refresh } = useApiResource<TopDeal[]>('/stats/deals/')
+
+function usd(value: number): string {
+  return formatAmount(value, 'USD')
 }
 
-useHead({ title: 'Bonnes affaires — SteamLens' })
-
-const { data: deals, isLoading, hasError, refresh } = useApiResource<DealItem[]>(() => '/stats/deals/')
+/** L'image Steam du jeu quand on la connaît, sinon la vignette (petite) de CheapShark. */
+function coverSources(deal: TopDeal): string[] {
+  const thumb = deal.thumb ? [deal.thumb] : []
+  return deal.steam_appid ? [...wideCoverSources(deal.steam_appid), ...thumb] : thumb
+}
 </script>

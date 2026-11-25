@@ -53,7 +53,12 @@
     </DataBlock>
 
     <DataBlock v-if="history.length >= MINIMUM_HISTORY" title="Le prix en France, relevé après relevé">
+      <p v-if="isStable" class="text-lg">
+        Le prix n'a pas bougé : <strong class="figure">{{ formatPrice(history[0]!.value) }}</strong>
+        à chacun des {{ history.length }} relevés depuis le {{ formatDate(history[0]!.date) }}.
+      </p>
       <TimeLineChart
+        v-else
         :points="history"
         :height="280"
         :label="`Prix de ${game?.name ?? 'ce jeu'} en France au fil du temps`"
@@ -67,8 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import type { GameDetail } from '~/types'
-import type { StoreComparison } from '~/components/charts/StoreDealsBarChart.vue'
+import type { GameDetail, StoreComparison } from '~/types'
 
 const MINIMUM_HISTORY = 2
 const HISTORY_COUNTRY = 'FR'
@@ -92,6 +96,7 @@ const history = computed(() =>
     .filter((point) => point.country === HISTORY_COUNTRY && point.price_eur !== null)
     .map((point) => ({ date: point.date, value: Number(point.price_eur) }))
 )
+const isStable = computed(() => new Set(history.value.map((point) => point.value)).size === 1)
 const emptyMessage = computed(() =>
   game.value?.is_free ? 'Ce jeu est gratuit : aucun prix à comparer.' : 'Pas encore de prix relevé pour ce jeu.'
 )

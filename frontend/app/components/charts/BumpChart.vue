@@ -3,10 +3,10 @@
 </template>
 
 <script setup lang="ts">
-import type { RaceGameEntry } from '~/composables/usePlayerRace'
+import { trackedRaceGames, type RaceGameEntry } from '~/composables/usePlayerRace'
 
 const GRID = { left: 40, right: 120, top: 30, bottom: 40 }
-const MAX_GAMES = 10
+const LAST_RANK = 10
 
 const props = defineProps<{
   months: string[]
@@ -15,24 +15,10 @@ const props = defineProps<{
   label: string
 }>()
 
-// Sélectionner les jeux qui sont apparus le plus souvent dans le top
-const trackedGames = computed(() => {
-  const counts: Record<string, { appid: number | null; count: number }> = {}
-  for (const m of props.months) {
-    const list = props.timeline[m] || []
-    list.slice(0, 5).forEach((item) => {
-      const tracked = counts[item.name] ?? { appid: item.appid, count: 0 }
-      tracked.count++
-      counts[item.name] = tracked
-    })
-  }
-  return Object.keys(counts)
-    .sort((a, b) => (counts[b]?.count ?? 0) - (counts[a]?.count ?? 0))
-    .slice(0, MAX_GAMES)
-})
+const trackedGames = computed(() => trackedRaceGames(props.months, props.timeline))
 
 const series = computed(() => {
-  return trackedGames.value.map((gameName) => {
+  return trackedGames.value.map((gameName, index) => {
     const data = props.months.map((m) => {
       const list = props.timeline[m] || []
       const rankIdx = list.findIndex((x) => x.name === gameName)
@@ -49,7 +35,8 @@ const series = computed(() => {
         color: COLORS.soft,
         distance: 10
       },
-      lineStyle: { width: 3 }
+      itemStyle: { color: seriesColor(index) },
+      lineStyle: { width: 3, color: seriesColor(index) }
     }
   })
 })
@@ -58,9 +45,10 @@ const option = computed(() => ({
   ...chartBase(),
   grid: GRID,
   tooltip: {
+    ...chartBase().tooltip,
     trigger: 'item',
     formatter: (params: { seriesName: string; value: number; name: string }) =>
-      `${params.name} : ${params.seriesName} (Rang #${params.value})`
+      `${formatMonth(params.name)} : <strong>${escapeHtml(params.seriesName)}</strong>, ${params.value}<sup>e</sup>`
   },
   xAxis: {
     type: 'category',
@@ -75,7 +63,7 @@ const option = computed(() => ({
     type: 'value',
     inverse: true,
     min: 1,
-    max: 10,
+    max: LAST_RANK,
     ...axisStyle(),
     splitLine: { show: true, lineStyle: { color: COLORS.raised } },
     axisLabel: {

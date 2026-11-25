@@ -1,5 +1,3 @@
-import type { Ref } from 'vue'
-
 export interface RaceGameEntry {
   /** null : pas sur Steam (catégories Twitch comme « Just Chatting »). */
   appid: number | null
@@ -11,6 +9,27 @@ export interface MonthlyRaceResponse {
   is_sample: boolean
   months: string[]
   timeline: Record<string, RaceGameEntry[]>
+}
+
+/** Autant de jeux suivis que de couleurs de séries : au-delà, ils restent neutres. */
+const TRACKED_GAMES = 8
+const PODIUM_SIZE = 5
+
+/**
+ * Les jeux le plus souvent dans le top 5 d'un mois, du plus fidèle au moins fidèle : chacun
+ * garde sa couleur (`seriesColor(rang)`) d'un graphique de la course à l'autre.
+ */
+export function trackedRaceGames(months: string[], timeline: Record<string, RaceGameEntry[]>): string[] {
+  const appearances = new Map<string, number>()
+  for (const month of months) {
+    for (const entry of (timeline[month] ?? []).slice(0, PODIUM_SIZE)) {
+      appearances.set(entry.name, (appearances.get(entry.name) ?? 0) + 1)
+    }
+  }
+  return [...appearances]
+    .sort((first, second) => second[1] - first[1])
+    .slice(0, TRACKED_GAMES)
+    .map(([name]) => name)
 }
 
 /** Course mois par mois ; `path` change la mesure (joueurs Steam, spectateurs Twitch…). */

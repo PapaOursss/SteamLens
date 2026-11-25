@@ -3,23 +3,9 @@
 </template>
 
 <script setup lang="ts">
-import type { RaceGameEntry } from '~/composables/usePlayerRace'
+import { trackedRaceGames, type RaceGameEntry } from '~/composables/usePlayerRace'
 
 const GRID = { left: 160, right: 60, top: 20, bottom: 20 }
-const MAX_TRACKED_GAMES = 10
-
-// Même palette catégorielle par défaut d'ECharts (utilisée par BumpChart)
-const ECHARTS_PALETTE = [
-  '#5070dd',
-  '#b6d634',
-  '#505372',
-  '#ff994d',
-  '#0ca8df',
-  '#ffd10a',
-  '#fb628b',
-  '#785db0',
-  '#3fbe95'
-]
 
 const props = defineProps<{
   entries: RaceGameEntry[]
@@ -30,31 +16,16 @@ const props = defineProps<{
   months?: string[]
 }>()
 
-// Même sélection et ordre de jeux que le BumpChart pour garantir des couleurs identiques
-const gameColorMap = computed(() => {
-  const map = new Map<string, string>()
-  if (!props.timeline || !props.months) return map
-
-  const counts: Record<string, { appid: number | null; count: number }> = {}
-  for (const m of props.months) {
-    const list = props.timeline[m] || []
-    list.slice(0, 5).forEach((item) => {
-      const tracked = counts[item.name] ?? { appid: item.appid, count: 0 }
-      tracked.count++
-      counts[item.name] = tracked
-    })
-  }
-
-  const topGames = Object.keys(counts)
-    .sort((a, b) => (counts[b]?.count ?? 0) - (counts[a]?.count ?? 0))
-    .slice(0, MAX_TRACKED_GAMES)
-
-  topGames.forEach((name, index) => {
-    map.set(name, ECHARTS_PALETTE[index % ECHARTS_PALETTE.length] ?? COLORS.hot)
-  })
-
-  return map
+/** Les jeux suivis gardent leur couleur de série (comme dans BumpChart), les autres restent neutres. */
+const gameColors = computed(() => {
+  if (!props.timeline || !props.months) return new Map<string, string>()
+  const tracked = trackedRaceGames(props.months, props.timeline)
+  return new Map(tracked.map((name, index) => [name, seriesColor(index)]))
 })
+
+function barColor(name: string): string {
+  return gameColors.value.get(name) ?? (props.timeline ? COLORS.line : COLORS.hot)
+}
 
 const sortedEntries = computed(() =>
   [...props.entries].sort((a, b) => a.players - b.players)
@@ -88,7 +59,7 @@ const option = computed(() => ({
       data: sortedEntries.value.map((e) => ({
         value: e.players,
         itemStyle: {
-          color: gameColorMap.value.get(e.name) ?? COLORS.hot,
+          color: barColor(e.name),
           borderRadius: [0, 4, 4, 0]
         }
       })),
@@ -111,8 +82,8 @@ const option = computed(() => ({
       right: 80,
       bottom: 40,
       style: {
-        text: props.currentMonth,
-        font: 'bold 48px sans-serif',
+        text: formatMonth(props.currentMonth),
+        font: `800 48px ${FONT_DISPLAY}`,
         fill: COLORS.raised
       },
       z: 100

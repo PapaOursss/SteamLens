@@ -3,6 +3,7 @@ const COMPACT_FORMAT = new Intl.NumberFormat('fr-FR', { notation: 'compact', max
 const PRICE_FORMAT = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' })
 const DATE_TIME_FORMAT = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long', timeStyle: 'short' })
 const DATE_FORMAT = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' })
+const MONTH_FORMAT = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric', timeZone: 'UTC' })
 
 /** L'espace fine de `fr-FR` disparaît presque dans notre police : espace insécable à la place. */
 function widenSpaces(text: string): string {
@@ -27,6 +28,12 @@ export function formatDateTime(isoDate: string): string {
 
 export function formatDate(isoDate: string): string {
   return DATE_FORMAT.format(new Date(isoDate))
+}
+
+/** « 2012-07 » ou « 2012-07-01 » : « juillet 2012 ». */
+export function formatMonth(isoMonth: string): string {
+  if (!isoMonth) return ''
+  return MONTH_FORMAT.format(new Date(`${isoMonth.slice(0, 7)}-01T00:00:00Z`))
 }
 
 export function formatPercent(value: number): string {

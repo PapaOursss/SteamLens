@@ -28,6 +28,8 @@
 
       <GameDna :appid="game.appid" :name="game.name" />
 
+      <SimilarGames :appid="game.appid" />
+
       <GamePriceHistory v-if="!game.is_free" :appid="game.appid" :name="game.name" />
 
       <DataBlock

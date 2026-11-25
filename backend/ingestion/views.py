@@ -135,6 +135,14 @@ KNOWN_SOURCES = [
         "license": "Données communautaires ProtonDB",
         "limits": "Rapports communautaires avec subjectivité possible.",
     },
+    {
+        "key": "gamerpower",
+        "name": "GamerPower",
+        "logo": "gamerpower",
+        "role": "Jeux Steam offerts en ce moment.",
+        "license": "API gratuite GamerPower",
+        "limits": "Offres saisies par GamerPower, relues au plus une fois par jour.",
+    },
 ]
 
 

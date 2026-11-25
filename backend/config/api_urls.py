@@ -30,6 +30,7 @@ from players.views_hardware import hardware_survey
 from players.views_history import monthly_player_race
 from players.views_hype import hype_stats
 from pricing.views import game_deals, price_history, sales_calendar, top_deals
+from pricing.views_giveaways import giveaways
 
 router = DefaultRouter(trailing_slash=True)
 router.register("games", GameViewSet, basename="game")
@@ -59,6 +60,7 @@ urlpatterns = [
     path("stats/price-history/<int:appid>/", price_history, name="stats-price-history"),
     path("stats/deals/<int:appid>/", game_deals, name="stats-game-deals"),
     path("stats/deals/", top_deals, name="stats-top-deals"),
+    path("stats/giveaways/", giveaways, name="stats-giveaways"),
     path("stats/sales-calendar/", sales_calendar, name="stats-sales-calendar"),
     path("stats/release-calendar/", release_calendar_stats, name="stats-release-calendar"),
     path("stats/top-played/", top_played, name="stats-top-played"),

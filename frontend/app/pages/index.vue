@@ -9,6 +9,7 @@
 
     <HomeIntro :overview="dashboard?.overview" :taken-at="topGames[0]?.taken_at" />
     <GamePlayersHistory v-if="topGames[0]" :appid="topGames[0].appid" :name="topGames[0].name" />
+    <HomeGiveaways />
     <HomePrices />
     <HomeGem v-if="dashboard?.featured_gem" :gem="dashboard.featured_gem" />
   </div>

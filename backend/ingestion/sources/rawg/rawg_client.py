@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from typing import Any
 from urllib.parse import urlparse
 

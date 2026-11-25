@@ -1,3 +1,5 @@
+from typing import Any
+
 from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework import serializers
 from rest_framework.decorators import api_view
@@ -5,6 +7,11 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from catalog.genre_streamgraph import build_genre_streamgraph
+from catalog.precomputed import precomputed
+
+
+def load_streamgraph() -> dict[str, Any]:
+    return precomputed("streamgraph", build_genre_streamgraph)
 
 
 @extend_schema(
@@ -32,5 +39,4 @@ from catalog.genre_streamgraph import build_genre_streamgraph
 @api_view(["GET"])
 def genre_streamgraph(request: Request) -> Response:
     """Nombre de sorties de jeux par genre et par année avec événements clés."""
-    data = build_genre_streamgraph()
-    return Response(data)
+    return Response(load_streamgraph())

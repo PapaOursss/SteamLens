@@ -25,6 +25,11 @@ def run_scheduled_command(command: str) -> None:
     except Exception:
         logger.exception("Import %s en échec.", command)
         ImportRun.objects.create(source=command).finish(rows=0, errors=traceback.format_exc())
+        return
+    try:
+        call_command("precompute_stats")
+    except Exception:
+        logger.exception("Statistiques lentes non recalculées après %s.", command)
 
 
 def add_jobs(scheduler: BaseScheduler, schedule: tuple[ScheduledCommand, ...]) -> None:

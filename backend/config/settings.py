@@ -150,6 +150,8 @@ SPECTACULAR_SETTINGS = {
 HOURS_PER_DAY = 24
 SECONDS_PER_HOUR = 3600
 HTTP_CACHE_DIR = BASE_DIR / "data" / "cache"
+# Statistiques lentes calculées d'avance (`manage.py precompute_stats`).
+PRECOMPUTED_DIR = BASE_DIR / "data" / "precomputed"
 # Fichiers bruts téléchargés (datasets Kaggle), eux aussi dans backend/data/.
 RAW_DATA_DIR = BASE_DIR / "data" / "raw"
 HTTP_CACHE_TTL_SECONDS = env.int("HTTP_CACHE_TTL_SECONDS", default=HOURS_PER_DAY * SECONDS_PER_HOUR)

@@ -47,6 +47,43 @@ TODO :
 - 
 
 
+### Lancer l'application SteamLens
+
+#### Option 1 : Avec Podman (Recommandé - pile complète)
+Dans un terminal à la racine du projet :
+```bash
+podman compose up --build
+```
+- Frontend : http://localhost:3000
+- API Backend : http://localhost:8000/api/
+- Documentation Swagger API : http://localhost:8000/api/docs/
+
+Pour arrêter les conteneurs :
+```bash
+podman compose down
+```
+
+#### Option 2 : Sans conteneur (En local avec 2 terminaux)
+
+**Terminal 1 — Backend (Django) :**
+```bash
+cd backend
+uv sync
+uv run python manage.py migrate
+uv run python manage.py runserver
+```
+*(Disponible sur http://localhost:8000)*
+
+**Terminal 2 — Frontend (Nuxt) :**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+*(Disponible sur http://localhost:3000)*
+
+---
+
 cmd : 
 - pour lancer antigravity mettre agy
 - /usage = suivie de consomation limite de 5h et limite de token hebdo

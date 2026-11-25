@@ -3,6 +3,7 @@
 One line per closed ticket, most recent first:
 `- **YYYY-MM-DD** · T-NN · Title — what was done (branch) · opened YYYY-MM-DD`.
 
+- **2026-11-25** · T-40 · Nuage de mots des avis positifs et négatifs — `manage.py import_reviews` garde aussi 50 extraits 👍 et 50 👎 par jeu en anglais et en français (texte seul, sans auteur) dans `ReviewExcerpt`, à côté de ceux de Kaggle (T-47) ; mots vides retirés par langue (`catalog/stopwords.py`), un mot compté une fois par avis, sur `/api/stats/review-words/` (tous les jeux ou `appid`) ; page `/review-words` avec deux nuages côte à côte (composant maison : `echarts-wordcloud` ne suit pas echarts 6) (feat/T-40-nuage-mots) · opened 2026-10-23
 - **2026-11-25** · T-50 · Page « Sources et méthode » pour la soutenance — Chaque source : logo, ce qu'on en tire, fraîcheur (dernier `ImportRun`), licence ; Limites honnêtes (propriétaires estimés, pays approximés par la langue…) ; Schéma du flux : sources → commandes d'import → base → API → graphiques (Samuel) · opened 2026-10-23
 - **2026-11-25** · T-43 · « Steam Wrapped » de l'année — Page en cartes défilantes façon Spotify Wrapped : jeu de l'année, genre qui monte, plus grosse promo, plus gros flop, pays le plus cher (Samuel) · opened 2026-10-23
 - **2026-11-25** · T-42 · Mini-jeu « Plus ou moins » — Deux jaquettes : lequel a le plus de joueurs / coûte le plus cher / est le mieux noté ? ; Score et série en cours ; parfait pour lancer la soutenance avec la classe (Samuel) · opened 2026-10-23

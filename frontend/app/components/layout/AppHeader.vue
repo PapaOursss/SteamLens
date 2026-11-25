@@ -42,7 +42,7 @@ const NAV_ITEMS: NavItem[] = [
     to: '/lab',
     sections: [
       '/steam-deck', '/playtime', '/minigame', '/wrapped', '/regional-sales',
-      '/price-history', '/reviews', '/hardware', '/achievements', '/profile-map', '/trends',
+      '/price-history', '/reviews', '/review-words', '/hardware', '/achievements', '/profile-map', '/trends',
       '/player-race', '/sankey-pricing', '/tag-network', '/releases'
     ]
   }

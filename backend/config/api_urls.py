@@ -11,6 +11,7 @@ from catalog.views.playtime import playtime_stats
 from catalog.views.proton import proton_stats
 from catalog.views.release_calendar_view import release_calendar_stats
 from catalog.views.review_sentiment import review_sentiment
+from catalog.views.review_words import review_words
 from catalog.views.sankey_view import sankey_price_review_stats
 from catalog.views.streamgraph import genre_streamgraph
 from catalog.views.sunburst import sunburst_igdb
@@ -50,6 +51,7 @@ urlpatterns = [
     path("stats/sankey-pricing/", sankey_price_review_stats, name="stats-sankey-pricing"),
     path("stats/sunburst-igdb/", sunburst_igdb, name="stats-sunburst-igdb"),
     path("stats/review-sentiment/", review_sentiment, name="stats-review-sentiment"),
+    path("stats/review-words/", review_words, name="stats-review-words"),
     path("stats/hardware-survey/", hardware_survey, name="stats-hardware-survey"),
     path("stats/price-history/<int:appid>/", price_history, name="stats-price-history"),
     path("stats/sales-calendar/", sales_calendar, name="stats-sales-calendar"),

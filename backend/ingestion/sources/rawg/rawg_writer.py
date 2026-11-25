@@ -14,7 +14,9 @@ def save_rawg_game_data(appid: int, rawg_data: dict[str, Any]) -> bool:
         return False
 
     rawg_id = rawg_data.get("id")
-    if rawg_id and (game.rawg_id is None or game.rawg_id == rawg_id):
+    if rawg_id:
+        # L'appid est vérifié : un autre jeu qui portait cet identifiant l'avait reçu à tort.
+        Game.objects.filter(rawg_id=rawg_id).exclude(appid=appid).update(rawg_id=None)
         game.rawg_id = rawg_id
 
     rating = rawg_data.get("rating")
